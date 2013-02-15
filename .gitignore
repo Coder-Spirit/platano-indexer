@@ -1,0 +1,4 @@
+target/
+doc/javadoc/
+*.zip
+*.tar.gz

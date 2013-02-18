@@ -21,12 +21,17 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *  This webservlet allows admins to view the caches status
  *
- *  @author Andreu Correa Casablanca
- *  @version 0.4
+ *  @author 	Andreu Correa Casablanca
+ *  @version 	0.4
  */
 @WebServlet("/cache")
 public class CacheController extends BaseController {
 
+	/**
+	 *  Returns (via http, GET method) a response with caches info
+	 *
+	 *  @see javax.servlet.http.HttpServlet#doGet
+	 */
 	@Override
 		public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			try {

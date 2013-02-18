@@ -25,12 +25,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+/**
+ *  This webservlet allows to insert items into the index collections (and remove it)
+ *
+ *  @author 	Andreu Correa Casablanca
+ *  @version 	0.4
+ */
 @WebServlet("/index")
 public class IndexController extends BaseController {
 
+	/**
+	 *  IndexModelBean reference
+	 */
 	@EJB
 	private IndexModelBean imB;
 
+	/**
+	 *  Handles Post requests, and calls insert or remove methods
+	 *
+	 *  @see javax.servlet.http.HttpServlet#doPost
+	 */
 	@Override
 		public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			try {
@@ -45,7 +59,7 @@ public class IndexController extends BaseController {
 				if (method.equals("insert")) {
 					insertLogic(collName, item);
 				} else if (method.equals("remove")) {
-
+					removeLogic(collName, item);
 				} else {
 					throw new Exception("Inexistent method : m="+method);
 				}
@@ -60,12 +74,34 @@ public class IndexController extends BaseController {
 			}
 		}
 
+	/**
+	 *  Insert an item into the specifiec collection (and updates caches)
+	 *
+	 *  @param collName Index collection name
+	 *  @param item 	Item to be inserted in the collection
+	 */
 		private void insertLogic (String collName, String item) throws Exception {
 			imB.insert(collName, item, SearchesTokenizer.getSubTokensList(item));
 
 			addToCache(collName, item);
 		}
 
+	/**
+	 *  Removes an item from the specifiec collection (and updates caches)
+	 *
+	 *  @param collName Index collection name
+	 *  @param item 	Item to be inserted in the collection
+	 */
+		private void removeLogic (String collName, String item) throws Exception {
+			
+		}
+
+	/**
+	 *  Adds an item to the results cache tied to the specified collection
+	 *
+	 *  @param collName Index collection name
+	 *  @param item 	Item to be inserted in the collection
+	 */
 		private void  addToCache (String collName, String item) throws Exception {
 			Cache<String, ArrayList<String>> cache = cB.getResultCache(collName);
 			
@@ -85,6 +121,14 @@ public class IndexController extends BaseController {
 			}
 		}
 
+	/**
+	 *  Adds an item to a results cache value (given with the key cacheKeyBaseItem@limit)
+	 *
+	 *  @param cache 			cache to be updated
+	 *  @param item 			item 
+	 *  @param cacheKeyBaseItem complete or partial searchTerm (as a part of cache key)
+	 *  @param limit 			limit imposed to search result size (as a part of cache key)
+	 */
 		private void addToCacheToken (Cache<String, ArrayList<String>> cache, String item, String cacheKeyBaseItem, Integer limit) throws Exception {
 			String cacheKey = new StringBuilder(cacheKeyBaseItem).append("@").append(limit.toString()).toString();
 			ArrayList<String>  cachedResult = cache.getIfPresent(cacheKey);
@@ -93,9 +137,10 @@ public class IndexController extends BaseController {
 
 			cachedResult.add(item);
 
+			// TODO : Cambiar Collections.sort y el siguiente 'if' por el sistema usado en las caches de tokens
 			Collections.sort(cachedResult, new ResultItemComparator(SearchesTokenizer.getSubTokensBag(cacheKeyBaseItem)));
 
-			if (cachedResult.size() > 10) {
+			if (cachedResult.size() > limit) {
 				cachedResult = new ArrayList<String>(cachedResult.subList(0, limit));
 			}
 

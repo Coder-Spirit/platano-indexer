@@ -2,7 +2,6 @@ package com.bananity.controllers;
 
 
 // Bananity Classes
-import com.bananity.caches.CacheBean;
 import com.bananity.models.IndexModelBean;
 import com.bananity.nlp.AnalyzerModule;
 import com.bananity.util.SearchesTokenizer;
@@ -31,9 +30,6 @@ public class IndexController extends BaseController {
 
 	@EJB
 	private IndexModelBean imB;
-
-	@EJB
-	private CacheBean cB;
 
 	@Override
 		public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,9 +1,6 @@
 package com.bananity.controllers;
 
 
-// Bananity Classes
-import com.bananity.caches.CacheBean;
-
 // Caches
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheStats;
@@ -14,7 +11,6 @@ import java.util.HashMap;
 // IO
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.annotation.WebServlet;
@@ -30,9 +26,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/cache")
 public class CacheController extends BaseController {
-
-	@EJB
-	private CacheBean cB;
 
 	@Override
 		public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

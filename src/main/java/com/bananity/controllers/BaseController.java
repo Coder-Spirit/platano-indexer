@@ -1,8 +1,12 @@
 package com.bananity.controllers;
 
 
+// Bananity Classes
+import com.bananity.caches.CacheBean;
+
 // IO
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +31,12 @@ public abstract class BaseController extends HttpServlet {
 	 *  Log4j reference
 	 */
 	protected static Logger log;
+
+	/**
+	 *  CacheBean reference
+	 */
+	@EJB
+	protected CacheBean cB;
 
 	/**
 	 *  @see javax.servlet.http.HttpServlet#init

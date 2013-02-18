@@ -36,6 +36,15 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
 
 
+/**
+ *  This class is the central handler of the search caches.
+ *  The object follows the Singleton pattern.
+ *
+ *  @author  Andreu Correa Casablanca
+ *  @version 0.4
+ *
+ *  @see com.bananity.constants.StorageConstantsBean
+ */
 @Startup
 @Singleton
 @DependsOn({"StorageConstantsBean"})
@@ -43,14 +52,30 @@ import org.apache.log4j.PropertyConfigurator;
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class CacheBean {
 
+	/**
+	 *  Log4j reference
+	 */
 	private static Logger log;
 
+	/**
+	 * Reference to the storage constants bean, needed to access loaded settings values
+	 */
 	@EJB
 	private StorageConstantsBean scB;
 
+	/**
+	 *  Associative list (by collection name) of results caches
+	 */
 	private HashMap<String, Cache<String, ArrayList<String>>> resultCaches;
+
+	/**
+	 *  Associative list (by collection name) of tokens caches
+	 */
 	private HashMap<String, Cache<String, ArrayList<String>>> tokensCaches;
 
+	/**
+	 *  This method initialized the logger reference and the caches associative lists
+	 */
 	@Lock(LockType.WRITE)
 	@PostConstruct
 		void init() throws Exception {
@@ -113,21 +138,39 @@ public class CacheBean {
 			}
 		}
 
+	/**
+	 *  Returns a tokens cache associated to a collection
+	 *
+	 *  @param 	collName 	The collection name
+	 *  @return 			Associated tokens cache to the referenced collection
+	 */
 	@Lock(LockType.READ)
 		public Cache<String, ArrayList<String>> getTokensCache (String collName) {
 			return tokensCaches.get(collName);
 		}
 
+	/**
+	 *  Returns a results cache associated to a collection
+	 *
+	 *  @param 	collName 	The collection name
+	 *  @return 			Associated results cache to the referenced collection
+	 */
 	@Lock(LockType.READ)
 		public Cache<String, ArrayList<String>> getResultCache (String collName) {
 			return resultCaches.get(collName);
 		}
 
+	/**
+	 *  @return Associative list (by collection name) of tokens caches
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, Cache<String, ArrayList<String>>> getTokensCaches () {
 			return tokensCaches;
 		}
 
+	/**
+	 *  @return Associative list (by collection name) of results caches
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, Cache<String, ArrayList<String>>> getResultCaches () {
 			return resultCaches;

@@ -1,5 +1,11 @@
 package com.bananity.constants;
 
+/**
+ *  This class have error constants that the server returns when crashes
+ *
+ *  @author  Andreu Correa Casablanca
+ *  @version 0.2
+ */
 public class ErrorConstants
 {
 	public static final int UNABLE_TO_LOAD_INDEX_SETTINGS 		= 100;

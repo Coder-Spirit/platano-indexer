@@ -1,20 +1,44 @@
 package com.bananity.controllers;
 
 
+// IO
 import java.io.IOException;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// Logging
+import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
+
 
 /**
  *  This abstract class encapsules general methods used by all controllers
  *
- *  @author Andreu Correa Casablanca
- *  @version 0.3
+ *  @author 	Andreu Correa Casablanca
+ *  @version 	0.4
  */
 public abstract class BaseController extends HttpServlet {
+
+	/**
+	 *  Log4j reference
+	 */
+	protected static Logger log;
+
+	/**
+	 *  @see javax.servlet.http.HttpServlet#init
+	 *  @see javax.servlet.ServletConfig
+	 */
+	@Override
+		public void init(ServletConfig config) throws ServletException {
+			super.init(config);
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			PropertyConfigurator.configure(classLoader.getResource("log4j.properties"));
+			log = Logger.getLogger(this.getClass());
+		}
 
 	/**
 	 *  This method sends a json response to the http client

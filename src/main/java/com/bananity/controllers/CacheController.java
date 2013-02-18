@@ -11,36 +11,28 @@ import com.google.common.cache.CacheStats;
 // Java utils
 import java.util.HashMap;
 
+// IO
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.PropertyConfigurator;
 
-
+/**
+ *  This webservlet allows admins to view the caches status
+ *
+ *  @author Andreu Correa Casablanca
+ *  @version 0.4
+ */
 @WebServlet("/cache")
 public class CacheController extends BaseController {
 
-	private static Logger log;
-
 	@EJB
 	private CacheBean cB;
-
-	@Override
-		public void init(ServletConfig config) throws ServletException {
-			super.init(config);
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			PropertyConfigurator.configure(classLoader.getResource("log4j.properties"));
-			log = Logger.getLogger(CacheController.class);
-		}
 
 	@Override
 		public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

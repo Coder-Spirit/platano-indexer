@@ -27,12 +27,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+/**
+ *  This webservlet allows to search items into the index collections
+ *
+ *  @author 	Andreu Correa Casablanca
+ *  @version 	0.4
+ */
 @WebServlet("/search")
 public class SearchController extends BaseController {
 
+	/**
+	 *  IndexModelBean reference
+	 */
 	@EJB
 	private IndexModelBean imB;
 
+	/**
+	 *  Handles Post requests
+	 *
+	 *  @see javax.servlet.http.HttpServlet#doPost
+	 *  @see com.bananity.controllers.SearchController#searchLogic
+	 */
 	@Override
 		public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			try {
@@ -56,6 +71,15 @@ public class SearchController extends BaseController {
 			}
 		}
 
+	/**
+	 *  The magic happens here
+	 *
+	 *  @param collName 	Index collection name
+	 *  @param searchTerm 	Search text
+	 *  @param limit 		Maximum number of items that result can have
+	 *
+	 *  @result List of found elements in the specified collection searching by searchTerm
+	 */
 		private ArrayList<String> searchLogic (String collName, String searchTerm, int limit) throws Exception {
 			Cache<String, ArrayList<String>> cache = cB.getResultCache(collName);
 			

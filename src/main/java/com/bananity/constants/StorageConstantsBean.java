@@ -29,6 +29,13 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
 
 
+/**
+ *  This class loads the server settings from a .properties file
+ *  The object follows the Singleton pattern.
+ *
+ *  @author  Andreu Correa Casablanca
+ *  @version 0.4
+ */
 @Startup
 @Singleton
 //@DependsOn({})
@@ -36,23 +43,40 @@ import org.apache.log4j.PropertyConfigurator;
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class StorageConstantsBean {
 
+	/**
+	 *  Log4j reference
+	 */
 	private static Logger log;
 
 	////////////////////////////////////////
 	//              Constants             //
 	////////////////////////////////////////
 
+	/**
+	 *  Constant used to reference the default settings for a specified parameter
+	 */
 	public final static String DEFAULT = "default";
 
 	////////////////////////////////////////
 	//      General Storage Settings      //
 	////////////////////////////////////////
 
+	/**
+	 *  Storage type name (only 'mongo' supported at this moment)
+	 */
 	private String 		STORAGE_TYPE;
 
+	/**
+	 *  List of indexed collections names
+	 */
 	private String[] 	INDEXED_COLLECTIONS;
 
 	// INDEX OPTIONS
+	/**
+	 *  Maximum number of indexed items per token
+	 *  Greater values give us more accuracy, but lower performance too.
+	 *  Lower values give us better performance, but less accuracy too.
+	 */
 	private int 		TOKEN_ENTRY_SIZE;
 
 
@@ -61,16 +85,41 @@ public class StorageConstantsBean {
 	////////////////////////////////////////
 
 	// MONGO CONNECTION
+	/**
+	 *  Associative list of mongo hosts (by 'internal' name), internal_host_name -> address,port
+	 */
 	private HashMap<String, ArrayList<String>> MONGO_HOSTS;
+
+	/**
+	 *  Associative list of mongo shards (by 'internal' name), internal_shard_name -> internal_host_name,...,internal_host_name
+	 */
 	private HashMap<String, ArrayList<String>> MONGO_SHARDS;
+
+	/**
+	 *  Associative list of mongo dbs (by 'internal' name), internal_db_name -> internal_[host/shard]_name,mongo_db 
+	 */
 	private HashMap<String, ArrayList<String>> MONGO_DB;
 
 	// COLLECTION MAPPINGS
+	/**
+	 * Mapping from index collections to mongo collections, collection -> internal_db_name,mongo_collection
+	 */
 	private HashMap<String, ArrayList<String>> MONGO_MAPPINGS;
 
 	// MONGO TUNING
+	/**
+	 *  Associative list of 'maximum connections per host (or shard)' (by host or shard internal name)
+	 */
 	private HashMap<String, ArrayList<String>> MONGO_CONS_PER_HOST;
+
+	/**
+	 *  Associative list of 'mongo connect timeout per host (or shard)' (by host or shard internal name)
+	 */
 	private HashMap<String, ArrayList<String>> MONGO_CONNECT_TIMEOUT;
+
+	/**
+	 *  Associative list of 'mongo socket timeout per host (or shard)' (by host or shard internal name)
+	 */
 	private HashMap<String, ArrayList<String>> MONGO_SOCKET_TIMEOUT;
 
 
@@ -78,9 +127,21 @@ public class StorageConstantsBean {
 	//           Cache Settings           //
 	////////////////////////////////////////
 
+	/**
+	 *  Associative list of tokens cache sizes (by collection name, measured in bytes)
+	 *  The used type is for convenience (it's not the 'correct' type, but it's easier to use with 'readConfLine' method)
+	 */
 	private HashMap<String, ArrayList<String>> TOKENS_CACHE_SIZE;
+
+	/**
+	 *  Associative list of results cache sizes (by collection name, measured in bytes)
+	 *  The used type is for convenience (it's not the 'correct' type, but it's easier to use with 'readConfLine' method)
+	 */
 	private HashMap<String, ArrayList<String>> RESULTS_CACHE_SIZE;
 
+	/**
+	 *  This method initialized the logger reference and load the settings from conf.properties
+	 */
 	@Lock(LockType.WRITE)
 	@PostConstruct
 		void init() throws Exception {
@@ -141,11 +202,23 @@ public class StorageConstantsBean {
 			}
 		}
 
+	/**
+	 * The same as readConfLine but forcing 'strict' parameter to 'true'.
+	 *
+	 * @see com.bananity.constants.StorageConstantsBean#readConfLine
+	 */
 	@Lock(LockType.WRITE)
 		private static HashMap<String, ArrayList<String>> readConfLine (String confLine) throws Exception {
 			return readConfLine(confLine, true);
 		}
 
+	/**
+	 *  This method reads a text line and transforms it into an associative list, which values are lists of strings
+	 *
+	 *  @param 	confLine 	text line with settings data
+	 *  @param 	strict 		this value specifies if the settings data must exist or not
+	 *  @return 			Extracted data (as an associative list with list values) from conf line
+	 */
 	@Lock(LockType.WRITE)
 		private static HashMap<String, ArrayList<String>> readConfLine (String confLine, boolean strict) throws Exception {
 			HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>();
@@ -173,17 +246,29 @@ public class StorageConstantsBean {
 	//      General Storage Settings      //
 	////////////////////////////////////////
 
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#STORAGE_TYPE
+	 *  @return Storage type name
+	 */
 	@Lock(LockType.READ)
 		public String getStorageType () {
 			return STORAGE_TYPE;
 		}
 
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#INDEXED_COLLECTIONS
+	 *  @return Indexed Collection Names
+	 */
 	@Lock(LockType.READ)
 		public String[] getIndexedCollections () {
 			return INDEXED_COLLECTIONS;
 		}
 
 	// INDEX OPTIONS
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#TOKEN_ENTRY_SIZE
+	 *  @return Token Entry Size
+	 */
 	@Lock(LockType.READ)
 		public int 		getTokenEntrySize () {
 			return TOKEN_ENTRY_SIZE;
@@ -195,38 +280,66 @@ public class StorageConstantsBean {
 	////////////////////////////////////////
 
 	// MONGO CONNECTION
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#MONGO_HOSTS
+	 *  @return Mongo Hosts data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getMongoHosts () {
 			return MONGO_HOSTS;
 		}
 
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#MONGO_SHARDS
+	 *  @return Mongo Shards data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getMongoShards () {
 			return MONGO_SHARDS;
 		}
 
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#MONGO_DB
+	 *  @return Mongo DBs data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getMongoDB () {
 			return MONGO_DB;
 		}
 
 	// COLLECTION MAPPINGS
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#MONGO_MAPPINGS
+	 *  @return Mongo Mappings data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getMongoMappings () {
 			return MONGO_MAPPINGS;
 		}
 
 	// MONGO TUNING
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#MONGO_CONS_PER_HOST
+	 *  @return Mongo Connections per host data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getMongoConsPerHost () {
 			return MONGO_CONS_PER_HOST;
 		}
 
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#MONGO_CONNECT_TIMEOUT
+	 *  @return Mongo Connection timeouts data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getMongoConnectTimeout() {
 			return MONGO_CONNECT_TIMEOUT;
 		}
 
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#MONGO_SOCKET_TIMEOUT
+	 *  @return Mongo Socket timeouts data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getMongoSocketTimeout () {
 			return MONGO_SOCKET_TIMEOUT;
@@ -236,11 +349,19 @@ public class StorageConstantsBean {
 	//           Cache Settings           //
 	////////////////////////////////////////
 
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#TOKENS_CACHE_SIZE
+	 *  @return Tokens Cache Sizes data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getTokensCacheSize () {
 			return TOKENS_CACHE_SIZE;
 		}
 
+	/**
+	 *  @see 	com.bananity.constants.StorageConstantsBean#RESULTS_CACHE_SIZE
+	 *  @return Results Cache Sizes data
+	 */
 	@Lock(LockType.READ)
 		public HashMap<String, ArrayList<String>> getResultsCacheSize () {
 			return RESULTS_CACHE_SIZE;

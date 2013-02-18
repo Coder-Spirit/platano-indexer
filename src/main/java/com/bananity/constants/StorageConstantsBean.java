@@ -1,4 +1,4 @@
-package com.bananity.constants;
+ package com.bananity.constants;
 
 
 // Java utils
@@ -142,12 +142,12 @@ public class StorageConstantsBean {
 		}
 
 	@Lock(LockType.WRITE)
-		private static HashMap<String, ArrayList<String>> readConfLine (String confLine) { // throws Exception {
+		private static HashMap<String, ArrayList<String>> readConfLine (String confLine) throws Exception {
 			return readConfLine(confLine, true);
 		}
 
 	@Lock(LockType.WRITE)
-		private static HashMap<String, ArrayList<String>> readConfLine (String confLine, boolean strict) { // throws Exception {
+		private static HashMap<String, ArrayList<String>> readConfLine (String confLine, boolean strict) throws Exception {
 			HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>();
 
 			if (confLine != null && confLine.length() > 0) {
@@ -163,8 +163,7 @@ public class StorageConstantsBean {
 					result.put(entryParts[0], entryData);
 				}
 			} else if (strict) {
-				// TODO : Para que los errores se capturen de forma más elegante, puede que convenga pasar de static a singleton (con un Bean)
-				// throw new Exception("¡Required confLine not found!");
+				throw new Exception("¡Required confLine not found!");
 			}
 
 			return result;

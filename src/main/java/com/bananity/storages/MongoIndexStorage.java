@@ -25,14 +25,51 @@ import java.util.Map;
 import org.bson.types.ObjectId;
 
 
+/**
+ *  Implementation of IIndexStorage based on Mongo
+ *  
+ *  - Internal Collection maps to Mongo Collection
+ *  - A Mongo Collection is stored in a Mongo DB (referenced by its internal name)
+ *  - A Mongo DB have an internal name, wich maps to a Mongo name. It's stored in a host or in a shard (referenced by an internal name)
+ *  - A shard have an internal name, and is a collection of hosts, referenced by its internal name
+ *  - A host have an internal name, and refers to an address and a port
+ *
+ *  @author 	Andreu Correa Casablanca
+ *  @version 	0.4
+ *
+ *  @see 		com.bananity.constants.StorageConstantsBean
+ *  @see 		com.bananity.storages.IIndexStorage
+ *  @see 		com.mongodb.MongoClient
+ */
 public class MongoIndexStorage implements IIndexStorage
 {
+	/**
+	 * Associative list of Mongo Clients
+	 */
 	private HashMap<String, MongoClient> 	mcs;
+
+	/**
+	 * Associative list of Mongo DBs
+	 */
 	private HashMap<String, DB> 			dbs;
+
+	/**
+	 * Associative list of Mongo Collections
+	 */
 	private HashMap<String, DBCollection> 	collections;
 
+	/**
+	 * Reference to Storage Constants
+	 */
 	private StorageConstantsBean scB;
 
+	/**
+	 *  Public constructor. Avoid using it directly, it's better to use the StoragesFactoryBean
+	 *
+	 *  @param scB 	Reference to storage constants
+	 *
+	 *  @see 		com.bananity.storages.StoragesFactoryBean
+	 */
 	public MongoIndexStorage (StorageConstantsBean scB) throws Exception {
 		mcs 		= new HashMap<String, MongoClient>();
 		dbs 		= new HashMap<String, DB>();
@@ -51,6 +88,9 @@ public class MongoIndexStorage implements IIndexStorage
 		loadCollections();
 	}
 
+	/**
+	 *  Load shards settings
+	 */
 	private void loadShards () throws Exception {
 		HashSet<String> loadedHosts = new HashSet<String>();
 
@@ -66,6 +106,9 @@ public class MongoIndexStorage implements IIndexStorage
 		}
 	}
 
+	/**
+	 *  Load settings for a specific shard
+	 */
 	private void loadShard (String shardName) throws Exception {
 		ArrayList<String> shardSrc = scB.getMongoShards().get(shardName);
 
@@ -137,12 +180,18 @@ public class MongoIndexStorage implements IIndexStorage
 		mcs.put(shardName, mc);
 	}
 
+	/**
+	 *  Load hosts settings
+	 */
 	private void loadHosts () throws Exception {
 		for (String hostName : scB.getMongoHosts().keySet()) {
 			loadHost(hostName);
 		}
 	}
 
+	/**
+	 *  Load settings for a specific host
+	 */
 	private void loadHost (String hostName) throws Exception {
 		ArrayList<String> hostAddrSrc		= scB.getMongoHosts().get(hostName);
 		
@@ -204,12 +253,18 @@ public class MongoIndexStorage implements IIndexStorage
 		mcs.put(hostName, mc);
 	}
 
+	/**
+	 * Load DBs settings
+	 */
 	private void loadDBs () throws Exception {
 		for (String dbName : scB.getMongoDB().keySet()) {
 			loadDB(dbName);
 		}
 	}
 
+	/**
+	 * Load settings for a specific DB
+	 */
 	private void loadDB (String dbName) throws Exception {
 		ArrayList<String> dbSrc	= scB.getMongoShards().get(dbName);
 
@@ -236,12 +291,18 @@ public class MongoIndexStorage implements IIndexStorage
 		dbs.put(dbName, db);
 	}
 
+	/**
+	 * Load collections settings
+	 */
 	private void loadCollections () throws Exception {
 		for (String collName : scB.getIndexedCollections()) {
 			loadCollection(collName);
 		}
 	}
 
+	/**
+	 * Load settings for a specific collection
+	 */
 	private void loadCollection (String collName) throws Exception {
 		ArrayList<String> collSrc = scB.getMongoMappings().get(collName);
 
@@ -264,6 +325,9 @@ public class MongoIndexStorage implements IIndexStorage
 		collections.put(collName, coll);
 	}
 
+	/**
+	 *  @see com.bananity.storages.IIndexStorage#findSubToken
+	 */
 	public ArrayList<String> findSubToken (String collName, String subToken) throws Exception {
 		DBCollection coll = collections.get(collName);
 
@@ -287,6 +351,9 @@ public class MongoIndexStorage implements IIndexStorage
 		return result;
 	}
 
+	/**
+	 *  @see com.bananity.storages.IIndexStorage#insert
+	 */
 	public void insert (String collName, String subToken, Collection<String> items) throws Exception {
 		DBCollection coll = collections.get(collName);
 

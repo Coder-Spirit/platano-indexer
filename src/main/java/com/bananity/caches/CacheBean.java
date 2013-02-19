@@ -74,7 +74,7 @@ public class CacheBean {
 	private HashMap<String, Cache<String, ArrayList<String>>> tokensCaches;
 
 	/**
-	 *  This method initialized the logger reference and the caches associative lists
+	 *  This method initializes the logger reference and the caches associative lists
 	 */
 	@Lock(LockType.WRITE)
 	@PostConstruct

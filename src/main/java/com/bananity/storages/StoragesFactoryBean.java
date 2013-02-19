@@ -25,6 +25,15 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
 
+/**
+ *  Storages Factory
+ *
+ *  @author 	Andreu Correa Casablanca
+ *  @version 	0.4
+ *
+ *  @see 		com.bananity.storages.IIndexStorage
+ *  @see 		com.bananity.storages.MongoIndexStorage
+ */
 @Startup
 @Singleton
 @DependsOn({"StorageConstantsBean"})
@@ -32,15 +41,30 @@ import org.apache.log4j.PropertyConfigurator;
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class StoragesFactoryBean {
 
+	/**
+	 *  Storage Type Constant
+	 */
 	private final static String MONGO_TYPE = "mongo";
 
+	/**
+	 *  Log4j reference
+	 */
 	private static Logger log;
 
+	/**
+	 *  Storage reference
+	 */
 	private IIndexStorage storage;
 
+	/**
+	 *  Storage Constants reference
+	 */
 	@EJB
 	private StorageConstantsBean scB;
 
+	/**
+	 *  Initializes the logger and the storage
+	 */
 	@Lock(LockType.WRITE)
 	@PostConstruct
 		void init() {
@@ -62,6 +86,9 @@ public class StoragesFactoryBean {
 			}
 		}
 
+	/**
+	 *  @return Storage Reference (similar to Singleton: one instance)
+	 */
 	@Lock(LockType.READ)
 		public IIndexStorage getIndexStorage() {
 			return storage;

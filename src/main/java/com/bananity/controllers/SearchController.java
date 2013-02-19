@@ -78,7 +78,7 @@ public class SearchController extends BaseController {
 	 *  @param searchTerm 	Search text
 	 *  @param limit 		Maximum number of items that result can have
 	 *
-	 *  @result List of found elements in the specified collection searching by searchTerm
+	 *  @return 			List of found elements in the specified collection searching by searchTerm
 	 */
 		private ArrayList<String> searchLogic (String collName, String searchTerm, int limit) throws Exception {
 			Cache<String, ArrayList<String>> cache = cB.getResultCache(collName);

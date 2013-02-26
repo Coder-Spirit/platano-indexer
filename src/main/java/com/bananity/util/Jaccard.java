@@ -11,7 +11,9 @@ import java.util.ArrayList;
 public class Jaccard {
 
 	/**
+	 *  @param simmetric 	This param specifies if you want a typical Jaccard distance or if you want to use the cardinal of `b` as a distance
 	 *
+	 *  @return Jaccard distance between `a` and `b`
 	 */
 	public static double distance(ArrayList<String> a, ArrayList<String> b, boolean simmetric) {
 		ArrayList<String> i = doIntersection(a, b);
@@ -31,7 +33,9 @@ public class Jaccard {
 	}
 
 	/**
+	 *  @param simmetric 	This param specifies if you want a typical Jaccard distance or if you want to use the cardinal of `b` as a distance
 	 *
+	 *  @return Jaccard distance between `a` and `b`
 	 */
 	public static double distance(HashBag<String> a, HashBag<String> b, boolean simmetric) {
 		HashBag<String> i = a.doIntersection( b );
@@ -52,7 +56,7 @@ public class Jaccard {
 
 
 	/**
-	 *
+	 *  This method returns the union of `aa` and `bb`
 	 */
 	private static ArrayList<String> doUnion(ArrayList<String> aa, ArrayList<String>bb) {
 		ArrayList<String> b = (ArrayList<String>)bb.clone();
@@ -72,7 +76,7 @@ public class Jaccard {
 	}
 
 	/**
-	 *
+	 *  This method returns the intersection of `aa` and `bb`
 	 */
 	private static ArrayList<String> doIntersection(ArrayList<String> aa, ArrayList<String>bb) {
 		ArrayList<String> i = new ArrayList<String>();

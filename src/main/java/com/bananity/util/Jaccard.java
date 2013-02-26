@@ -2,31 +2,58 @@ package com.bananity.util;
 
 import java.util.ArrayList;
 
+/**
+ *  This class encapsulates many methods to calculate the Jaccard Distance
+ *
+ *  @author Alberto Rubio Muñoz
+ *  @see <a href="http://en.wikipedia.org/wiki/Jaccard_index">Jaccard Index (Wikipedia Article)</a> 
+ */
 public class Jaccard {
 
-	public static double distance(ArrayList<String> a, ArrayList<String> b) {
+	/**
+	 *
+	 */
+	public static double distance(ArrayList<String> a, ArrayList<String> b, boolean simmetric) {
 		ArrayList<String> i = doIntersection(a, b);
 		if (i.size() == 0) {
 			return 1.0d;
 		}
-		ArrayList<String> u = doUnion(a, b);
-		
-		return  1.0d - ((double)i.size() / (double)u.size());
+
+		double divisor;
+		if (simmetric) {
+			ArrayList<String> u = doUnion(a, b);
+			divisor = (double)u.size();
+		} else {
+			divisor = (double)b.size();
+		}
+
+		return  1.0d - ((double)i.size() / divisor);
 	}
 
-	public static double distance(HashBag<String> a, HashBag<String> b) {
-		long start = System.currentTimeMillis();
+	/**
+	 *
+	 */
+	public static double distance(HashBag<String> a, HashBag<String> b, boolean simmetric) {
 		HashBag<String> i = a.doIntersection( b );
 		if ( i.size() == 0 ) {
 			return 1.0d;
 		}
-		HashBag<String> u = a.doUnion( b );
-		long end = System.currentTimeMillis();
+
+		double divisor;
+		if (simmetric) {
+			HashBag<String> u =  a.doUnion( b );
+			divisor = (double)u.size();
+		} else {
+			divisor = (double)b.size();
+		}
 		
-		return 1.0d - ((double)i.size() / (double)u.size());
+		return 1.0d - ((double)i.size() / divisor);
 	}
 
 
+	/**
+	 *
+	 */
 	private static ArrayList<String> doUnion(ArrayList<String> aa, ArrayList<String>bb) {
 		ArrayList<String> b = (ArrayList<String>)bb.clone();
 		ArrayList<String> u = new ArrayList<String>();
@@ -44,6 +71,9 @@ public class Jaccard {
 		return u;
 	}
 
+	/**
+	 *
+	 */
 	private static ArrayList<String> doIntersection(ArrayList<String> aa, ArrayList<String>bb) {
 		ArrayList<String> i = new ArrayList<String>();
 		ArrayList<String> l, h;

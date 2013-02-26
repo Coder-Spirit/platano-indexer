@@ -23,14 +23,14 @@ public class SearchSubstrings {
 	}
 
 	public SearchSubstrings (String searchTerm, int threshold) throws Exception {
-		this(AnalyzerModule.analyze(searchTerm, true), threshold);
+		this(AnalyzerModule.analyze(searchTerm, true), threshold, true);
 	}
 
 	public SearchSubstrings( ArrayList<String> basicTokens ) {
-		this( basicTokens, THRESHOLD );
+		this( basicTokens, THRESHOLD, true );
 	}
 
-	public SearchSubstrings( ArrayList<String> basicTokens, int threshold ) {
+	public SearchSubstrings( ArrayList<String> basicTokens, int threshold, boolean addWordPairs ) {
 		tokens = basicTokens;
 		maxTokenLength = 0;
 		hashBag = new HashBag<String>();
@@ -46,6 +46,41 @@ public class SearchSubstrings {
 			HashBag<String> tmp = AnalyzerModule.getSubstringsBag( s, (maxTokenLength>1)?threshold:1 );
 			tokensSubs.add( tmp );
 			hashBag.addAll( tmp );
+		}
+
+		// This block is a hack to add word pairs
+		if (addWordPairs) {
+			String pairFirst  	= null;
+			String pairSecond 	= null;
+			String pair 		= null;
+			String s;
+
+			ArrayList<String> 	al;
+			HashBag<String> 	hb;
+
+			for (int i=0, n=tokens.size(); i<n; i++) {
+				s = tokens.get(i);
+
+				if (pairFirst == null) {
+					pairFirst = s;
+				} else {
+					pairSecond = s;
+					pair = new StringBuilder(pairFirst).append(' ').append(pairSecond).toString();
+					
+					al = new ArrayList<String>();
+					al.add(pair);
+					hb = new HashBag<String>(al);
+
+					maxTokenLength = Math.max( maxTokenLength, pair.length() );
+
+					tokens.add(pair);
+					tokensMaxLength.add( pair.length() );
+					tokensSubs.add( hb );
+					hashBag.addAll( hb );
+
+					pairFirst = pairSecond;
+				}
+			}
 		}
 	}
 

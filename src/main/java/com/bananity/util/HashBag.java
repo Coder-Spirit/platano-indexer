@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -18,10 +19,10 @@ public class HashBag<T> {
 		hb = new HashMap<T, Integer>();
 	}
 
-	public HashBag( List<T> list ) {
+	public HashBag( Collection<T> coll ) {
 		size = 0;
 		hb = new HashMap<T, Integer>();
-		for ( T e : list ) {
+		for ( T e : coll ) {
 			put( e );
 		}
 	}
@@ -60,8 +61,8 @@ public class HashBag<T> {
 		}
 	}
 
-	public void addAll ( List<T> l ) {
-		for (T o : l) put(o);
+	public void addAll ( Collection<T> c ) {
+		for (T o : c) put(o);
 	}
 
 	public ArrayList<T> toUniqueArrayList () {

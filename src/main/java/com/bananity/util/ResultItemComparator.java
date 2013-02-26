@@ -24,12 +24,12 @@ public class ResultItemComparator implements Comparator<String>
 
 		try {
 			if (d1 == null) {
-				d1 = Jaccard.distance(SearchesTokenizer.getSubTokensBag(r1), searchTermBag);
+				d1 = Jaccard.distance(SearchesTokenizer.getSubTokensBag(r1), searchTermBag, false);
 				distancesCache.put(r1, d1);
 			}
 
 			if (d2 == null) {
-				d2 = Jaccard.distance(SearchesTokenizer.getSubTokensBag(r2), searchTermBag);
+				d2 = Jaccard.distance(SearchesTokenizer.getSubTokensBag(r2), searchTermBag, false);
 				distancesCache.put(r2, d2);
 			}
 		} catch (Exception e) {

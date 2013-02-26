@@ -87,7 +87,7 @@ public class SearchController extends BaseController {
 				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 			}
 
-			String cacheKey	= AnalyzerModule.normalize( searchTerm ) + "@" + limit;
+			String cacheKey	= new StringBuilder(AnalyzerModule.normalize( searchTerm )).append('@').append(limit).toString();
 			ArrayList<String> finalResult = cache.getIfPresent( cacheKey );
 			if (finalResult != null) {
 				return finalResult;

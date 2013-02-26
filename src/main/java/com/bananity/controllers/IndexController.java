@@ -135,13 +135,25 @@ public class IndexController extends BaseController {
 
 			if (cachedResult == null) return;
 
-			cachedResult.add(item);
+			String sortingTmpValue;
+			boolean addedItem;
 
-			// TODO : Cambiar Collections.sort y el siguiente 'if' por el sistema usado en las caches de tokens
-			Collections.sort(cachedResult, new ResultItemComparator(SearchesTokenizer.getSubTokensBag(cacheKeyBaseItem)));
+			if (cachedResult.size() < limit) {
+				cachedResult.add(item);
+				addedItem = true;
+			} else if (cachedResult.get(limit-1).compareTo(item) > 0) {
+				cachedResult.set(limit-1, item);
+				addedItem = true;
+			} else {
+				addedItem = false;
+			}
 
-			if (cachedResult.size() > limit) {
-				cachedResult = new ArrayList<String>(cachedResult.subList(0, limit));
+			if (addedItem) {
+				for (int i=cachedResult.size()-1; i>0 && cachedResult.get(i).compareTo(cachedResult.get(i-1)) < 0; i--) {
+					sortingTmpValue = cachedResult.get(i);
+					cachedResult.set(i, cachedResult.get(i-1));
+					cachedResult.set(i-1, sortingTmpValue);
+				}
 			}
 
 			cache.put(cacheKey, cachedResult);

@@ -84,6 +84,11 @@ public class IndexModelBean {
 	private static Logger log;
 
 	/**
+	 *  Configuration Value
+	 */
+	private static int tokenEntrySize;
+
+	/**
 	 *  This method initializes the logger and storage references
 	 */
 	@Lock(LockType.WRITE)
@@ -95,6 +100,8 @@ public class IndexModelBean {
 
 			// Loading storage
 			storage = sfB.getIndexStorage();
+
+			tokenEntrySize = scB.getTokenEntrySize();
 		}
 
 	/**
@@ -147,9 +154,8 @@ public class IndexModelBean {
 				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 			}
 
-			boolean addedItem, recoveredFromStorage;
+			boolean addedItem, mustTrim, recoveredFromStorage;
 			String sortingTmpValue;
-			int tokenEntrySize = scB.getTokenEntrySize();
 
 			for (String subToken : subTokens) {
 				ArrayList<String>  subTokenRelatedItems = cache.getIfPresent(subToken);
@@ -157,8 +163,10 @@ public class IndexModelBean {
 				if (subTokenRelatedItems == null) {
 					subTokenRelatedItems = storage.findSubToken (collName, subToken);
 					recoveredFromStorage = true;
+					mustTrim = true;
 				} else {
 					recoveredFromStorage = false;
+					mustTrim = false;
 				}
 
 				// Este enfoque (más complejo que un simple Collections.sort)
@@ -167,6 +175,7 @@ public class IndexModelBean {
 				if (subTokenRelatedItems.size() < tokenEntrySize) {
 					subTokenRelatedItems.add(item);
 					addedItem = true;
+					mustTrim = true;
 				} else if (subTokenRelatedItems.get(tokenEntrySize-1).compareTo(item) > 0) {
 					subTokenRelatedItems.set(tokenEntrySize-1, item);
 					addedItem = true;
@@ -189,7 +198,9 @@ public class IndexModelBean {
 					cache.put(subToken, subTokenRelatedItems);
 				}
 
-				subTokenRelatedItems.trimToSize();
+				if (mustTrim) {
+					subTokenRelatedItems.trimToSize();
+				}
 			}
 		}
 

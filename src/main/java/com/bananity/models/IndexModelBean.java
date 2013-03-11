@@ -172,13 +172,17 @@ public class IndexModelBean {
 				// Este enfoque (más complejo que un simple Collections.sort)
 				// se aplica para evitar copias en memoria, inserciones en mongo,
 				// y ordenaciones inútiles
-				if (subTokenRelatedItems.size() < tokenEntrySize) {
-					subTokenRelatedItems.add(item);
-					addedItem = true;
-					mustTrim = true;
-				} else if (subTokenRelatedItems.get(tokenEntrySize-1).compareTo(item) > 0) {
-					subTokenRelatedItems.set(tokenEntrySize-1, item);
-					addedItem = true;
+				if (!subTokenRelatedItems.contains(item)) {
+					if (subTokenRelatedItems.size() < tokenEntrySize) {
+						subTokenRelatedItems.add(item);
+						addedItem = true;
+						mustTrim = true;
+					} else if (subTokenRelatedItems.get(tokenEntrySize-1).compareTo(item) > 0) {
+						subTokenRelatedItems.set(tokenEntrySize-1, item);
+						addedItem = true;
+					} else {
+						addedItem = false;
+					}
 				} else {
 					addedItem = false;
 				}

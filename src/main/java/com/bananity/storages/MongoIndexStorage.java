@@ -13,6 +13,7 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientOptions.Builder;
+import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
 import com.mongodb.WriteConcern;
 
@@ -174,6 +175,7 @@ public class MongoIndexStorage implements IIndexStorage
 				.connectTimeout(connectTimeout)
 				.socketTimeout(socketTimeout)
 				.writeConcern(WriteConcern.UNACKNOWLEDGED)
+				.readPreference(ReadPreference.secondaryPreferred())
 				.build()
 		);
 

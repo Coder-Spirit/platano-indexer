@@ -29,6 +29,11 @@ public class SearchesTokenizer
 			subTokens.addAll(AnalyzerModule.getAllSubstrings(token, MIN_WORD_LENGTH));
 		}
 
+		// This block increments the index size, but allows more precise searches
+		for (int i=0, n=tokens.size()-1; i<n; i++) {
+			subTokens.add(new StringBuilder(tokens.get(i)).append(" ").append(tokens.get(i+1)).toString());
+		}
+
 		return subTokens;
 	}
 
@@ -45,6 +50,11 @@ public class SearchesTokenizer
 		HashBag<String> subTokens = new HashBag<String>();
 		for (String token : tokens) {
 			subTokens.addAll(AnalyzerModule.getSubstringsBag(token, MIN_WORD_LENGTH));
+		}
+
+		// This block increments the index size, but allows more precise searches
+		for (int i=0, n=tokens.size()-1; i<n; i++) {
+			subTokens.put(new StringBuilder(tokens.get(i)).append(" ").append(tokens.get(i+1)).toString());
 		}
 
 		return subTokens;

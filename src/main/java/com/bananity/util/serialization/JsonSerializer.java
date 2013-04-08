@@ -64,7 +64,6 @@ public class JsonSerializer {
 			.append(
 				str
 					.replace("\"", "\\\"")
-					.replace("\'", "\\\'")
 					.replace("\n", "\\n")
 					.replace("\t", "\\t")
 					.replace("\r", "\\r")

@@ -127,4 +127,19 @@ public class SearchesTokenizer
 
 		return new ArrayList<String>(Arrays.asList(text.split("\\s+")));
 	}
+
+	/**
+	 *
+	 */
+	public static ArrayList<String> tokenize (final String text, boolean flattenText, boolean addWordPairs) {
+		ArrayList<String> tokens = tokenize(text, flattenText);
+
+		if (addWordPairs) {
+			for (int i=0, n=tokens.size()-1; i<n; i++) {
+				tokens.add(new StringBuilder(tokens.get(i)).append(" ").append(tokens.get(i+1)).toString());
+			}
+		}
+
+		return tokens;
+	}
 }

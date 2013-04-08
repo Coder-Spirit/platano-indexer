@@ -24,7 +24,7 @@ public class SearchSubstrings {
 	}
 
 	public SearchSubstrings (final String searchTerm, int threshold) throws Exception {
-		this(SearchesTokenizer.tokenize(searchTerm, true), threshold);
+		this(SearchesTokenizer.tokenize(searchTerm, true, true), threshold);
 	}
 
 	public SearchSubstrings (final ArrayList<String> basicTokens ) {

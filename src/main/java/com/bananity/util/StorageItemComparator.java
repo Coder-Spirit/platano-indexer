@@ -18,20 +18,11 @@ public class StorageItemComparator implements Comparator<String>
 		int result = (sr1.length() > sr2.length())?1:((sr1.length() == sr2.length())?0:-1);
 
 		if (result == 0) {
-			// Si tienen la misma longitud, comparamos el número de apariciones del token
-			int ctoSr1 = countTokenOccurrences(sr1);
-			int ctoSr2 = countTokenOccurrences(sr2);
-
-			result = (ctoSr1 > ctoSr2)?1:((ctoSr1 == ctoSr2)?0:-1);
-
-			if (result == 0) {
-				// Si no queda otra: orden lexicográfico
-				result = sr1.compareTo(sr2);
-			}
+			// Si no queda otra: orden lexicográfico
+			result = sr1.compareTo(sr2);
 		}
 
-		//return result;
-		return sr1.compareTo(sr2);
+		return result;
 	}
 
 	private int countTokenOccurrences (String str) {

@@ -159,6 +159,7 @@ public class IndexModelBean {
 
 			for (String subToken : subTokens) {
 				ArrayList<String>  subTokenRelatedItems = cache.getIfPresent(subToken);
+				StorageItemComparator tokenComparator = new StorageItemComparator(subToken);
 				
 				if (subTokenRelatedItems == null) {
 					subTokenRelatedItems = storage.findSubToken (collName, subToken);
@@ -177,7 +178,7 @@ public class IndexModelBean {
 						subTokenRelatedItems.add(item);
 						addedItem = true;
 						mustTrim = true;
-					} else if (subTokenRelatedItems.get(tokenEntrySize-1).compareTo(item) > 0) {
+					} else if (tokenComparator.compare(subTokenRelatedItems.get(tokenEntrySize-1), item) > 0) {
 						subTokenRelatedItems.set(tokenEntrySize-1, item);
 						addedItem = true;
 					} else {
@@ -189,7 +190,7 @@ public class IndexModelBean {
 
 				if (addedItem) {
 					
-					for (int i=subTokenRelatedItems.size()-1; i>0 && subTokenRelatedItems.get(i).compareTo(subTokenRelatedItems.get(i-1)) < 0; i--) {
+					for (int i=subTokenRelatedItems.size()-1; i>0 && tokenComparator.compare(subTokenRelatedItems.get(i), subTokenRelatedItems.get(i-1)) < 0; i--) {
 						sortingTmpValue = subTokenRelatedItems.get(i);
 						subTokenRelatedItems.set(i, subTokenRelatedItems.get(i-1));
 						subTokenRelatedItems.set(i-1, sortingTmpValue);

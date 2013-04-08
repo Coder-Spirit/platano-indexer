@@ -82,7 +82,6 @@ public class IndexController extends BaseController {
 	 */
 		private void insertLogic (String collName, String item) throws Exception {
 			imB.insert(collName, item, SearchesTokenizer.getSubTokensList(item));
-
 			addToCache(collName, item);
 		}
 

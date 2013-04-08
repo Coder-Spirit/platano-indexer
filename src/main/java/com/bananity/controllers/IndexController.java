@@ -3,7 +3,7 @@ package com.bananity.controllers;
 
 // Bananity Classes
 import com.bananity.models.IndexModelBean;
-import com.bananity.nlp.AnalyzerModule;
+import com.bananity.text.TextNormalizer;
 import com.bananity.util.SearchesTokenizer;
 import com.bananity.util.HashBag;
 import com.bananity.util.ResultItemComparator;
@@ -50,7 +50,7 @@ public class IndexController extends BaseController {
 			try {
 				String 	method 		= request.getParameter("m");
 				String 	collName 	= request.getParameter("c");
-				String 	item 		= request.getParameter("item");
+				String 	item 		= TextNormalizer.normalizeText(request.getParameter("item"));
 
 				if (collName == null || collName.length() == 0 || item == null || item.length() == 0) {
 					throw new Exception( "Invalid parameters" );
@@ -108,9 +108,7 @@ public class IndexController extends BaseController {
 				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 			}
 
-			String cacheKeyBase = AnalyzerModule.normalize( item );
-
-			ArrayList<String> expandedCacheKeyBase = AnalyzerModule.getAllSubstrings(cacheKeyBase, 2);
+			ArrayList<String> expandedCacheKeyBase = SearchesTokenizer.getAllSubstrings(TextNormalizer.flattenText(item), 2);
 
 			for (String cacheKeyBaseItem : expandedCacheKeyBase) {
 				addToCacheToken (cache, item, cacheKeyBaseItem, 5);

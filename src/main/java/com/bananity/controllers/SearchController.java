@@ -2,7 +2,7 @@ package com.bananity.controllers;
 
 // Bananity Classes
 import com.bananity.models.IndexModelBean;
-import com.bananity.nlp.AnalyzerModule;
+import com.bananity.text.TextNormalizer;
 import com.bananity.util.CandidatesCache;
 import com.bananity.util.ResultItemComparator;
 import com.bananity.util.SearchSubstrings;
@@ -52,7 +52,7 @@ public class SearchController extends BaseController {
 		public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			try {
 				String 	collName 	= request.getParameter("c");
-				String 	searchTerm 	= request.getParameter("searchTerm");
+				String 	searchTerm 	= TextNormalizer.normalizeText(request.getParameter("searchTerm"));
 				int 	limit 		= Integer.parseInt(request.getParameter("limit"));
 
 				if (collName == null || collName.length() == 0 || searchTerm == null || limit <= 0) {
@@ -87,7 +87,7 @@ public class SearchController extends BaseController {
 				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 			}
 
-			String cacheKey	= new StringBuilder(AnalyzerModule.normalize( searchTerm )).append('@').append(limit).toString();
+			String cacheKey	= new StringBuilder(TextNormalizer.flattenText( searchTerm )).append('@').append(limit).toString();
 			ArrayList<String> finalResult = cache.getIfPresent( cacheKey );
 			if (finalResult != null) {
 				return finalResult;

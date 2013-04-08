@@ -59,7 +59,18 @@ public class JsonSerializer {
 	}
 
 	public static String StringToJsonString (String str) {
-		return new StringBuilder().append("\"").append(str).append("\"").toString();
+		return new StringBuilder()
+			.append("\"")
+			.append(
+				str
+					.replace("\"", "\\\"")
+					.replace("\'", "\\\'")
+					.replace("\n", "\\n")
+					.replace("\t", "\\t")
+					.replace("\r", "\\r")
+			)
+			.append("\"")
+			.toString();
 	}
 
 	public static String CollectionToJsonString (Collection jsonCollection) {

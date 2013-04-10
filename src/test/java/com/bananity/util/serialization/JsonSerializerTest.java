@@ -4,6 +4,9 @@ package com.bananity.util.serialization;
 // Main Class
 import com.bananity.util.serialization.JsonSerializer;
 
+// Java Utils
+import java.util.LinkedHashMap;
+
 // Junit
 import org.junit.Assert;
 import org.junit.Test;
@@ -75,5 +78,23 @@ public class JsonSerializerTest
 		Assert.assertEquals("null", JsonSerializer.ObjectToJsonString(Double.NaN));
 		Assert.assertEquals("null", JsonSerializer.ObjectToJsonString(Double.POSITIVE_INFINITY));
 		Assert.assertEquals("null", JsonSerializer.ObjectToJsonString(Double.NEGATIVE_INFINITY));
+	}
+
+	@Test
+	public void test_ObjectToJsonString_checkStringSerialization () {
+		Assert.assertEquals("\" Hola \\n \\t \\\"Mundo\\\" \"", JsonSerializer.ObjectToJsonString(" Hola \n \t \"Mundo\" "));
+	}
+
+	@Test
+	public void test_ObjectToJsonString_checkMapSerialization () {
+		// We use LinkedHashMap in order to have predictable iteration order.
+		LinkedHashMap<String, Object> mapToSerialize = new LinkedHashMap<String, Object>();
+
+		mapToSerialize.put("entero", 45);
+		mapToSerialize.put("booleano", false);
+		mapToSerialize.put("nulo", null);
+		mapToSerialize.put("cadena", "Hola Mundo");
+
+		Assert.assertEquals("{\"entero\":45,\"booleano\":false,\"nulo\":null,\"cadena\":\"Hola Mundo\"}", JsonSerializer.ObjectToJsonString(mapToSerialize));
 	}
 }

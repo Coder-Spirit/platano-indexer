@@ -40,7 +40,7 @@ public class JsonSerializer {
 		} else if (jsonObject instanceof Object[]) {
 			return ArrayToJsonString((Object[])jsonObject);
 		} else if (jsonObject instanceof Map) {
-			return MapToJsonString((Map)jsonObject);
+			return MapToJsonString((Map<String, Object>)jsonObject);
 		} else if (jsonObject instanceof IJsonSerializable) {
 			return ((IJsonSerializable)jsonObject).toJsonStr();
 		} else {

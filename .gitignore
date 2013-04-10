@@ -1,3 +1,6 @@
+coverageReport
+coverageReport/
+coverageReport/*
 target/
 doc/javadoc/
 *.zip

@@ -142,6 +142,9 @@ test: compile_test
 		i=`expr $$i + 1`; \
 	done
 
+coverage_report:
+	java -cp .:lib/*:target/classes/:target/test-classes/ org.pitest.mutationtest.MutationCoverageReport --reportDir coverageReport --targetClasses com.bananity.* --sourceDirs src/main/ --targetTests com.bananity.* --threads 4
+
 dist: compile
 	@echo ">> Packaging ($(PACKAGE_TYPE))"
 	@mkdir $(TARGET_DIR)$(FINAL_NAME)/

@@ -19,10 +19,6 @@ import javax.ejb.DependsOn;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 
-// Timeouts
-//import javax.ejb.AccessTimeout;
-//import javax.ejb.ConcurrentAccessTimeoutException;
-
 // Log4j
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
@@ -38,10 +34,12 @@ import org.apache.log4j.PropertyConfigurator;
  */
 @Startup
 @Singleton
-//@DependsOn({})
-//@AccessTimeout(value=10000)
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class StorageConstantsBean {
+
+	////////////////////////////////////////
+	//   TODO : BIG REFACTOR IS NEEDED    //
+	////////////////////////////////////////
 
 	/**
 	 *  Log4j reference

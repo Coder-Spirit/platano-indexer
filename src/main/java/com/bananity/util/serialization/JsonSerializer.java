@@ -4,10 +4,19 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * @author Andreu Correa Casablanca
+ * This class encapsulates static methods to serialize objects to JSON representations 
+ *
+ * @author 	Andreu Correa Casablanca
+ * @see 	com.bananity.util.serialization.IJsonSerializable
  */
 public class JsonSerializer {
 
+	/**
+	 * Generic method to serialize "any" object to a JSON string
+	 *
+	 * @param 	jsonObject 	Object to be serialized
+	 * @return 				JSON string
+	 */
 	public static String ObjectToJsonString (Object jsonObject) {
 		if (jsonObject == null) {
 
@@ -58,6 +67,9 @@ public class JsonSerializer {
 		}
 	}
 
+	/**
+	 * @return 	Escaped and quoted valid JSON string value
+	 */
 	public static String StringToJsonString (String str) {
 		return new StringBuilder()
 			.append("\"")
@@ -72,6 +84,9 @@ public class JsonSerializer {
 			.toString();
 	}
 
+	/**
+	 * Serializes collections as if were arrays to JSON strings
+	 */
 	public static String CollectionToJsonString (Collection jsonCollection) {
 		StringBuilder result = new StringBuilder("[");
 
@@ -89,6 +104,9 @@ public class JsonSerializer {
 		return result.append("]").toString();
 	}
 
+	/**
+	 * Serializes arrays to JSON strings
+	 */
 	public static String ArrayToJsonString (Object[] jsonArray) {
 		StringBuilder result = new StringBuilder("[");
 
@@ -106,6 +124,9 @@ public class JsonSerializer {
 		return result.append("]").toString();
 	}
 
+	/**
+	 * Serializes maps to JSON Object values
+	 */
 	public static String MapToJsonString (Map<String, Object> jsonMap) {
 		StringBuilder result = new StringBuilder("{");
 

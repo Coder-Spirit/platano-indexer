@@ -1,8 +1,7 @@
 package com.bananity.util;
 
 
-import com.bananity.util.ResultItemComparator;
-
+// Java Utils
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
@@ -11,7 +10,11 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.util.PriorityQueue;
 
-
+/**
+ * This class is used to mantain limited priority queues (used to store ordered search results)
+ *
+ * @author Alberto Rubio Muñoz
+ */
 public class CandidatesCache<T> {
 
 	private final int limit;
@@ -19,6 +22,9 @@ public class CandidatesCache<T> {
 	private final PriorityQueue<T> queue;
 	private final Comparator<T> comparator;
 
+	/**
+	 * Constructor
+	 */
 	public CandidatesCache (Comparator<T> comparator, int limit) throws Exception {
 		if (limit <= 0) {
 			throw new Exception( "BAD \"size\" value (" + limit + ")" );
@@ -31,6 +37,9 @@ public class CandidatesCache<T> {
 		queue = new PriorityQueue<T>(limit, Collections.reverseOrder(comparator));
 	}
 
+	/**
+	 * Tries to put the element 'e' in the internal queue
+	 */
 	public void put (T e) {
 		if ( !used.contains( e ) ) {
 			if ( queue.size() < limit ) {
@@ -55,6 +64,9 @@ public class CandidatesCache<T> {
 		return queue.size();
 	}
 
+	/**
+	 * Returns the internal queue as an ArrayList
+	 */
 	public ArrayList<T> getRecords () {
 		ArrayList<T> a = new ArrayList<T>();
 		while ( queue.size() > 0 ) {

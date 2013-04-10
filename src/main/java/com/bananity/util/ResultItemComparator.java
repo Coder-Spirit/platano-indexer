@@ -8,6 +8,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 
+/**
+ * Comparator class, compares search results using a String as a reference
+ *
+ * @author 	Andreu Correa Casablanca
+ * @see 	java.util.Comparator
+ */
 public class ResultItemComparator implements Comparator<String>
 {
 	private final HashBag<String> searchTermBag;

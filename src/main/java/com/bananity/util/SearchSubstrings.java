@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.ArrayList;
 
 
+/**
+ * This class encapsulates expanded info about a searchTerm string
+ */
 public class SearchSubstrings {
 
 	private ArrayList<String> tokens;

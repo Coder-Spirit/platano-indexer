@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Jaccard {
 
 	/**
-	 *  @param simmetric 	This param specifies if you want a typical Jaccard distance or if you want to use the cardinal of `b` as a distance
+	 *  @param simmetric 	This param specifies if you want a typical Jaccard distance or if you want to use the cardinal of `b` as a divisor
 	 *
 	 *  @return Jaccard distance between `a` and `b`
 	 */
@@ -33,7 +33,7 @@ public class Jaccard {
 	}
 
 	/**
-	 *  @param simmetric 	This param specifies if you want a typical Jaccard distance or if you want to use the cardinal of `b` as a distance
+	 *  @param simmetric 	This param specifies if you want a typical Jaccard distance or if you want to use the cardinal of `b` as a divisor
 	 *
 	 *  @return Jaccard distance between `a` and `b`
 	 */

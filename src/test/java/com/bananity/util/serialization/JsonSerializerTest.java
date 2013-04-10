@@ -1,5 +1,9 @@
 package com.bananity.util.serialization;
 
+
+// Main Class
+import com.bananity.util.serialization.JsonSerializer;
+
 // JUnit
 import org.junit.Test;
 import org.junit.Ignore;

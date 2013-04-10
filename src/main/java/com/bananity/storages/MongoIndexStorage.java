@@ -44,6 +44,10 @@ import org.bson.types.ObjectId;
  */
 public class MongoIndexStorage implements IIndexStorage
 {
+	////////////////////////////////////////////////////////////////
+	//   TODO : BIG REFACTOR IS NEEDED (ONLY FOR SETTINGS LOAD)   //
+	////////////////////////////////////////////////////////////////
+
 	/**
 	 * Associative list of Mongo Clients
 	 */

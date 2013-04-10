@@ -9,6 +9,11 @@ import java.util.Collection;
 import java.util.List;
 
 
+/**
+ * This class is similar to HashSet, but the elements have associated counters
+ *
+ * @author Alberto Rubio Muñoz
+ */
 public class HashBag<T> {
 
 	private int size;

@@ -21,7 +21,7 @@ public class SearchesTokenizer
 	/**
 	 *
 	 */
-	public static ArrayList<String> getSubTokensList (String searchTerm) throws Exception {		
+	public static ArrayList<String> getSubTokensList (String searchTerm) {		
 		ArrayList<String> tokens = tokenize(searchTerm, true);
 
 		int maxLength = 0;

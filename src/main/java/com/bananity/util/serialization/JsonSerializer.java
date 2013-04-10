@@ -30,9 +30,9 @@ public class JsonSerializer {
 		} else if (jsonObject instanceof Long) {
 			return ((Long)jsonObject).toString();
 		} else if (jsonObject instanceof Float) {
-			return ((Float)jsonObject).toString();
+			return FloatToJsonString((Float)jsonObject);
 		} else if (jsonObject instanceof Double) {
-			return ((Double)jsonObject).toString();
+			return DoubleToJsonString((Double)jsonObject);
 		} else if (jsonObject instanceof String) {
 			return StringToJsonString((String)jsonObject);
 		} else if (jsonObject instanceof Collection) {
@@ -45,6 +45,22 @@ public class JsonSerializer {
 			return ((IJsonSerializable)jsonObject).toJsonStr();
 		} else {
 			return ""; // TODO : throw an Exception
+		}
+	}
+
+	public static String FloatToJsonString (Float flt) {
+		if (flt.equals(Float.NaN) || flt.equals(Float.POSITIVE_INFINITY) || flt.equals(Float.NEGATIVE_INFINITY)) {
+			return "null";
+		} else {
+			return flt.toString();
+		}
+	}
+
+	public static String DoubleToJsonString (Double dbl) {
+		if (dbl.equals(Double.NaN) || dbl.equals(Double.POSITIVE_INFINITY) || dbl.equals(Double.NEGATIVE_INFINITY)) {
+			return "null";
+		} else {
+			return dbl.toString();
 		}
 	}
 

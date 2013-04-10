@@ -40,10 +40,9 @@ JC := javac
 JDOC := javadoc
 JAR := jar
 JARFLAGS := -cf
-JPATH := $(JUNIT_HOME)/*
-JCFLAGS := -cp "$(JPATH):$(LIB_DIR)*:."
-JDOCFLAGS := -classpath "$(JPATH):$(LIB_DIR)*:." -quiet -private -use -version -author
-JTEST_FLAGS := -cp "$(JPATH):$(TARGET_DIR)*:$(LIB_DIR)*:."
+JCFLAGS := -cp "$(LIB_DIR)*:."
+JDOCFLAGS := -classpath "$(LIB_DIR)*:." -quiet -private -use -version -author
+JTEST_FLAGS := -cp "$(TARGET_DIR)$(CLASS_DIR):$(LIB_DIR)*:."
 TAR_GZ := tar -czvf
 TAR_FILE := tar.gz
 ZIP := zip -r
@@ -106,7 +105,6 @@ check:
 	@if ! test -d "$(SRC_DIR)$(CODE_DIR)$(WEBAPP_DIR)$(WEBINF_DIR)"; then echo "Missing web-inf directory $(SRC_DIR)$(CODE_DIR)$(WEBAPP_DIR)$(WEBINF_DIR), see 'make create'"; exit 1; fi
 	@if ! test -d "$(SRC_DIR)$(CODE_DIR)$(JAVA_DIR)"; then echo "Missing java code directory $(SRC_DIR)$(CODE_DIR)$(JAVA_DIR), see 'make create'"; exit 1; fi
 	@if ! test -d "$(SRC_DIR)$(TEST_DIR)"; then echo "Missing test directory $(SRC_DIR)$(TEST_DIR), see 'make create'"; exit 1; fi
-	@if test "$(JUNIT_HOME)" = "" ; then echo "JUNIT_HOME is undefined"; exit 1; fi
 	@if test "$(JBOSS_HOME)" = "" ; then echo "JBOSS_HOME is undefined"; exit 1; fi
 
 clean: clean_build clean_doc clean_backup
@@ -138,7 +136,7 @@ test: compile_test
 	@for test_file in `cd $(TARGET_DIR)$(TEST_CLASS_DIR) ; find . -name "*.class" | awk '{path = substr($$0,3,length($$0)-8); gsub(/\//,".",path); print path;}'` ; do \
 		echo Testing: $$test_file ; \
 		if test "$$i" = "" ; then cd $(TARGET_DIR)$(TEST_CLASS_DIR); fi; \
-		output=`java -cp "$(JUNIT_HOME)/*:../../$(DIST_DIR)$(PACKAGE_NAME):." org.junit.runner.JUnitCore $$test_file` ; \
+		output=`java -cp "../../$(LIB_DIR)*:../$(CLASS_DIR):." org.junit.runner.JUnitCore $$test_file` ; \
 		echo "$$output" ; \
 		if test `echo $$output | grep "FAILURES!!!" | wc -l` -gt 0; then exit 1; fi; \
 		i=`expr $$i + 1`; \

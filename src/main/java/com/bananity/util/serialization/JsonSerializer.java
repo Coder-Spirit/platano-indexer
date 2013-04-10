@@ -57,9 +57,11 @@ public class JsonSerializer {
 			.append(
 				str
 					.replace("\"", "\\\"")
+					.replace("\b", "\\b")
+					.replace("\f", "\\f")
 					.replace("\n", "\\n")
-					.replace("\t", "\\t")
 					.replace("\r", "\\r")
+					.replace("\t", "\\t")
 			)
 			.append("\"")
 			.toString();

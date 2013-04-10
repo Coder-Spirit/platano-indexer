@@ -18,50 +18,31 @@ public class JsonSerializer {
 	 * @return 				JSON string
 	 */
 	public static String ObjectToJsonString (Object jsonObject) {
+		// TODO : Add support to
+		// - Character, char[], boolean[], int[], long[], float[], double[]
+
 		if (jsonObject == null) {
-
 			return "null";
-
-		} if (jsonObject instanceof Boolean) {
-
+		} else if (jsonObject instanceof Boolean) {
 			return ((Boolean)jsonObject).toString();
-
-		} if (jsonObject instanceof Integer) {
-
+		} else if (jsonObject instanceof Integer) {
 			return ((Integer)jsonObject).toString();
-
-		} if (jsonObject instanceof Long) {
-
+		} else if (jsonObject instanceof Long) {
 			return ((Long)jsonObject).toString();
-
-		} if (jsonObject instanceof Float) {
-
+		} else if (jsonObject instanceof Float) {
 			return ((Float)jsonObject).toString();
-
-		} if (jsonObject instanceof Double) {
-
+		} else if (jsonObject instanceof Double) {
 			return ((Double)jsonObject).toString();
-
-		} if (jsonObject instanceof String) {
-
+		} else if (jsonObject instanceof String) {
 			return StringToJsonString((String)jsonObject);
-
-		} if (jsonObject instanceof Collection) {
-
+		} else if (jsonObject instanceof Collection) {
 			return CollectionToJsonString((Collection)jsonObject);
-
-		} if (jsonObject instanceof Object[]) {
-
+		} else if (jsonObject instanceof Object[]) {
 			return ArrayToJsonString((Object[])jsonObject);
-
-		} if (jsonObject instanceof Map) {
-
+		} else if (jsonObject instanceof Map) {
 			return MapToJsonString((Map)jsonObject);
-
-		} if (jsonObject instanceof IJsonSerializable) {
-
+		} else if (jsonObject instanceof IJsonSerializable) {
 			return ((IJsonSerializable)jsonObject).toJsonStr();
-
 		} else {
 			return ""; // TODO : throw an Exception
 		}

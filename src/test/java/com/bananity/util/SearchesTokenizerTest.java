@@ -262,7 +262,7 @@ public class SearchesTokenizerTest
 	public void test_getSubTokensList_SingleWord () {
 		String singleWord = "Bananity";
 
-		String[] _2Array = {
+		String[] _array = {
 			"bananity",
 			"bananit","ananity",
 			"banani","ananit","nanity",
@@ -272,12 +272,32 @@ public class SearchesTokenizerTest
 			"ba","an","na","an","ni","it","ty"
 		};
 
-		ArrayList<String> _2List = SearchesTokenizer.getSubTokensList(singleWord);
+		ArrayList<String> _list = SearchesTokenizer.getSubTokensList(singleWord);
 
-		Assert.assertEquals(_2Array.length, _2List.size());
+		Assert.assertEquals(_array.length, _list.size());
 
-		for (String token : _2Array) {
-			Assert.assertTrue(_2List.contains(token));
+		for (String token : _array) {
+			Assert.assertTrue(_list.contains(token));
+		}
+	}
+
+	@Test
+	public void test_getSubTokensList_TwoWords () {
+		String twoWords = "Love Hate";
+
+		String[] _array = {
+			"love hate",
+			"love", "hate",
+			"lov", "ove", "hat", "ate",
+			"lo", "ov", "ve", "ha", "at", "te"
+		};
+
+		ArrayList<String> _list = SearchesTokenizer.getSubTokensList(twoWords);
+
+		Assert.assertEquals(_array.length, _list.size());
+
+		for (String token : _array) {
+			Assert.assertTrue(_list.contains(token));
 		}
 	}
 }

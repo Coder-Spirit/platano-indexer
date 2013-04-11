@@ -28,18 +28,14 @@ public class ResultItemComparator implements Comparator<String>
 		Double d1 = distancesCache.get(r1);
 		Double d2 = distancesCache.get(r2);
 
-		try {
-			if (d1 == null) {
-				d1 = Jaccard.distance(SearchesTokenizer.getSubTokensBag(r1), searchTermBag, false);
-				distancesCache.put(r1, d1);
-			}
+		if (d1 == null) {
+			d1 = Jaccard.distance(SearchesTokenizer.getSubTokensBag(r1), searchTermBag, false);
+			distancesCache.put(r1, d1);
+		}
 
-			if (d2 == null) {
-				d2 = Jaccard.distance(SearchesTokenizer.getSubTokensBag(r2), searchTermBag, false);
-				distancesCache.put(r2, d2);
-			}
-		} catch (Exception e) {
-			// TODO: Comprobar que efectivamente no se lanzan IOExceptions
+		if (d2 == null) {
+			d2 = Jaccard.distance(SearchesTokenizer.getSubTokensBag(r2), searchTermBag, false);
+			distancesCache.put(r2, d2);
 		}
 
 		return d1.compareTo(d2);

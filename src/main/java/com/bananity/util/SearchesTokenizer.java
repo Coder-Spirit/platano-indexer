@@ -47,7 +47,7 @@ public class SearchesTokenizer
 	/**
 	 *
 	 */
-	public static HashBag<String> getSubTokensBag (String searchTerm) throws Exception {
+	public static HashBag<String> getSubTokensBag (String searchTerm) {
 		ArrayList<String> tokens = tokenize(searchTerm, true);
 
 		int maxLength = 0;

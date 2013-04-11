@@ -111,6 +111,37 @@ public class SearchesTokenizerTest
 	}
 
 	@Test
+	public void test_tokenize_MixedCaseSingleWord () {
+		String mixedCaseWord = "Bananity";
+		ArrayList<String> tokenizeMixedCaseResult;
+
+
+		tokenizeMixedCaseResult = SearchesTokenizer.tokenize(mixedCaseWord, false);
+		Assert.assertEquals(1, tokenizeMixedCaseResult.size());
+		Assert.assertEquals("Bananity", tokenizeMixedCaseResult.get(0));
+		
+		tokenizeMixedCaseResult = SearchesTokenizer.tokenize(mixedCaseWord, false, false);
+		Assert.assertEquals(1, tokenizeMixedCaseResult.size());
+		Assert.assertEquals("Bananity", tokenizeMixedCaseResult.get(0));
+
+		tokenizeMixedCaseResult = SearchesTokenizer.tokenize(mixedCaseWord, false, true);
+		Assert.assertEquals(1, tokenizeMixedCaseResult.size());
+		Assert.assertEquals("Bananity", tokenizeMixedCaseResult.get(0));
+
+		tokenizeMixedCaseResult = SearchesTokenizer.tokenize(mixedCaseWord, true);
+		Assert.assertEquals(1, tokenizeMixedCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeMixedCaseResult.get(0));
+		
+		tokenizeMixedCaseResult = SearchesTokenizer.tokenize(mixedCaseWord, true, false);
+		Assert.assertEquals(1, tokenizeMixedCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeMixedCaseResult.get(0));
+
+		tokenizeMixedCaseResult = SearchesTokenizer.tokenize(mixedCaseWord, true, true);
+		Assert.assertEquals(1, tokenizeMixedCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeMixedCaseResult.get(0));
+	}
+
+	@Test
 	public void test_tokenize_UpperCaseSingleWord () {
 		String upperCaseWord = "BANANITY";
 		ArrayList<String> tokenizeUpperCaseResult;
@@ -141,9 +172,92 @@ public class SearchesTokenizerTest
 		Assert.assertEquals("bananity", tokenizeUpperCaseResult.get(0));
 	}
 
-	// TODO for TwoWords and ThreeWords
+	@Test
+	public void test_tokenize_MixedCaseTwoWords () {
+		String mixedCaseTwoWords = "Love Hate";
+		ArrayList<String> tokenizeMixedCaseTwoWordsResult;
 
-	/*
+
+		tokenizeMixedCaseTwoWordsResult = SearchesTokenizer.tokenize(mixedCaseTwoWords, false);
+		Assert.assertEquals(2, tokenizeMixedCaseTwoWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("Love"));
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("Hate"));
+		
+		tokenizeMixedCaseTwoWordsResult = SearchesTokenizer.tokenize(mixedCaseTwoWords, false, false);
+		Assert.assertEquals(2, tokenizeMixedCaseTwoWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("Love"));
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("Hate"));
+
+		tokenizeMixedCaseTwoWordsResult = SearchesTokenizer.tokenize(mixedCaseTwoWords, false, true);
+		Assert.assertEquals(3, tokenizeMixedCaseTwoWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("Love"));
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("Hate"));
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("Love Hate"));
+
+		tokenizeMixedCaseTwoWordsResult = SearchesTokenizer.tokenize(mixedCaseTwoWords, true);
+		Assert.assertEquals(2, tokenizeMixedCaseTwoWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("love"));
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("hate"));
+		
+		tokenizeMixedCaseTwoWordsResult = SearchesTokenizer.tokenize(mixedCaseTwoWords, true, false);
+		Assert.assertEquals(2, tokenizeMixedCaseTwoWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("love"));
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("hate"));
+
+		tokenizeMixedCaseTwoWordsResult = SearchesTokenizer.tokenize(mixedCaseTwoWords, true, true);
+		Assert.assertEquals(3, tokenizeMixedCaseTwoWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("love"));
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("hate"));
+		Assert.assertTrue(tokenizeMixedCaseTwoWordsResult.contains("love hate"));
+	}
+
+	@Test
+	public void test_tokenize_MixedCaseThreeWords () {
+		String mixedCaseThreeWords = "The Banana Society";
+		ArrayList<String> tokenizeMixedCaseThreeWordsResult;
+
+
+		tokenizeMixedCaseThreeWordsResult = SearchesTokenizer.tokenize(mixedCaseThreeWords, false);
+		Assert.assertEquals(3, tokenizeMixedCaseThreeWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("The"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("Banana"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("Society"));
+		
+		tokenizeMixedCaseThreeWordsResult = SearchesTokenizer.tokenize(mixedCaseThreeWords, false, false);
+		Assert.assertEquals(3, tokenizeMixedCaseThreeWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("The"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("Banana"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("Society"));
+
+		tokenizeMixedCaseThreeWordsResult = SearchesTokenizer.tokenize(mixedCaseThreeWords, false, true);
+		Assert.assertEquals(5, tokenizeMixedCaseThreeWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("The"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("Banana"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("Society"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("The Banana"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("Banana Society"));
+
+		tokenizeMixedCaseThreeWordsResult = SearchesTokenizer.tokenize(mixedCaseThreeWords, true);
+		Assert.assertEquals(3, tokenizeMixedCaseThreeWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("the"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("banana"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("society"));
+		
+		tokenizeMixedCaseThreeWordsResult = SearchesTokenizer.tokenize(mixedCaseThreeWords, true, false);
+		Assert.assertEquals(3, tokenizeMixedCaseThreeWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("the"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("banana"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("society"));
+
+		tokenizeMixedCaseThreeWordsResult = SearchesTokenizer.tokenize(mixedCaseThreeWords, true, true);
+		Assert.assertEquals(5, tokenizeMixedCaseThreeWordsResult.size());
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("the"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("banana"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("society"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("the banana"));
+		Assert.assertTrue(tokenizeMixedCaseThreeWordsResult.contains("banana society"));
+	}
+
 	@Test
 	public void test_getSubTokensList_SingleWord () {
 		String singleWord = "Bananity";
@@ -163,9 +277,7 @@ public class SearchesTokenizerTest
 		Assert.assertEquals(_2Array.length, _2List.size());
 
 		for (String token : _2Array) {
-			System.out.println("Testing token : " + token);
 			Assert.assertTrue(_2List.contains(token));
 		}
 	}
-	*/
 }

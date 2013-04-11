@@ -125,7 +125,7 @@ public class SearchesTokenizer
 			processedText = text;
 		}
 
-		return new ArrayList<String>(Arrays.asList(text.split("\\s+")));
+		return new ArrayList<String>(Arrays.asList(processedText.split("\\s+")));
 	}
 
 	/**

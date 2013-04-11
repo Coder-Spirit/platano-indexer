@@ -80,40 +80,65 @@ public class SearchesTokenizerTest
 	}
 
 	@Test
-	public void test_tokenize_singleWord () {
+	public void test_tokenize_UnderCaseSingleWord () {
+		String underCaseWord = "bananity";
 		ArrayList<String> tokenizeUnderCaseResult;
-		ArrayList<String> tokenizeUpperCaseResult;
-		ArrayList<String> tokenizeMixedCaseResult;
 
-		String undercaseWord = "bananity";
+
+		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(underCaseWord, false);
+		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+		
+		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(underCaseWord, false, false);
+		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+
+		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(underCaseWord, false, true);
+		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+
+		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(underCaseWord, true);
+		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+		
+		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(underCaseWord, true, false);
+		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+
+		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(underCaseWord, true, true);
+		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+	}
+
+	@Test
+	public void test_tokenize_UpperCaseSingleWord () {
 		String upperCaseWord = "BANANITY";
-		String mixedCaseWord = "Bananity";
+		ArrayList<String> tokenizeUpperCaseResult;
 
-		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(undercaseWord, false);
-		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
-		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+
+		tokenizeUpperCaseResult = SearchesTokenizer.tokenize(upperCaseWord, false);
+		Assert.assertEquals(1, tokenizeUpperCaseResult.size());
+		Assert.assertEquals("BANANITY", tokenizeUpperCaseResult.get(0));
 		
-		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(undercaseWord, false, false);
-		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
-		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+		tokenizeUpperCaseResult = SearchesTokenizer.tokenize(upperCaseWord, false, false);
+		Assert.assertEquals(1, tokenizeUpperCaseResult.size());
+		Assert.assertEquals("BANANITY", tokenizeUpperCaseResult.get(0));
 
-		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(undercaseWord, false, true);
-		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
-		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+		tokenizeUpperCaseResult = SearchesTokenizer.tokenize(upperCaseWord, false, true);
+		Assert.assertEquals(1, tokenizeUpperCaseResult.size());
+		Assert.assertEquals("BANANITY", tokenizeUpperCaseResult.get(0));
 
-		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(undercaseWord, true);
-		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
-		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+		tokenizeUpperCaseResult = SearchesTokenizer.tokenize(upperCaseWord, true);
+		Assert.assertEquals(1, tokenizeUpperCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUpperCaseResult.get(0));
 		
-		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(undercaseWord, true, false);
-		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
-		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
+		tokenizeUpperCaseResult = SearchesTokenizer.tokenize(upperCaseWord, true, false);
+		Assert.assertEquals(1, tokenizeUpperCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUpperCaseResult.get(0));
 
-		tokenizeUnderCaseResult = SearchesTokenizer.tokenize(undercaseWord, true, true);
-		Assert.assertEquals(1, tokenizeUnderCaseResult.size());
-		Assert.assertEquals("bananity", tokenizeUnderCaseResult.get(0));
-
-		// TODO : For UpperCase and Mixed Case
+		tokenizeUpperCaseResult = SearchesTokenizer.tokenize(upperCaseWord, true, true);
+		Assert.assertEquals(1, tokenizeUpperCaseResult.size());
+		Assert.assertEquals("bananity", tokenizeUpperCaseResult.get(0));
 	}
 
 	// TODO for TwoWords and ThreeWords

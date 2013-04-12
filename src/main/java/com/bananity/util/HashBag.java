@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Alberto Rubio Muñoz
  */
-public class HashBag<T> {
+public class HashBag<T> implements Cloneable {
 
 	private int size;
 	private HashMap<T, Integer> hb;
@@ -30,6 +30,15 @@ public class HashBag<T> {
 		for ( T e : coll ) {
 			put( e );
 		}
+	}
+
+	public HashBag<T> clone () {
+		HashBag<T> cloneHB = new HashBag<T>();
+		
+		cloneHB.size = this.size;
+		cloneHB.hb = (HashMap<T, Integer>)this.hb.clone();
+
+		return cloneHB;
 	}
 
 	public int size() {

@@ -26,6 +26,7 @@ public class JaccardTest
 	private ArrayList<String> bcdList;
 	private ArrayList<String> cdaList;
 	private ArrayList<String> dabList;
+	private ArrayList<String> abcdList;
 
 	@Before
 	public void setupJaccardTest () {
@@ -33,10 +34,13 @@ public class JaccardTest
 		bcdList = new ArrayList<String>();
 		cdaList = new ArrayList<String>();
 		dabList = new ArrayList<String>();
+		abcdList = new ArrayList<String>();
 
 		abcList.add("a"); bcdList.add("b"); cdaList.add("c"); dabList.add("d");
 		abcList.add("b"); bcdList.add("c"); cdaList.add("d"); dabList.add("a");
 		abcList.add("c"); bcdList.add("d"); cdaList.add("a"); dabList.add("b");
+
+		abcdList.add("a"); abcdList.add("b"); abcdList.add("c"); abcdList.add("d");
 	}
 
 
@@ -88,8 +92,12 @@ public class JaccardTest
 	public void test_distance_ArrayList_checkDistanceValues () {
 		Assert.assertEquals(0.5, Jaccard.distance(abcList, bcdList, true), 0.00001);
 		Assert.assertEquals(0.5, Jaccard.distance(bcdList, abcList, true), 0.00001);
+		Assert.assertEquals(0.25, Jaccard.distance(abcdList, abcList, true), 0.00001);
+		Assert.assertEquals(0.25, Jaccard.distance(abcList, abcdList, true), 0.00001);
 
 		Assert.assertEquals(0.33333, Jaccard.distance(abcList, bcdList, false), 0.00001);
 		Assert.assertEquals(0.33333, Jaccard.distance(bcdList, abcList, false), 0.00001);
+		Assert.assertEquals(0., Jaccard.distance(abcdList, abcList, false), 0.00001);
+		Assert.assertEquals(0.25, Jaccard.distance(abcList, abcdList, false), 0.00001);
 	}
 }

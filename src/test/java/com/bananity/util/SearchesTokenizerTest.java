@@ -3,9 +3,12 @@ package com.bananity.util;
 
 // Main Class
 import com.bananity.text.TextNormalizer;
+import com.bananity.util.HashBag;
 
 // Java Utils
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 // Junit
 import org.junit.Assert;
@@ -278,6 +281,37 @@ public class SearchesTokenizerTest
 
 		for (String token : _array) {
 			Assert.assertTrue(_list.contains(token));
+		}
+	}
+
+	@Test
+	public void test_getSubTokensBag_SingleWord () {
+		String singleWord = "Bananity";
+
+		String[] _array = {
+			"bananity",
+			"bananit","ananity",
+			"banani","ananit","nanity",
+			"banan","anani","nanit","anity",
+			"bana","anan","nani","anit","nity",
+			"ban","ana","nan","ani","nit","ity",
+			"ba","an","na","an","ni","it","ty"
+		};
+
+		ArrayList<String> al = new ArrayList<String>(Arrays.asList(_array));
+
+		HashBag<String> exampleHB = new HashBag<String>(al);
+		HashBag<String> testHB = SearchesTokenizer.getSubTokensBag(singleWord);
+
+		Assert.assertEquals(_array.length, testHB.size());
+		Assert.assertEquals(exampleHB.size(), testHB.size());
+
+		for (String s : al) {
+			Assert.assertTrue(exampleHB.contains(s));
+			Assert.assertTrue(testHB.contains(s));
+
+			Assert.assertEquals(Collections.frequency(al, s), exampleHB.getTimes(s));
+			Assert.assertEquals(Collections.frequency(al, s), testHB.getTimes(s));
 		}
 	}
 

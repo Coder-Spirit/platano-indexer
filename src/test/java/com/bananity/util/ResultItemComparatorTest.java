@@ -34,7 +34,7 @@ public class ResultItemComparatorTest
 		Assert.assertEquals(0, c2.compare("Xananity", "Xananity"));
 
 		// More Interesting comparisons
-		//Assert.assertEquals(1, c1.compare("Bananity On", "Bananity"));
-		//Assert.assertEquals(-1, c1.compare("Bananity", "Bananity On"));
+		Assert.assertEquals(1, c1.compare("Bananity On", "Bananity"));
+		Assert.assertEquals(-1, c1.compare("Bananity", "Bananity On"));
 	}
 }

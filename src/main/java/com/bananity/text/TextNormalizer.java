@@ -1,6 +1,11 @@
 package com.bananity.text;
 
 
+// Apache Commons
+import org.apache.commons.lang3.text.translate.UnicodeEscaper;
+import org.apache.commons.lang3.text.translate.UnicodeUnescaper;
+
+// Java Text
 import java.text.Normalizer;
 
 
@@ -11,8 +16,11 @@ import java.text.Normalizer;
  */
 public class TextNormalizer
 {
+	private static UnicodeEscaper 		escaper 	= UnicodeEscaper.above(127);
+	private static UnicodeUnescaper 	unescaper 	= new UnicodeUnescaper();
+
 	/**
-	 * This method normalizs UTF8 strings into its canonical form
+	 * This method normalizes UTF8 strings into its canonical form
 	 *
 	 * @param 	text 	Text to be normalized
 	 * @return 			normalized text
@@ -22,6 +30,21 @@ public class TextNormalizer
 			return Normalizer.normalize(text, Normalizer.Form.NFC);
 		} else {
 			return text;
+		}
+	}
+
+	/**
+	 * This method normalizes UTF8 strings into its canonical form (and, if you want, unescapes \uXXXX substrings)
+	 *
+	 * @param 	text 		Text to be normalized
+	 * @param 	unescape 	Indicates if you want to unescape \uXXXX substrings
+	 * @return 				normalized text
+	 */
+	public static String normalizeText (final String text, boolean unescape) {
+		if (unescape) {
+			return normalizeText(unescaper.translate(text));
+		} else {
+			return normalizeText(text);
 		}
 	}
 
@@ -41,5 +64,19 @@ public class TextNormalizer
 		}
 
 		return nfdNormalizedText.replaceAll("\\p{IsM}", "");
+	}
+
+	/**
+	 *
+	 */
+	public static String escapeUnicode (final String text) {
+		return escaper.translate(text);
+	}
+
+	/**
+	 *
+	 */
+	public static String unescapeUnicode (final String text) {
+		return unescaper.translate(text);
 	}
 }

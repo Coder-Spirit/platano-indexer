@@ -52,7 +52,7 @@ public class SearchController extends BaseController {
 		public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			try {
 				String 	collName 	= request.getParameter("c");
-				String 	searchTerm 	= TextNormalizer.normalizeText(request.getParameter("searchTerm"));
+				String 	searchTerm 	= TextNormalizer.normalizeText(request.getParameter("searchTerm"), true);
 				int 	limit 		= Integer.parseInt(request.getParameter("limit"));
 
 				if (collName == null || collName.length() == 0 || searchTerm == null || limit <= 0) {

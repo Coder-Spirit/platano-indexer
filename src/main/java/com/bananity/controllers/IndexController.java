@@ -50,7 +50,7 @@ public class IndexController extends BaseController {
 			try {
 				String 	method 		= request.getParameter("m");
 				String 	collName 	= request.getParameter("c");
-				String 	item 		= TextNormalizer.normalizeText(request.getParameter("item"));
+				String 	item 		= TextNormalizer.normalizeText(request.getParameter("item"), true);
 
 				if (collName == null || collName.length() == 0 || item == null || item.length() == 0) {
 					throw new Exception( "Invalid parameters" );

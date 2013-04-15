@@ -1,7 +1,11 @@
 package com.bananity.util.serialization;
 
+
+import com.bananity.text.TextNormalizer;
+
 import java.util.Collection;
 import java.util.Map;
+
 
 /**
  * This class encapsulates static methods to serialize objects to JSON representations 
@@ -70,7 +74,7 @@ public class JsonSerializer {
 	public static String StringToJsonString (String str) {
 		return new StringBuilder()
 			.append("\"")
-			.append(
+			.append(TextNormalizer.escapeUnicode(
 				str
 					.replace("\"", "\\\"")
 					.replace("\b", "\\b")
@@ -78,7 +82,7 @@ public class JsonSerializer {
 					.replace("\n", "\\n")
 					.replace("\r", "\\r")
 					.replace("\t", "\\t")
-			)
+			))
 			.append("\"")
 			.toString();
 	}

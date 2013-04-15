@@ -34,10 +34,10 @@ public class TextNormalizer
 	}
 
 	/**
-	 * This method normalizes UTF8 strings into its canonical form (and, if you want, unescapes \uXXXX substrings)
+	 * This method normalizes UTF8 strings into its canonical form (and, if you want, unescapes \\uXXXX substrings)
 	 *
 	 * @param 	text 		Text to be normalized
-	 * @param 	unescape 	Indicates if you want to unescape \uXXXX substrings
+	 * @param 	unescape 	Indicates if you want to unescape \\uXXXX substrings
 	 * @return 				normalized text
 	 */
 	public static String normalizeText (final String text, boolean unescape) {

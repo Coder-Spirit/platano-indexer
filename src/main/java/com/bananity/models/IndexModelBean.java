@@ -4,12 +4,17 @@ package com.bananity.models;
 // Bananity Classes
 import com.bananity.caches.CacheBean;
 import com.bananity.constants.StorageConstantsBean;
+import com.bananity.locks.LocksBean;
 import com.bananity.storages.IIndexStorage;
 import com.bananity.storages.StoragesFactoryBean;
 import com.bananity.util.StorageItemComparator;
 
 // Google Caches
 import com.google.common.cache.Cache;
+
+// Java Concurrency
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 // Java utils
 import java.util.ArrayList;
@@ -24,8 +29,6 @@ import javax.ejb.Singleton;
 import javax.annotation.PostConstruct;
 
 // Concurrency Management
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.ejb.DependsOn;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
@@ -48,12 +51,14 @@ import org.apache.log4j.PropertyConfigurator;
  */
 @Startup
 @Singleton
-@DependsOn({"StorageConstantsBean", "CacheBean", "StoragesFactoryBean"})
-//@AccessTimeout(value=10000)
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@DependsOn({"LocksBean", "StorageConstantsBean", "CacheBean", "StoragesFactoryBean"})
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class IndexModelBean {
 	// TODO: Pasar a ConcurrencyManagementType.BEAN
 	//       y manejar bloqueos en insert de forma lo más atómica posible
+
+	@EJB
+	private LocksBean lB;
 
 	/**
 	 *  Storage Factory reference
@@ -91,7 +96,6 @@ public class IndexModelBean {
 	/**
 	 *  This method initializes the logger and storage references
 	 */
-	@Lock(LockType.WRITE)
 	@PostConstruct
 		void init() {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -113,31 +117,33 @@ public class IndexModelBean {
 	 *
 	 *  @return 			List of strings (found results in storage)
 	 */
-	@Lock(LockType.READ)
-		public ArrayList<String> find (String collName, Collection<String> subTokens, int limit) throws Exception {
-			Cache<String, ArrayList<String>> cache = cB.getTokensCache(collName);
+	public ArrayList<String> find (String collName, Collection<String> subTokens, int limit) throws Exception {
+		Cache<String, ArrayList<String>> cache = cB.getTokensCache(collName);
 
-			if (cache == null) {
-				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
-			}
-
-			ArrayList<String> subTokenResult;
-			ArrayList<String> result 			= new ArrayList<String>();
-
-			for (String subToken : subTokens) {
-				subTokenResult = cache.getIfPresent(subToken);
-
-				if (subTokenResult == null) {
-					subTokenResult = storage.findSubToken (collName, subToken);
-					subTokenResult.trimToSize();
-					cache.put(subToken, subTokenResult);
-				}
-
-				result.addAll(subTokenResult);
-			}
-
-			return result;
+		if (cache == null) {
+			throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 		}
+
+		ReadLock collectionReadLock = lB.getCollectionReadLock(collName);
+		WriteLock collectionWriteLock = lB.getCollectionWriteLock(collName);
+
+		ArrayList<String> subTokenResult;
+		ArrayList<String> result 			= new ArrayList<String>();
+
+		for (String subToken : subTokens) {
+			subTokenResult = cache.getIfPresent(subToken);
+
+			if (subTokenResult == null) {
+				subTokenResult = storage.findSubToken (collName, subToken);
+				subTokenResult.trimToSize();
+				cache.put(subToken, subTokenResult);
+			}
+
+			result.addAll(subTokenResult);
+		}
+
+		return result;
+	}
 
 	/**
 	 *  This method inserts an 'item' into the specified collection (collName) through many 'subTokens'
@@ -146,68 +152,67 @@ public class IndexModelBean {
 	 *  @param item 		Item to be inserted
 	 *  @param subTokens 	Tokens used to index the item
 	 */
-	@Lock(LockType.READ)
-		public void insert (String collName, String item, Collection<String> subTokens) throws Exception {
-			Cache<String, ArrayList<String>> cache = cB.getTokensCache(collName);
+	public void insert (String collName, String item, Collection<String> subTokens) throws Exception {
+		Cache<String, ArrayList<String>> cache = cB.getTokensCache(collName);
 
-			if (cache == null) {
-				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
+		if (cache == null) {
+			throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
+		}
+
+		boolean addedItem, mustTrim, recoveredFromStorage;
+		String sortingTmpValue;
+
+		for (String subToken : subTokens) {
+			ArrayList<String>  subTokenRelatedItems = cache.getIfPresent(subToken);
+			StorageItemComparator tokenComparator = new StorageItemComparator(subToken);
+			
+			if (subTokenRelatedItems == null) {
+				subTokenRelatedItems = storage.findSubToken (collName, subToken);
+				recoveredFromStorage = true;
+				mustTrim = true;
+			} else {
+				recoveredFromStorage = false;
+				mustTrim = false;
 			}
 
-			boolean addedItem, mustTrim, recoveredFromStorage;
-			String sortingTmpValue;
-
-			for (String subToken : subTokens) {
-				ArrayList<String>  subTokenRelatedItems = cache.getIfPresent(subToken);
-				StorageItemComparator tokenComparator = new StorageItemComparator(subToken);
-				
-				if (subTokenRelatedItems == null) {
-					subTokenRelatedItems = storage.findSubToken (collName, subToken);
-					recoveredFromStorage = true;
+			// Este enfoque (más complejo que un simple Collections.sort)
+			// se aplica para evitar copias en memoria, inserciones en mongo,
+			// y ordenaciones inútiles
+			if (!subTokenRelatedItems.contains(item)) {
+				if (subTokenRelatedItems.size() < tokenEntrySize) {
+					subTokenRelatedItems.add(item);
+					addedItem = true;
 					mustTrim = true;
-				} else {
-					recoveredFromStorage = false;
-					mustTrim = false;
-				}
-
-				// Este enfoque (más complejo que un simple Collections.sort)
-				// se aplica para evitar copias en memoria, inserciones en mongo,
-				// y ordenaciones inútiles
-				if (!subTokenRelatedItems.contains(item)) {
-					if (subTokenRelatedItems.size() < tokenEntrySize) {
-						subTokenRelatedItems.add(item);
-						addedItem = true;
-						mustTrim = true;
-					} else if (tokenComparator.compare(subTokenRelatedItems.get(tokenEntrySize-1), item) > 0) {
-						subTokenRelatedItems.set(tokenEntrySize-1, item);
-						addedItem = true;
-					} else {
-						addedItem = false;
-					}
+				} else if (tokenComparator.compare(subTokenRelatedItems.get(tokenEntrySize-1), item) > 0) {
+					subTokenRelatedItems.set(tokenEntrySize-1, item);
+					addedItem = true;
 				} else {
 					addedItem = false;
 				}
+			} else {
+				addedItem = false;
+			}
 
-				if (addedItem) {
-					
-					for (int i=subTokenRelatedItems.size()-1; i>0 && tokenComparator.compare(subTokenRelatedItems.get(i), subTokenRelatedItems.get(i-1)) < 0; i--) {
-						sortingTmpValue = subTokenRelatedItems.get(i);
-						subTokenRelatedItems.set(i, subTokenRelatedItems.get(i-1));
-						subTokenRelatedItems.set(i-1, sortingTmpValue);
-					}
-
-					storage.insert(collName, subToken, subTokenRelatedItems);
+			if (addedItem) {
+				
+				for (int i=subTokenRelatedItems.size()-1; i>0 && tokenComparator.compare(subTokenRelatedItems.get(i), subTokenRelatedItems.get(i-1)) < 0; i--) {
+					sortingTmpValue = subTokenRelatedItems.get(i);
+					subTokenRelatedItems.set(i, subTokenRelatedItems.get(i-1));
+					subTokenRelatedItems.set(i-1, sortingTmpValue);
 				}
 
-				if (addedItem || recoveredFromStorage) {
-					cache.put(subToken, subTokenRelatedItems);
-				}
+				storage.insert(collName, subToken, subTokenRelatedItems);
+			}
 
-				if (mustTrim) {
-					subTokenRelatedItems.trimToSize();
-				}
+			if (addedItem || recoveredFromStorage) {
+				cache.put(subToken, subTokenRelatedItems);
+			}
+
+			if (mustTrim) {
+				subTokenRelatedItems.trimToSize();
 			}
 		}
+	}
 
 	/**
 	 *  This method removes an 'item' from the specified collection (collName) through many 'subTokens'
@@ -216,8 +221,7 @@ public class IndexModelBean {
 	 *  @param item 		Item to be removed
 	 *  @param subTokens 	Tokens used to index the item
 	 */
-	@Lock(LockType.READ)
-		public void remove (String collName, String item, Collection<String> subTokens) throws Exception {
-			// TODO
-		}
+	public void remove (String collName, String item, Collection<String> subTokens) throws Exception {
+		// TODO
+	}
 }

@@ -109,7 +109,7 @@ public class LocksBean {
 	 *
 	 */
 	public ReadLock getTokenReadLock (String collName, String token) {
-		// TODO : Implement a real token block
+		// TODO : Implement a real token lock
 		return getCollectionReadLock(collName);
 	}
 
@@ -117,7 +117,7 @@ public class LocksBean {
 	 *
 	 */
 	public WriteLock getTokenWriteLock (String collName, String token) {
-		// TODO : Implement a real token block
+		// TODO : Implement a real token lock
 		return getCollectionWriteLock(collName);
 	}
 }

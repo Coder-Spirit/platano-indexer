@@ -6,10 +6,11 @@ import javax.ejb.Startup;
 import javax.ejb.Singleton;
 import javax.annotation.PostConstruct;
 
-// Concurrency Management
-import javax.ejb.Lock;
-import javax.ejb.LockType;
-import javax.ejb.DependsOn;
+// Java Concurrency Management
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+
+// JBoss Concurrency Management
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 
@@ -18,6 +19,10 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
 
+
+/**
+ *
+ */
 @Startup
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
@@ -33,18 +38,18 @@ public class LocksBean {
 	}
 
 	ReadLock getCollectionReadLock (String collName) {
-
+		return null;
 	}
 
 	WriteLock getCollectionWriteLock (String collName) {
-
+		return null;
 	}
 
 	ReadLock getTokenReadLock (String collName, String token) {
-
+		return null;
 	}
 
 	WriteLock getTokenWriteLock (String collName, String token) {
-		
+		return null;
 	}
 }

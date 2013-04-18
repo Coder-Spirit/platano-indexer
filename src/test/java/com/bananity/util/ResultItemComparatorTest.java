@@ -37,4 +37,13 @@ public class ResultItemComparatorTest
 		Assert.assertEquals(1, c1.compare("Bananity On", "Bananity"));
 		Assert.assertEquals(-1, c1.compare("Bananity", "Bananity On"));
 	}
+
+	@Test
+	public void test_compare_regression1 () {
+		ResultItemComparator c1 = new ResultItemComparator(SearchesTokenizer.getSubTokensBag("el viaje de la pegatina"));
+		Assert.assertEquals(-1, c1.compare("El Viaje De La Pegatina", "De la"));
+
+		ResultItemComparator c2 = new ResultItemComparator(SearchesTokenizer.getSubTokensBag("huevos fritos"));
+		Assert.assertEquals(-1, c2.compare("huevos fritos", "Fritos"));
+	}
 }

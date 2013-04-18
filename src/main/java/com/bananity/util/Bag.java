@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 
-public interface Bag<T> extends Cloneable, Iterable<Map.Entry<T, Integer>>
+public interface Bag<T> extends Iterable<Map.Entry<T, Integer>>
 {
 	public void add (final T o);
 	public void add (final T o, int times);

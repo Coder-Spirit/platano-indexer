@@ -31,7 +31,7 @@ public final class HashBag2<T> implements Bag<T>
 	 */
 	public HashBag2 (HashBag2<T> b) {
 		size = b.size;
-		internalMap = (HashMap<T, Integer>)b.internalMap.clone();
+		internalMap = new HashMap<T, Integer>(b.internalMap);
 	}
 
 	/**
@@ -58,12 +58,6 @@ public final class HashBag2<T> implements Bag<T>
 		addAll(l);
 	}
 
-	/**
-	 *
-	 */
-	public Object clone () {
-		return new HashBag2<T>(this);
-	}
 
 	/**
 	 *

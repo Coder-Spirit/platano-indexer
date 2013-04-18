@@ -29,12 +29,12 @@ public class ResultItemComparator implements Comparator<String>
 		Double d2 = distancesCache.get(r2);
 
 		if (d1 == null) {
-			d1 = Jaccard.distance(searchTermBag, SearchesTokenizer.getSubTokensBag(r1), false);
+			d1 = Jaccard.distance(searchTermBag, SearchesTokenizer.getSubTokensBag(r1), true);
 			distancesCache.put(r1, d1);
 		}
 
 		if (d2 == null) {
-			d2 = Jaccard.distance(searchTermBag, SearchesTokenizer.getSubTokensBag(r2), false);
+			d2 = Jaccard.distance(searchTermBag, SearchesTokenizer.getSubTokensBag(r2), true);
 			distancesCache.put(r2, d2);
 		}
 

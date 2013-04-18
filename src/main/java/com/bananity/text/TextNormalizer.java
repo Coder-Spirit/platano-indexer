@@ -55,15 +55,25 @@ public class TextNormalizer
 	 * @return 			flattened text
 	 */
 	public static String flattenText (final String text) {
-		String nfdNormalizedText;
+		return flattenText(text, true);
+	}
 
+	/**
+	 * This method flattens UTF8 strings (removes accents, diacritical marks and other marks, and also can undercase the text)
+	 * 
+	 * @param 	text 	Text to be flattened
+	 * @return 			flattened text
+	 */
+	public static String flattenText (String text, boolean toLowerCase) {
 		if (!Normalizer.isNormalized(text, Normalizer.Form.NFD)) {
-			nfdNormalizedText = Normalizer.normalize(text, Normalizer.Form.NFD).toLowerCase();
-		} else {
-			nfdNormalizedText = text.toLowerCase();
+			text = Normalizer.normalize(text, Normalizer.Form.NFD);
 		}
 
-		return nfdNormalizedText.replaceAll("\\p{IsM}", "");
+		if (toLowerCase) {
+			text = text.toLowerCase();
+		}
+
+		return text.replaceAll("\\p{IsM}", "");
 	}
 
 	/**

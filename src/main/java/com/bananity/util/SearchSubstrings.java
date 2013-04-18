@@ -22,11 +22,11 @@ public class SearchSubstrings {
 
 	private static final int THRESHOLD = 2;
 
-	public SearchSubstrings (final String searchTerm) throws Exception {
+	public SearchSubstrings (final String searchTerm) {
 		this(searchTerm, THRESHOLD);
 	}
 
-	public SearchSubstrings (final String searchTerm, int threshold) throws Exception {
+	public SearchSubstrings (final String searchTerm, int threshold) {
 		this(SearchesTokenizer.tokenize(searchTerm, true, true), threshold);
 	}
 

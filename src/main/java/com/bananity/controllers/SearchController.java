@@ -80,52 +80,52 @@ public class SearchController extends BaseController {
 	 *
 	 *  @return 			List of found elements in the specified collection searching by searchTerm
 	 */
-		private ArrayList<String> searchLogic (String collName, String searchTerm, int limit) throws Exception {
-			Cache<String, ArrayList<String>> cache = cB.getResultCache(collName);
-			
-			if (cache == null) {
-				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
-			}
+	private ArrayList<String> searchLogic (String collName, String searchTerm, int limit) throws Exception {
+		Cache<String, ArrayList<String>> cache = cB.getResultCache(collName);
+		
+		if (cache == null) {
+			throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
+		}
 
-			String cacheKey	= new StringBuilder(TextNormalizer.flattenText( searchTerm )).append('@').append(limit).toString();
-			ArrayList<String> finalResult = cache.getIfPresent( cacheKey );
-			if (finalResult != null) {
-				return finalResult;
-			}
-
-			SearchSubstrings searchSubstrings = new SearchSubstrings(searchTerm);
-			CandidatesCache<String> candidates = new CandidatesCache<String>(new ResultItemComparator(searchSubstrings.getHashBag()), limit);
-
-			int lengthThreshold = searchSubstrings.getMaxTokenLength();
-
-			ArrayList<String> partialResults;
-
-			Set<String> usedTokens = new HashSet();
-			ArrayList<String> currSearch, tmpSearch;
-
-			while ( candidates.size() < limit && lengthThreshold > 0 ) {
-				tmpSearch = new ArrayList<String>( searchSubstrings.getUniqByLength( lengthThreshold ) );
-				currSearch = new ArrayList<String>();
-
-				for ( String s : tmpSearch ) {
-					if ( ! usedTokens.contains( s ) ) {
-						usedTokens.add( s );
-						currSearch.add( s );
-					}
-				}
-
-				if ( currSearch.size() > 0 && (partialResults = imB.find(collName, currSearch, limit)) != null ) {
-					for ( String partialResult : partialResults ) {
-						candidates.put (partialResult);
-					}
-				}
-
-				--lengthThreshold;
-			}
-
-			finalResult = candidates.getRecords();
-			cache.put( cacheKey, finalResult );
-
+		String cacheKey	= new StringBuilder(TextNormalizer.flattenText( searchTerm )).append('@').append(limit).toString();
+		ArrayList<String> finalResult = cache.getIfPresent( cacheKey );
+		if (finalResult != null) {
 			return finalResult;
 		}
+
+		SearchSubstrings searchSubstrings = new SearchSubstrings(searchTerm);
+		CandidatesCache<String> candidates = new CandidatesCache<String>(new ResultItemComparator(searchSubstrings.getHashBag()), limit);
+
+		int lengthThreshold = searchSubstrings.getMaxTokenLength();
+
+		ArrayList<String> partialResults;
+
+		Set<String> usedTokens = new HashSet();
+		ArrayList<String> currSearch, tmpSearch;
+
+		while ( candidates.size() < limit && lengthThreshold > 0 ) {
+			tmpSearch = new ArrayList<String>( searchSubstrings.getUniqByLength( lengthThreshold ) );
+			currSearch = new ArrayList<String>();
+
+			for ( String s : tmpSearch ) {
+				if ( ! usedTokens.contains( s ) ) {
+					usedTokens.add( s );
+					currSearch.add( s );
+				}
+			}
+
+			if ( currSearch.size() > 0 && (partialResults = imB.find(collName, currSearch, limit)) != null ) {
+				for ( String partialResult : partialResults ) {
+					candidates.put (partialResult);
+				}
+			}
+
+			--lengthThreshold;
+		}
+
+		finalResult = candidates.getRecords();
+		cache.put( cacheKey, finalResult );
+
+		return finalResult;
+	}
 }

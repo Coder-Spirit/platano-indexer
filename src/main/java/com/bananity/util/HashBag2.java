@@ -269,20 +269,28 @@ public final class HashBag2<T> implements Bag<T>
 		return itemsCounter;
 	}
 
-	public boolean equals(Object o) {
-		return false;
-	}
-
 	@Override
 	public int hashCode() {
 		return internalMap.hashCode()*994009 + size*997 + itemsCounter;
 	}
 
-	public boolean equals(HashBag2<T> o) {
+	public boolean equals(Object o) {
 		if (o == this) {
 			return true;
 		}
 
+		if (o instanceof HashBag2) {
+			try {
+				return equals((HashBag2<T>)o);
+			} catch (Exception e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public boolean equals(HashBag2<T> o) {
 		if (internalMap.hashCode() == o.internalMap.hashCode() && o.size==size && o.itemsCounter==itemsCounter) {
 			for (Map.Entry<T, Integer> e : o.internalMap.entrySet()) {
 				if (!e.getValue().equals(internalMap.get(e.getKey()))) {

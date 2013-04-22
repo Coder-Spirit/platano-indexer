@@ -20,11 +20,11 @@ public class TextNormalizerTest
 {
 	@Test
 	public void test_flattenText_checkAccentsRemoval () {
-		Assert.assertEquals("aeiou", TextNormalizer.flattenText("AEIOU"));
-		Assert.assertEquals("aeiou", TextNormalizer.flattenText("ÁÉÍÓÚ"));
-		Assert.assertEquals("aeiou", TextNormalizer.flattenText("ÀÈÌÒÙ"));
-		Assert.assertEquals("aeiou", TextNormalizer.flattenText("ÄËÏÖÜ"));
-		Assert.assertEquals("aeiou", TextNormalizer.flattenText("ÂÊÎÔÛ"));
+		Assert.assertEquals("AEIOU", TextNormalizer.flattenText("AEIOU"));
+		Assert.assertEquals("AEIOU", TextNormalizer.flattenText("ÁÉÍÓÚ"));
+		Assert.assertEquals("AEIOU", TextNormalizer.flattenText("ÀÈÌÒÙ"));
+		Assert.assertEquals("AEIOU", TextNormalizer.flattenText("ÄËÏÖÜ"));
+		Assert.assertEquals("AEIOU", TextNormalizer.flattenText("ÂÊÎÔÛ"));
 
 		Assert.assertEquals("aeiou", TextNormalizer.flattenText("áéíóú"));
 		Assert.assertEquals("aeiou", TextNormalizer.flattenText("àèìòù"));
@@ -34,10 +34,10 @@ public class TextNormalizerTest
 
 	@Test
 	public void test_flattenText_checkSpecialCharactersHandling () {
-		Assert.assertEquals("c", TextNormalizer.flattenText("Ç"));
+		Assert.assertEquals("C", TextNormalizer.flattenText("Ç"));
 		Assert.assertEquals("c", TextNormalizer.flattenText("ç"));
 
-		Assert.assertEquals("n", TextNormalizer.flattenText("Ñ"));
+		Assert.assertEquals("N", TextNormalizer.flattenText("Ñ"));
 		Assert.assertEquals("n", TextNormalizer.flattenText("ñ"));
 	}
 }

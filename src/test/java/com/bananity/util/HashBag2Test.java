@@ -38,7 +38,7 @@ public class HashBag2Test
 		HashBag2<String> dHB = new HashBag2<String>(bHB);
 
 		// HashBag from a Bag
-		HashBag2<String> eHB = new HashBag2<String>((Bag)bHB);
+		HashBag2<String> eHB = new HashBag2<String>((IBag)bHB);
 
 		// 
 		HashBag2<String> fHB = new HashBag2<String>(new String[] {"a", "b", "c", "d"});
@@ -114,18 +114,105 @@ public class HashBag2Test
 			"Bty", "Bty", "Love", "Love", "Love", "Hate"
 		});
 
-		aHB.decreaseValue("Love");
+		Assert.assertEquals(3, aHB.decreaseValue("Love"));
 		Assert.assertEquals(5, aHB.size());
 		Assert.assertEquals(2, aHB.getTimes("Bty"));
 		Assert.assertEquals(2, aHB.getTimes("Love"));
 		Assert.assertEquals(1, aHB.getTimes("Hate"));
 		Assert.assertEquals(3, aHB.uniqueItemsCount());
 
-		aHB.decreaseValue("Hate");
+		Assert.assertEquals(1, aHB.decreaseValue("Hate"));
 		Assert.assertEquals(4, aHB.size());
 		Assert.assertEquals(2, aHB.getTimes("Bty"));
 		Assert.assertEquals(2, aHB.getTimes("Love"));
 		Assert.assertEquals(0, aHB.getTimes("Hate"));
 		Assert.assertEquals(2, aHB.uniqueItemsCount());
+	}
+
+	@Test
+	public void test_removeValue () {
+		HashBag2<String> aHB = new HashBag2<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
+
+		Assert.assertEquals(3, aHB.removeValue("Love"));
+		Assert.assertEquals(3, aHB.size());
+		Assert.assertEquals(2, aHB.getTimes("Bty"));
+		Assert.assertEquals(0, aHB.getTimes("Love"));
+		Assert.assertEquals(1, aHB.getTimes("Hate"));
+		Assert.assertEquals(2, aHB.uniqueItemsCount());
+
+		Assert.assertEquals(2, aHB.removeValue("Bty"));
+		Assert.assertEquals(1, aHB.size());
+		Assert.assertEquals(0, aHB.getTimes("Bty"));
+		Assert.assertEquals(0, aHB.getTimes("Love"));
+		Assert.assertEquals(1, aHB.getTimes("Hate"));
+		Assert.assertEquals(1, aHB.uniqueItemsCount());
+
+		Assert.assertEquals(1, aHB.removeValue("Hate"));
+		Assert.assertEquals(0, aHB.size());
+		Assert.assertEquals(0, aHB.getTimes("Bty"));
+		Assert.assertEquals(0, aHB.getTimes("Love"));
+		Assert.assertEquals(0, aHB.getTimes("Hate"));
+		Assert.assertEquals(0, aHB.uniqueItemsCount());
+
+		Assert.assertEquals(new HashBag2<String>(), aHB);
+	}
+
+	@Test
+	public void test_union () {
+		HashBag2<String> aHB = new HashBag2<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
+
+		HashBag2<String> bHB = new HashBag2<String>(new String[] {
+			"Bty", "Love", "Love", "Hate", "Hate", "Hate"
+		});
+
+		HashBag2<String> abHB = new HashBag2<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate", "Hate", "Hate"
+		});
+
+		Assert.assertEquals(aHB, aHB.union(aHB));
+		Assert.assertEquals(abHB, aHB.union(bHB));
+		Assert.assertEquals(abHB, bHB.union(aHB));
+	}
+
+	@Test
+	public void test_intersection () {
+		HashBag2 aHB = new HashBag2<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
+
+		HashBag2<String> bHB = new HashBag2<String>(new String[] {
+			"Bty", "Love", "Love", "Hate", "Hate", "Hate"
+		});
+
+		HashBag2<String> abHB = new HashBag2<String>(new String[] {
+			"Bty", "Love", "Love", "Hate"
+		});
+
+		Assert.assertEquals(aHB, aHB.intersection(aHB));
+		Assert.assertEquals(abHB, aHB.intersection(bHB));
+		Assert.assertEquals(abHB, bHB.intersection(aHB));
+	}
+
+	@Test
+	public void test_difference () {
+		HashBag2 aHB = new HashBag2<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
+
+		HashBag2 bHB = new HashBag2<String>(new String[] {
+			"Love", "Love", "Love"
+		});
+
+		HashBag2<String> abHB = new HashBag2<String>(new String[] {
+			"Bty", "Bty", "Hate"
+		});
+
+		Assert.assertEquals(new HashBag2<String>(), aHB.difference(aHB));
+		Assert.assertEquals(abHB, aHB.difference(bHB));
+		Assert.assertEquals(new HashBag2<String>(), bHB.difference(aHB));
 	}
 }

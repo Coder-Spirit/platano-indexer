@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Andreu Correa Casablanca
  */
-public final class HashBag2<T> implements IMutableBag<T>
+public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 {
 	/**
 	 *
@@ -39,18 +39,9 @@ public final class HashBag2<T> implements IMutableBag<T>
 	/**
 	 *
 	 */
-	public HashBag2 (HashBag2<T> b) {
-		size = b.size;
-		itemsCounter = b.itemsCounter;
-		internalMap = new HashMap<T, Integer>(b.internalMap);
-	}
-
-	/**
-	 *
-	 */
 	public HashBag2 (IBag<T> b) {
 		this();
-		addAll(b);
+		_addAll(b);
 	}
 
 	/**
@@ -58,7 +49,7 @@ public final class HashBag2<T> implements IMutableBag<T>
 	 */
 	public HashBag2 (Collection<T> c) {
 		this();
-		addAll(c);
+		_addAll(c);
 	}
 
 	/**
@@ -66,7 +57,16 @@ public final class HashBag2<T> implements IMutableBag<T>
 	 */
 	public HashBag2 (T[] l) {
 		this();
-		addAll(l);
+		_addAll(l);
+	}
+
+	/**
+	 *
+	 */
+	public HashBag2 (HashBag2<T> b) {
+		size = b.size;
+		itemsCounter = b.itemsCounter;
+		internalMap = new HashMap<T, Integer>(b.internalMap);
 	}
 
 
@@ -81,13 +81,17 @@ public final class HashBag2<T> implements IMutableBag<T>
 	 *
 	 */
 	public void add (final T o) {
-		add(o, 1);
+		_add(o);
+	}
+
+	public void add (final T o, final int times) {
+		_add(o, times);
 	}
 
 	/**
 	 *
 	 */
-	public void add (final T o, final int times) {
+	protected void _add (final T o, final int times) {
 		if (times > 0) {
 			Integer _n = internalMap.get(o);
 
@@ -105,27 +109,21 @@ public final class HashBag2<T> implements IMutableBag<T>
 	 *
 	 */
 	public void addAll (final IBag<T> b) {
-		for (Map.Entry<T, Integer> e : b) {
-			add(e.getKey(), e.getValue());
-		}
+		_addAll(b);
 	}
 
 	/**
 	 *
 	 */
 	public void addAll (final Collection<T> c) {
-		for (T item : c) {
-			add(item);
-		}
+		_addAll(c);
 	}
 
 	/**
 	 *
 	 */
 	public void addAll (final T[] l) {
-		for (T item : l) {
-			add(item);
-		}
+		_addAll(l);
 	}
 
 
@@ -155,11 +153,11 @@ public final class HashBag2<T> implements IMutableBag<T>
 
 		if (times != 0) {
 			if (times > 1) {
-				internalMap.put(o, --times);
+				internalMap.put(o, times-1);
 				--size;
 			} else if (times == 1) {
 				internalMap.remove(o);
-				--size; --itemsCounter; --times;
+				--size; --itemsCounter;
 			} else {
 				// Strange case... should not happen
 				internalMap.remove(o);

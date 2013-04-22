@@ -19,8 +19,8 @@ public class StorageItemComparator implements Comparator<String>
 		int result = Integer.compare(sr1.length(), sr2.length());
 
 		if (result == 0) {
-			int indexOfTokenInSr1 = TextNormalizer.flattenText(sr1).indexOf(token);
-			int indexOfTokenInSr2 = TextNormalizer.flattenText(sr2).indexOf(token);
+			int indexOfTokenInSr1 = TextNormalizer.flattenText(sr1).toLowerCase().indexOf(token);
+			int indexOfTokenInSr2 = TextNormalizer.flattenText(sr2).toLowerCase().indexOf(token);
 
 			if (indexOfTokenInSr1 == -1) indexOfTokenInSr1 = Integer.MAX_VALUE;
 			if (indexOfTokenInSr2 == -1) indexOfTokenInSr2 = Integer.MAX_VALUE;

@@ -27,7 +27,7 @@ public class SearchSubstrings2Test
 		Assert.assertEquals(8, searchSubstrings_B.getMaxTokenLength());
 
 		SearchSubstrings2 searchSubstrings_C = new SearchSubstrings2("The Banana Society");
-		Assert.assertEquals(7, searchSubstrings_C.getMaxTokenLength());
+		Assert.assertEquals(14, searchSubstrings_C.getMaxTokenLength());
 	}
 
 	

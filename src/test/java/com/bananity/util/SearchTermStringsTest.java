@@ -16,7 +16,7 @@ import org.junit.runners.JUnit4;
  * @author Andreu Correa Casablanca
  */
 @RunWith(JUnit4.class)
-public class SearchSubstrings2Test
+public class SearchTermStringsTest
 {
 	@Test
 	public void test_getMaxTokenLength () {

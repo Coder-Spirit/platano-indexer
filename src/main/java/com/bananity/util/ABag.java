@@ -1,6 +1,7 @@
 package com.bananity.util;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -44,5 +45,35 @@ public abstract class ABag<T> implements IBag<T>
 		for (T item : l) {
 			_add(item);
 		}
+	}
+
+	/**
+	 *
+	 */
+	public ArrayList<T> toArrayList () {
+		ArrayList<T> result = new ArrayList<T>();
+
+		for (Map.Entry<T, Integer> e : this) {
+			T v = e.getKey();
+
+			for (int i=0, n=e.getValue(); i<n; i++) {
+				result.add(v);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 *
+	 */
+	public ArrayList<T> toUniqueArrayList () {
+		ArrayList<T> result = new ArrayList<T>();
+
+		for (Map.Entry<T, Integer> e : this) {
+			result.add(e.getKey());
+		}
+
+		return result;
 	}
 }

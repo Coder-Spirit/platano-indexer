@@ -1,7 +1,7 @@
 package com.bananity.util;
 
 // Main Class
-import com.bananity.util.SearchSubstrings2;
+import com.bananity.util.SearchTermStrings;
 
 // Junit
 import org.junit.Assert;
@@ -20,13 +20,13 @@ public class SearchTermStringsTest
 {
 	@Test
 	public void test_getMaxTokenLength () {
-		SearchSubstrings2 searchSubstrings_A = new SearchSubstrings2("");
+		SearchTermStrings searchSubstrings_A = new SearchTermStrings("");
 		Assert.assertEquals(0, searchSubstrings_A.getMaxTokenLength());
 
-		SearchSubstrings2 searchSubstrings_B = new SearchSubstrings2("Bananity");
+		SearchTermStrings searchSubstrings_B = new SearchTermStrings("Bananity");
 		Assert.assertEquals(8, searchSubstrings_B.getMaxTokenLength());
 
-		SearchSubstrings2 searchSubstrings_C = new SearchSubstrings2("The Banana Society");
+		SearchTermStrings searchSubstrings_C = new SearchTermStrings("The Banana Society");
 		Assert.assertEquals(14, searchSubstrings_C.getMaxTokenLength());
 	}
 

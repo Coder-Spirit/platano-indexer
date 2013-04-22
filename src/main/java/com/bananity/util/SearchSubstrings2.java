@@ -5,6 +5,7 @@ package com.bananity.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 
 /**
@@ -39,7 +40,12 @@ public class SearchSubstrings2
 	/**
 	 *
 	 */
-	private static final int THRESHOLD = 2;
+	private final static int THRESHOLD = 2;
+
+	/**
+	 *
+	 */
+	private final static Pattern spacePattern = Pattern.compile("\\s+");
 
 	/**
 	 *
@@ -70,13 +76,46 @@ public class SearchSubstrings2
 	/**
 	 *
 	 */
-	private void computeMaxTokenLength () {
+	public HashBag2<String> getOriginalTextBag () {
+		if (originalTextBag == null) {
+			computeOriginalTextBag();
+		}
+
+		return originalTextBag;
+	}
+
+	private void computeOriginalTextBag () {
 		if (originalTokens == null) {
 			originalTokens = tokenize(searchTerm, true);
 		}
 
-		for (String searchTermToken : originalTokens) {
-			int tokenLength = searchTermToken.length();
+		originalWordsBags = new HashMap<String, HashBag2<String>>();
+
+		ArrayList<String> allSubtokens = new ArrayList<String>();
+
+		for (String token : originalTokens) {
+			ArrayList<String> wordSubtokens = getAllSubstrings(token, Math.min(token.length(), threshold)); // Alternative for threshold : "(maxTokenLength>1)?threshold:1"
+
+			allSubtokens.addAll(wordSubtokens);
+			originalWordsBags.put(token, new HashBag2<String>(wordSubtokens));
+		}
+
+		originalTextBag = new HashBag2<String>(allSubtokens);
+	}
+
+	/**
+	 *
+	 */
+	private void computeMaxTokenLength () {
+		if (originalTokens == null) {
+			originalTokens 	= tokenize(searchTerm, true);
+			wordLengths 	= new HashMap<String, Integer>();
+		}
+
+		for (String token : originalTokens) {
+			int tokenLength = token.length();
+
+			wordLengths.put(token, tokenLength);
 			if (tokenLength > maxTokenLength) maxTokenLength = tokenLength;
 		}
 	}
@@ -84,8 +123,30 @@ public class SearchSubstrings2
 	/**
 	 *
 	 */
-	private ArrayList<String> tokenize (final String searchTerm, final boolean addWordPairs) {
-		 final String[] tokensArray = searchTerm.split("\\s+");
+	private static ArrayList<String> getAllSubstrings(String token, int minLength) {
+		int l = token.length();
+		ArrayList<String> t = new ArrayList<String>();
+
+		if (l < minLength) {
+			return t;
+		}
+
+		--minLength;
+
+		for ( int c = 0; c < l; c++ ) {
+			for ( int r = minLength; r < l - c; r++ ){
+				t.add( token.substring( c, c + r + 1 ) );
+			}
+		}
+
+		return t;
+	}
+
+	/**
+	 *
+	 */
+	private static ArrayList<String> tokenize (final String searchTerm, final boolean addWordPairs) {
+		 final String[] tokensArray = spacePattern.split(searchTerm);
 
 		 ArrayList<String> finalTokens = new ArrayList<String>(Arrays.asList(tokensArray));
 

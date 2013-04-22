@@ -6,6 +6,7 @@ import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.apache.commons.lang3.text.translate.UnicodeUnescaper;
 
 // Java Text
+import java.util.regex.Pattern;
 import java.text.Normalizer;
 
 
@@ -16,8 +17,10 @@ import java.text.Normalizer;
  */
 public class TextNormalizer
 {
-	private static UnicodeEscaper 		escaper 	= UnicodeEscaper.above(127);
-	private static UnicodeUnescaper 	unescaper 	= new UnicodeUnescaper();
+	private final static Pattern isMPattern = Pattern.compile("\\p{IsM}");
+
+	private final static UnicodeEscaper 	escaper 	= UnicodeEscaper.above(127);
+	private final static UnicodeUnescaper 	unescaper 	= new UnicodeUnescaper();
 
 	/**
 	 * This method normalizes UTF8 strings into its canonical form
@@ -59,7 +62,7 @@ public class TextNormalizer
 			text = Normalizer.normalize(text, Normalizer.Form.NFD);
 		}
 
-		return text.replaceAll("\\p{IsM}", "");
+		return isMPattern.matcher(text).replaceAll("");
 	}
 
 	/**

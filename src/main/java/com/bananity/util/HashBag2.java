@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Andreu Correa Casablanca
  */
-public final class HashBag2<T> implements Bag<T>
+public final class HashBag2<T> implements IMutableBag<T>
 {
 	/**
 	 *
@@ -48,7 +48,7 @@ public final class HashBag2<T> implements Bag<T>
 	/**
 	 *
 	 */
-	public HashBag2 (Bag<T> b) {
+	public HashBag2 (IBag<T> b) {
 		this();
 		addAll(b);
 	}
@@ -104,7 +104,7 @@ public final class HashBag2<T> implements Bag<T>
 	/**
 	 *
 	 */
-	public void addAll (final Bag<T> b) {
+	public void addAll (final IBag<T> b) {
 		for (Map.Entry<T, Integer> e : b) {
 			add(e.getKey(), e.getValue());
 		}
@@ -188,7 +188,7 @@ public final class HashBag2<T> implements Bag<T>
 	/**
 	 *
 	 */
-	public Bag<T> union (final Bag<T> b) {
+	public IBag<T> union (final IBag<T> b) {
 		HashBag2<T> uBag = new HashBag2<T>();
 		
 		T aux;
@@ -212,10 +212,10 @@ public final class HashBag2<T> implements Bag<T>
 	/**
 	 *
 	 */
-	public Bag<T> intersection (final Bag<T> b) {
+	public IBag<T> intersection (final IBag<T> b) {
 		HashBag2<T> iBag = new HashBag2<T>();
 
-		Bag<T> minBag, maxBag;
+		IBag<T> minBag, maxBag;
 
 		int min;
 
@@ -241,7 +241,7 @@ public final class HashBag2<T> implements Bag<T>
 	/**
 	 *
 	 */
-	public Bag<T> difference (final Bag<T> b) {
+	public IBag<T> difference (final IBag<T> b) {
 		HashBag2<T> dBag = new HashBag2<T>();
 		int bTimes;
 

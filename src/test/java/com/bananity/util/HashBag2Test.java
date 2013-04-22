@@ -107,4 +107,25 @@ public class HashBag2Test
 		Assert.assertEquals(9, aHB.size());
 		Assert.assertEquals(2, aHB.uniqueItemsCount());
 	}
+
+	@Test
+	public void test_decreaseValue () {
+		HashBag2<String> aHB = new HashBag2<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
+
+		aHB.decreaseValue("Love");
+		Assert.assertEquals(5, aHB.size());
+		Assert.assertEquals(2, aHB.getTimes("Bty"));
+		Assert.assertEquals(2, aHB.getTimes("Love"));
+		Assert.assertEquals(1, aHB.getTimes("Hate"));
+		Assert.assertEquals(3, aHB.uniqueItemsCount());
+
+		aHB.decreaseValue("Hate");
+		Assert.assertEquals(4, aHB.size());
+		Assert.assertEquals(2, aHB.getTimes("Bty"));
+		Assert.assertEquals(2, aHB.getTimes("Love"));
+		Assert.assertEquals(0, aHB.getTimes("Hate"));
+		Assert.assertEquals(2, aHB.uniqueItemsCount());
+	}
 }

@@ -1,13 +1,14 @@
 package com.bananity.util;
 
 
+// Bananity Classes
+import com.bananity.text.SubstringCalculator;
+
 // Java Utils
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 
 /**
@@ -19,11 +20,6 @@ public class SearchTermStrings
 	 *
 	 */
 	private final static int THRESHOLD = 2;
-
-	/**
-	 *
-	 */
-	private final static Pattern spacePattern = Pattern.compile("\\s+");
 
 	// ---------------------------------------------------------------------------------------------
 
@@ -154,7 +150,13 @@ public class SearchTermStrings
 		ArrayList<String> allSubtokens = new ArrayList<String>();
 
 		for (String token : tokens) {
-			ArrayList<String> wordSubtokens = getAllSubstrings(token, Math.min(token.length(), threshold)); // Alternative for threshold : "(maxTokenLength>1)?threshold:1"
+			ArrayList<String> wordSubtokens;
+			if (token.indexOf(" ") == -1) {
+				// Alternative for threshold : "(maxTokenLength>1)?threshold:1"
+				wordSubtokens = SubstringCalculator.getAllSubstrings(token, Math.min(token.length(), threshold));
+			} else {
+				wordSubtokens = SubstringCalculator.getWordsPairSubstrings(token, Math.min(token.length(), threshold));
+			}
 
 			allSubtokens.addAll(wordSubtokens);
 			wordsBags.put(token, new HashBag2<String>(wordSubtokens));
@@ -185,38 +187,6 @@ public class SearchTermStrings
 	 *
 	 */
 	private void computeTokens () {
-		final String[] tokensArray = spacePattern.split(text);
-
-		tokens = new ArrayList<String>(Arrays.asList(tokensArray));
-
-	 	for (int i=0, n=tokensArray.length-1; i<n; i++) {
-			tokens.add(
-				new StringBuilder(tokensArray[i]).append(" ").append(tokensArray[i+1]).toString()
-			);
-		}
-	}
-
-	// ---------------------------------------------------------------------------------------------
-
-	/**
-	 *
-	 */
-	private static ArrayList<String> getAllSubstrings(String token, int minLength) {
-		int l = token.length();
-		ArrayList<String> t = new ArrayList<String>();
-
-		if (l < minLength) {
-			return t;
-		}
-
-		--minLength;
-
-		for ( int c = 0; c < l; c++ ) {
-			for ( int r = minLength; r < l - c; r++ ){
-				t.add( token.substring( c, c + r + 1 ) );
-			}
-		}
-
-		return t;
+		tokens = SubstringCalculator.tokenize(text, true);
 	}
 }

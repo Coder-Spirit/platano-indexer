@@ -20,15 +20,30 @@ public class SearchTermStringsTest
 {
 	@Test
 	public void test_getMaxTokenLength () {
-		SearchTermStrings searchSubstrings_A = new SearchTermStrings("");
-		Assert.assertEquals(0, searchSubstrings_A.getMaxTokenLength());
+		SearchTermStrings sts_A = new SearchTermStrings("");
+		Assert.assertEquals(0, sts_A.getMaxTokenLength());
 
-		SearchTermStrings searchSubstrings_B = new SearchTermStrings("Bananity");
-		Assert.assertEquals(8, searchSubstrings_B.getMaxTokenLength());
+		SearchTermStrings sts_B = new SearchTermStrings("Bananity");
+		Assert.assertEquals(8, sts_B.getMaxTokenLength());
 
-		SearchTermStrings searchSubstrings_C = new SearchTermStrings("The Banana Society");
-		Assert.assertEquals(14, searchSubstrings_C.getMaxTokenLength());
+		SearchTermStrings sts_C = new SearchTermStrings("The Banana Society");
+		Assert.assertEquals(14, sts_C.getMaxTokenLength());
 	}
 
-	
+	@Test
+	public void test_getText () {
+		SearchTermStrings sts_A = new SearchTermStrings("Bananity");
+		Assert.assertEquals("Bananity", sts_A.getText());
+	}
+
+	@Test
+	public void test_getTextBag () {
+		SearchTermStrings 	sts_A 	= new SearchTermStrings("The Banana Society");
+		HashBag2<String> 	hb_A 	= sts_A.getTextBag();
+
+		HashBag2<String> 	hb_B 	= new HashBag2<String>(new String[] {
+			"Banana Society",
+			"The Banana"
+		});
+	}
 }

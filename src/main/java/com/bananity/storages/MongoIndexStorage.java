@@ -340,7 +340,7 @@ public class MongoIndexStorage implements IIndexStorage
 
 		if (coll == null) throw new Exception("¡Inexistent Mongo Collection ("+collName+")!");
 
-		ArrayList<SearchTerm> result = new ArrayList<String>(scB.getTokenEntrySize());
+		ArrayList<SearchTerm> result = new ArrayList<SearchTerm>(scB.getTokenEntrySize());
 
 		DBObject mongoResult = coll.findOne(new BasicDBObject("_id", subToken));
 

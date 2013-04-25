@@ -4,7 +4,7 @@ package com.bananity.controllers;
 import com.bananity.models.IndexModelBean;
 import com.bananity.text.TextNormalizer;
 import com.bananity.util.CandidatesCache;
-import com.bananity.util.ResultItemComparator;
+import com.bananity.util.ResultItemComparator2;
 import com.bananity.util.SearchTerm;
 import com.bananity.util.SearchSubstrings;
 import com.bananity.util.Jaccard;
@@ -95,7 +95,7 @@ public class SearchController extends BaseController {
 		}
 
 		SearchTerm searchTerm = new SearchTerm(searchText);
-		CandidatesCache<SearchTerm> candidates = new CandidatesCache<String>(new ResultItemComparator2(searchTerm), limit);
+		CandidatesCache<SearchTerm> candidates = new CandidatesCache<SearchTerm>(new ResultItemComparator2(searchTerm), limit);
 
 		int lengthThreshold = searchTerm.getLcFlattenStrings().getMaxTokenLength();
 
@@ -106,7 +106,7 @@ public class SearchController extends BaseController {
 		ArrayList<String> currSearch;
 
 		while ( candidates.size() < limit && lengthThreshold > 0 ) {
-			tmpSearch = searchTerm..getUniqueByLength( lengthThreshold );
+			tmpSearch = searchTerm.getLcFlattenStrings().getUniqueByLength( lengthThreshold );
 			currSearch = new ArrayList<String>();
 
 			for ( String s : tmpSearch ) {

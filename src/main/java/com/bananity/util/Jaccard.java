@@ -54,6 +54,28 @@ public class Jaccard {
 		return 1.0d - ((double)i.size() / divisor);
 	}
 
+	/**
+	 *  @param simmetric 	This param specifies if you want a typical Jaccard distance or if you want to use the cardinal of `b` as a divisor
+	 *
+	 *  @return Jaccard distance between `a` and `b`
+	 */
+	public static double distance(HashBag2<String> a, HashBag2<String> b, boolean simmetric) {
+		IBag<String> i = a.intersection( b );
+		if ( i.size() == 0 ) {
+			return 1.0d;
+		}
+
+		double divisor;
+		if (simmetric) {
+			IBag<String> u =  a.union( b );
+			divisor = (double)u.size();
+		} else {
+			divisor = (double)b.size();
+		}
+		
+		return 1.0d - ((double)i.size() / divisor);
+	}
+
 
 	/**
 	 *  This method returns the union of `aa` and `bb`

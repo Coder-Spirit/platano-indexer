@@ -140,14 +140,14 @@ public class SearchTermStrings
 	/**
 	 *
 	 */
-	public int hashCode() {
+	public int hashCode () {
 		return text.hashCode();
 	}
 
 	/**
 	 *
 	 */
-	public boolean equals(Object o) {
+	public boolean equals (Object o) {
 		if (o == this) {
 			return true;
 		}
@@ -157,6 +157,13 @@ public class SearchTermStrings
 		} else {
 			return (this.text == ((SearchTermStrings)o).text);
 		}
+	}
+
+	/**
+	 *
+	 */
+	public String toString () {
+		return text;
 	}
 
 	// ---------------------------------------------------------------------------------------------

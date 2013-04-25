@@ -140,6 +140,30 @@ public class SearchTermStrings
 	/**
 	 *
 	 */
+	public int hashCode() {
+		return text.hashCode();
+	}
+
+	/**
+	 *
+	 */
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+
+		if (!(o instanceof SearchTermStrings)) {
+			return false;
+		} else {
+			return (this.text == ((SearchTermStrings)o).text);
+		}
+	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 *
+	 */
 	private void computeBags () {
 		if (tokens == null) {
 			computeTokens();
@@ -155,7 +179,7 @@ public class SearchTermStrings
 				// Alternative for threshold : "(maxTokenLength>1)?threshold:1"
 				wordSubtokens = SubstringCalculator.getAllSubstrings(token, Math.min(token.length(), threshold));
 			} else {
-				wordSubtokens = SubstringCalculator.getWordsPairSubstrings(token, Math.min(token.length(), threshold));
+				wordSubtokens = SubstringCalculator.getWordsPairSubstrings(token, Math.min(token.length(), threshold+2));
 			}
 
 			allSubtokens.addAll(wordSubtokens);

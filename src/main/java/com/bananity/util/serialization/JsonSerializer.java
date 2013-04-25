@@ -21,7 +21,7 @@ public class JsonSerializer {
 	 * @param 	jsonObject 	Object to be serialized
 	 * @return 				JSON string
 	 */
-	public static String ObjectToJsonString (Object jsonObject) {
+	public static String ObjectToJsonString (final Object jsonObject) {
 		// TODO : Add support to
 		// - Character, char[], boolean[], int[], long[], float[], double[]
 
@@ -52,7 +52,7 @@ public class JsonSerializer {
 		}
 	}
 
-	public static String FloatToJsonString (Float flt) {
+	public static String FloatToJsonString (final Float flt) {
 		if (flt.equals(Float.NaN) || flt.equals(Float.POSITIVE_INFINITY) || flt.equals(Float.NEGATIVE_INFINITY)) {
 			return "null";
 		} else {
@@ -60,7 +60,7 @@ public class JsonSerializer {
 		}
 	}
 
-	public static String DoubleToJsonString (Double dbl) {
+	public static String DoubleToJsonString (final Double dbl) {
 		if (dbl.equals(Double.NaN) || dbl.equals(Double.POSITIVE_INFINITY) || dbl.equals(Double.NEGATIVE_INFINITY)) {
 			return "null";
 		} else {
@@ -71,7 +71,7 @@ public class JsonSerializer {
 	/**
 	 * @return 	Escaped and quoted valid JSON string value
 	 */
-	public static String StringToJsonString (String str) {
+	public static String StringToJsonString (final String str) {
 		return new StringBuilder()
 			.append("\"")
 			.append(TextNormalizer.escapeUnicode(
@@ -90,7 +90,7 @@ public class JsonSerializer {
 	/**
 	 * Serializes collections as if were arrays to JSON strings
 	 */
-	public static String CollectionToJsonString (Collection jsonCollection) {
+	public static String CollectionToJsonString (final Collection jsonCollection) {
 		StringBuilder result = new StringBuilder("[");
 
 		boolean isStart = true;
@@ -110,7 +110,7 @@ public class JsonSerializer {
 	/**
 	 * Serializes arrays to JSON strings
 	 */
-	public static String ArrayToJsonString (Object[] jsonArray) {
+	public static String ArrayToJsonString (final Object[] jsonArray) {
 		StringBuilder result = new StringBuilder("[");
 
 		boolean isStart = true;
@@ -130,7 +130,7 @@ public class JsonSerializer {
 	/**
 	 * Serializes maps to JSON Object values
 	 */
-	public static String MapToJsonString (Map<String, Object> jsonMap) {
+	public static String MapToJsonString (final Map<String, Object> jsonMap) {
 		StringBuilder result = new StringBuilder("{");
 
 		boolean isStart = true;

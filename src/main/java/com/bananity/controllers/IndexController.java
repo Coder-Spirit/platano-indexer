@@ -7,6 +7,8 @@ import com.bananity.text.TextNormalizer;
 import com.bananity.util.SearchesTokenizer;
 import com.bananity.util.HashBag;
 import com.bananity.util.ResultItemComparator;
+import com.bananity.util.SearchTerm;
+import com.bananity.util.StorageItemComparator2;
 
 // Cache
 import com.google.common.cache.Cache;
@@ -14,6 +16,7 @@ import com.google.common.cache.Cache;
 // Java utils
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import java.io.IOException;
@@ -81,8 +84,10 @@ public class IndexController extends BaseController {
 	 *  @param item 	Item to be inserted in the collection
 	 */
 		private void insertLogic (String collName, String item) throws Exception {
-			imB.insert(collName, item, SearchesTokenizer.getSubTokensList(item));
-			addToCache(collName, item);
+			SearchTerm stItem = new SearchTerm(item);
+
+			imB.insert(collName, stItem, SearchesTokenizer.getSubTokensList(item));
+			addToCache(collName, stItem);
 		}
 
 	/**
@@ -101,14 +106,14 @@ public class IndexController extends BaseController {
 	 *  @param collName Index collection name
 	 *  @param item 	Item to be inserted in the collection
 	 */
-		private void  addToCache (String collName, String item) throws Exception {
-			Cache<String, ArrayList<String>> cache = cB.getResultCache(collName);
+		private void  addToCache (String collName, SearchTerm item) throws Exception {
+			Cache<String, ArrayList<SearchTerm>> cache = cB.getResultCache(collName);
 			
 			if (cache == null) {
 				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 			}
 
-			ArrayList<String> expandedCacheKeyBase = SearchesTokenizer.getAllSubstrings(TextNormalizer.flattenText(item), 2);
+			HashSet<String> expandedCacheKeyBase = item.getLcFlattenStrings().getUniqueByLength(2);
 
 			for (String cacheKeyBaseItem : expandedCacheKeyBase) {
 				addToCacheToken (cache, item, cacheKeyBaseItem, 5);
@@ -126,19 +131,20 @@ public class IndexController extends BaseController {
 	 *  @param cacheKeyBaseItem complete or partial searchTerm (as a part of cache key)
 	 *  @param limit 			limit imposed to search result size (as a part of cache key)
 	 */
-		private void addToCacheToken (Cache<String, ArrayList<String>> cache, String item, String cacheKeyBaseItem, Integer limit) throws Exception {
+		private void addToCacheToken (Cache<String, ArrayList<SearchTerm>> cache, SearchTerm item, String cacheKeyBaseItem, Integer limit) throws Exception {
 			String cacheKey = new StringBuilder(cacheKeyBaseItem).append("@").append(limit.toString()).toString();
-			ArrayList<String>  cachedResult = cache.getIfPresent(cacheKey);
+			ArrayList<SearchTerm>  cachedResult = cache.getIfPresent(cacheKey);
+			StorageItemComparator2 tokenComparator = new StorageItemComparator2(cacheKeyBaseItem);
 
 			if (cachedResult == null) return;
 
-			String sortingTmpValue;
+			SearchTerm sortingTmpValue;
 			boolean addedItem;
 
 			if (cachedResult.size() < limit) {
 				cachedResult.add(item);
 				addedItem = true;
-			} else if (cachedResult.get(limit-1).compareTo(item) > 0) {
+			} else if (tokenComparator.compare(cachedResult.get(limit-1), item) > 0) {
 				cachedResult.set(limit-1, item);
 				addedItem = true;
 			} else {
@@ -146,7 +152,7 @@ public class IndexController extends BaseController {
 			}
 
 			if (addedItem) {
-				for (int i=cachedResult.size()-1; i>0 && cachedResult.get(i).compareTo(cachedResult.get(i-1)) < 0; i--) {
+				for (int i=cachedResult.size()-1; i>0 && tokenComparator.compare(cachedResult.get(i), cachedResult.get(i-1)) < 0; i--) {
 					sortingTmpValue = cachedResult.get(i);
 					cachedResult.set(i, cachedResult.get(i-1));
 					cachedResult.set(i-1, sortingTmpValue);

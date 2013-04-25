@@ -2,9 +2,12 @@ package com.bananity.util;
 
 
 import com.bananity.text.TextNormalizer;
+import com.bananity.util.serialization.IBsonSerializable;
+import com.bananity.util.serialization.IJsonSerializable;
+import com.bananity.util.serialization.JsonSerializer;
 
 
-public class SearchTerm
+public class SearchTerm implements IJsonSerializable, IBsonSerializable
 {
 	final String text;
 
@@ -12,9 +15,13 @@ public class SearchTerm
 	SearchTermStrings lowerCaseStrings 	= null;
 	SearchTermStrings originalStrings 	= null;
 
+	// ---------------------------------------------------------------------------------------------
+
 	public SearchTerm (final String text) {
 		this.text = text;
 	}
+
+	// ---------------------------------------------------------------------------------------------
 
 	public SearchTermStrings getLcFlattenStrings () {
 		if (lcFlattenStrings == null) {
@@ -38,5 +45,19 @@ public class SearchTerm
 		}
 
 		return lowerCaseStrings;
+	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	public String toString () {
+		return text;
+	}
+
+	public String toJsonStr () {
+		return JsonSerializer.StringToJsonString(text);
+	}
+
+	public Object toBsonCompatible () {
+		return text;
 	}
 }

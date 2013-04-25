@@ -7,7 +7,8 @@ import com.bananity.constants.StorageConstantsBean;
 import com.bananity.locks.LocksBean;
 import com.bananity.storages.IIndexStorage;
 import com.bananity.storages.StoragesFactoryBean;
-import com.bananity.util.StorageItemComparator;
+import com.bananity.util.SearchTerm;
+import com.bananity.util.StorageItemComparator2;
 
 // Google Caches
 import com.google.common.cache.Cache;
@@ -117,8 +118,8 @@ public class IndexModelBean {
 	 *
 	 *  @return 			List of strings (found results in storage)
 	 */
-	public ArrayList<String> find (String collName, Collection<String> subTokens, int limit) throws Exception {
-		Cache<String, ArrayList<String>> cache = cB.getTokensCache(collName);
+	public ArrayList<SearchTerm> find (String collName, Collection<String> subTokens, int limit) throws Exception {
+		Cache<String, ArrayList<SearchTerm>> cache = cB.getTokensCache(collName);
 
 		if (cache == null) {
 			throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
@@ -127,8 +128,8 @@ public class IndexModelBean {
 		ReadLock collectionReadLock = lB.getCollectionReadLock(collName);
 		WriteLock collectionWriteLock = lB.getCollectionWriteLock(collName);
 
-		ArrayList<String> subTokenResult;
-		ArrayList<String> result 			= new ArrayList<String>();
+		ArrayList<SearchTerm> subTokenResult;
+		ArrayList<SearchTerm> result 			= new ArrayList<SearchTerm>();
 
 		for (String subToken : subTokens) {
 			subTokenResult = cache.getIfPresent(subToken);
@@ -152,19 +153,19 @@ public class IndexModelBean {
 	 *  @param item 		Item to be inserted
 	 *  @param subTokens 	Tokens used to index the item
 	 */
-	public void insert (String collName, String item, Collection<String> subTokens) throws Exception {
-		Cache<String, ArrayList<String>> cache = cB.getTokensCache(collName);
+	public void insert (final String collName, final SearchTerm item, final Collection<String> subTokens) throws Exception {
+		Cache<String, ArrayList<SearchTerm>> cache = cB.getTokensCache(collName);
 
 		if (cache == null) {
 			throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 		}
 
 		boolean addedItem, mustTrim, recoveredFromStorage;
-		String sortingTmpValue;
+		SearchTerm sortingTmpValue;
 
 		for (String subToken : subTokens) {
-			ArrayList<String>  subTokenRelatedItems = cache.getIfPresent(subToken);
-			StorageItemComparator tokenComparator = new StorageItemComparator(subToken);
+			ArrayList<SearchTerm>  subTokenRelatedItems = cache.getIfPresent(subToken);
+			StorageItemComparator2 tokenComparator = new StorageItemComparator2(subToken);
 			
 			if (subTokenRelatedItems == null) {
 				subTokenRelatedItems = storage.findSubToken (collName, subToken);

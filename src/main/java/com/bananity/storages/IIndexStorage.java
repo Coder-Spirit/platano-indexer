@@ -1,6 +1,8 @@
 package com.bananity.storages;
 
 
+import com.bananity.util.SearchTerm;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,7 +23,7 @@ public interface IIndexStorage
 	 *
 	 *  @return 			List of strings stored that contains as a substring the specified 'subToken'
 	 */
-	public ArrayList<String> findSubToken (String collName, String subToken) throws Exception;
+	public ArrayList<SearchTerm> findSubToken (String collName, String subToken) throws Exception;
 
 	/**
 	 *  This method inserts a list of items in the specified storage collection (collName) using 'subToken' as a key
@@ -30,5 +32,5 @@ public interface IIndexStorage
 	 *  @param subToken 	subToken to be created/updated
 	 *  @param items 		items to be inserted using 'subToken' as a key
 	 */
-	public void insert (String collName, String subToken, Collection<String> items) throws Exception;
+	public void insert (String collName, String subToken, Collection<SearchTerm> items) throws Exception;
 }

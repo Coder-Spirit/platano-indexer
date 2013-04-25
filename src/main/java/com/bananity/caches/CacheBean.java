@@ -3,6 +3,7 @@ package com.bananity.caches;
 
 // Bananity Classes
 import com.bananity.constants.StorageConstantsBean;
+import com.bananity.util.SearchTerm;
 
 // Caches
 import com.google.common.cache.Cache;
@@ -61,12 +62,12 @@ public class CacheBean {
 	/**
 	 *  Associative list (by collection name) of results caches
 	 */
-	private HashMap<String, Cache<String, ArrayList<String>>> resultCaches;
+	private HashMap<String, Cache<String, ArrayList<SearchTerm>>> resultCaches;
 
 	/**
 	 *  Associative list (by collection name) of tokens caches
 	 */
-	private HashMap<String, Cache<String, ArrayList<String>>> tokensCaches;
+	private HashMap<String, Cache<String, ArrayList<SearchTerm>>> tokensCaches;
 
 	/**
 	 *  This method initializes the logger reference and the caches associative lists
@@ -78,8 +79,8 @@ public class CacheBean {
 			PropertyConfigurator.configure(classLoader.getResource("log4j.properties"));
 			log = Logger.getLogger(CacheBean.class);
 
-			tokensCaches = new HashMap<String, Cache<String, ArrayList<String>>>();
-			resultCaches = new HashMap<String, Cache<String, ArrayList<String>>>();
+			tokensCaches = new HashMap<String, Cache<String, ArrayList<SearchTerm>>>();
+			resultCaches = new HashMap<String, Cache<String, ArrayList<SearchTerm>>>();
 
 			for (String collName : scB.getIndexedCollections()) {
 				ArrayList<String> resultCacheSizeSrc = scB.getResultsCacheSize().get(collName);
@@ -96,15 +97,15 @@ public class CacheBean {
 				int tokensCacheSize = Integer.parseInt(tokensCacheSizeSrc.get(0));
 				int resultCacheSize = Integer.parseInt(tokensCacheSizeSrc.get(0));
 
-				Cache<String, ArrayList<String>> tokensCache = CacheBuilder.newBuilder()
+				Cache<String, ArrayList<SearchTerm>> tokensCache = CacheBuilder.newBuilder()
 					.maximumWeight(tokensCacheSize)
-					.weigher(new Weigher<String, ArrayList<String>>() {
-						public int weigh (String k, ArrayList<String> v) {
+					.weigher(new Weigher<String, ArrayList<SearchTerm>>() {
+						public int weigh (String k, ArrayList<SearchTerm> v) {
 							int size = 0;
 							
 							size += k.length() + 5 + v.size()*5; // Tenemos en cuenta el tamaño de clave y de los punteros (4 por puntero, 1 por fin de línea)
-							for (String vi : v) {
-								size += vi.length();
+							for (SearchTerm vi : v) {
+								size += vi.toString().length();
 							}
 
 							return size;
@@ -112,15 +113,15 @@ public class CacheBean {
 					})
 					.build();
 
-				Cache<String, ArrayList<String>> resultCache = CacheBuilder.newBuilder()
+				Cache<String, ArrayList<SearchTerm>> resultCache = CacheBuilder.newBuilder()
 					.maximumWeight(resultCacheSize)
-					.weigher(new Weigher<String, ArrayList<String>>() {
-						public int weigh (String k, ArrayList<String> v) {
+					.weigher(new Weigher<String, ArrayList<SearchTerm>>() {
+						public int weigh (String k, ArrayList<SearchTerm> v) {
 							int size = 0;
 							
 							size += k.length() + 5 + v.size()*5; // Tenemos en cuenta el tamaño de clave y de los punteros (4 por puntero, 1 por fin de línea)
-							for (String vi : v) {
-								size += vi.length();
+							for (SearchTerm vi : v) {
+								size += vi.toString().length();
 							}
 
 							return size;
@@ -140,7 +141,7 @@ public class CacheBean {
 	 *  @return 			Associated tokens cache to the referenced collection
 	 */
 	@Lock(LockType.READ)
-		public Cache<String, ArrayList<String>> getTokensCache (String collName) {
+		public Cache<String, ArrayList<SearchTerm>> getTokensCache (String collName) {
 			return tokensCaches.get(collName);
 		}
 
@@ -151,7 +152,7 @@ public class CacheBean {
 	 *  @return 			Associated results cache to the referenced collection
 	 */
 	@Lock(LockType.READ)
-		public Cache<String, ArrayList<String>> getResultCache (String collName) {
+		public Cache<String, ArrayList<SearchTerm>> getResultCache (String collName) {
 			return resultCaches.get(collName);
 		}
 
@@ -159,7 +160,7 @@ public class CacheBean {
 	 *  @return Associative list (by collection name) of tokens caches
 	 */
 	@Lock(LockType.READ)
-		public HashMap<String, Cache<String, ArrayList<String>>> getTokensCaches () {
+		public HashMap<String, Cache<String, ArrayList<SearchTerm>>> getTokensCaches () {
 			return tokensCaches;
 		}
 
@@ -167,7 +168,7 @@ public class CacheBean {
 	 *  @return Associative list (by collection name) of results caches
 	 */
 	@Lock(LockType.READ)
-		public HashMap<String, Cache<String, ArrayList<String>>> getResultCaches () {
+		public HashMap<String, Cache<String, ArrayList<SearchTerm>>> getResultCaches () {
 			return resultCaches;
 		}
 }

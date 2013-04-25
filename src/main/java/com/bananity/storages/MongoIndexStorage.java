@@ -2,7 +2,8 @@ package com.bananity.storages;
 
 
 import com.bananity.constants.StorageConstantsBean;
-import com.bananity.util.HashBag;
+import com.bananity.util.SearchTerm;
+import com.bananity.util.serialization.BsonSerializer;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -334,12 +335,12 @@ public class MongoIndexStorage implements IIndexStorage
 	/**
 	 *  @see com.bananity.storages.IIndexStorage#findSubToken
 	 */
-	public ArrayList<String> findSubToken (String collName, String subToken) throws Exception {
+	public ArrayList<SearchTerm> findSubToken (String collName, String subToken) throws Exception {
 		DBCollection coll = collections.get(collName);
 
 		if (coll == null) throw new Exception("¡Inexistent Mongo Collection ("+collName+")!");
 
-		ArrayList<String> result = new ArrayList<String>(scB.getTokenEntrySize());
+		ArrayList<SearchTerm> result = new ArrayList<String>(scB.getTokenEntrySize());
 
 		DBObject mongoResult = coll.findOne(new BasicDBObject("_id", subToken));
 
@@ -350,7 +351,7 @@ public class MongoIndexStorage implements IIndexStorage
 		BasicDBList aliasFromDB = (BasicDBList)mongoResult.get("tl");
 		if (aliasFromDB != null && aliasFromDB.size() > 0) {
 			for (Object aliasObject : aliasFromDB) {
-				result.add((String)aliasObject);
+				result.add(new SearchTerm((String)aliasObject));
 			}
 		}
 		
@@ -360,14 +361,14 @@ public class MongoIndexStorage implements IIndexStorage
 	/**
 	 *  @see com.bananity.storages.IIndexStorage#insert
 	 */
-	public void insert (String collName, String subToken, Collection<String> items) throws Exception {
+	public void insert (String collName, String subToken, Collection<SearchTerm> items) throws Exception {
 		DBCollection coll = collections.get(collName);
 
 		if (coll == null) throw new Exception("¡Inexistent Mongo Collection ("+collName+")!");
 
 		coll.update(
 			new BasicDBObject("_id", subToken),
-			new BasicDBObject("$set", new BasicDBObject("tl", items)),
+			new BasicDBObject("$set", new BasicDBObject("tl", BsonSerializer.CollectionToBsonCompatible(items))),
 			true, false
 		);
 	}

@@ -5,6 +5,7 @@ import com.bananity.models.IndexModelBean;
 import com.bananity.text.TextNormalizer;
 import com.bananity.util.CandidatesCache;
 import com.bananity.util.ResultItemComparator;
+import com.bananity.util.SearchTerm;
 import com.bananity.util.SearchSubstrings;
 import com.bananity.util.Jaccard;
 
@@ -59,7 +60,7 @@ public class SearchController extends BaseController {
 					throw new Exception( "Invalid parameters" );
 				}
 
-				ArrayList<String> searchResult = searchLogic(collName, searchTerm, limit);
+				ArrayList<SearchTerm> searchResult = searchLogic(collName, searchTerm, limit);
 
 				sendResponse(request, response, HttpServletResponse.SC_OK, 0, searchResult);
 
@@ -80,32 +81,32 @@ public class SearchController extends BaseController {
 	 *
 	 *  @return 			List of found elements in the specified collection searching by searchTerm
 	 */
-	private ArrayList<String> searchLogic (String collName, String searchTerm, int limit) throws Exception {
-		Cache<String, ArrayList<String>> cache = cB.getResultCache(collName);
+	private ArrayList<SearchTerm> searchLogic (String collName, String searchText, int limit) throws Exception {
+		Cache<String, ArrayList<SearchTerm>> cache = cB.getResultCache(collName);
 		
 		if (cache == null) {
 			throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 		}
 
-		String cacheKey	= new StringBuilder(TextNormalizer.flattenText( searchTerm )).append('@').append(limit).toString();
-		ArrayList<String> finalResult = cache.getIfPresent( cacheKey );
+		String cacheKey	= new StringBuilder(TextNormalizer.flattenText(searchText).toLowerCase()).append('@').append(limit).toString();
+		ArrayList<SearchTerm> finalResult = cache.getIfPresent( cacheKey );
 		if (finalResult != null) {
 			return finalResult;
 		}
 
-		SearchSubstrings searchSubstrings = new SearchSubstrings(searchTerm);
-		CandidatesCache<String> candidates = new CandidatesCache<String>(new ResultItemComparator(searchSubstrings.getHashBag()), limit);
+		SearchTerm searchTerm = new SearchTerm(searchText);
+		CandidatesCache<SearchTerm> candidates = new CandidatesCache<String>(new ResultItemComparator2(searchTerm), limit);
 
-		int lengthThreshold = searchSubstrings.getMaxTokenLength();
+		int lengthThreshold = searchTerm.getLcFlattenStrings().getMaxTokenLength();
 
-		ArrayList<String> partialResults;
+		ArrayList<SearchTerm> partialResults;
 
 		Set<String> usedTokens = new HashSet();
 		Set<String> tmpSearch;
 		ArrayList<String> currSearch;
 
 		while ( candidates.size() < limit && lengthThreshold > 0 ) {
-			tmpSearch = searchSubstrings.getUniqByLength( lengthThreshold );
+			tmpSearch = searchTerm..getUniqueByLength( lengthThreshold );
 			currSearch = new ArrayList<String>();
 
 			for ( String s : tmpSearch ) {
@@ -116,7 +117,7 @@ public class SearchController extends BaseController {
 			}
 
 			if ( currSearch.size() > 0 && (partialResults = imB.find(collName, currSearch, limit)) != null ) {
-				for ( String partialResult : partialResults ) {
+				for ( SearchTerm partialResult : partialResults ) {
 					candidates.put (partialResult);
 				}
 			}

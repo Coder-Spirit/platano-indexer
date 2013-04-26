@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Andreu Correa Casablanca
  */
-public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
+public final class HashBag<T> extends ABag<T> implements IMutableBag<T>
 {
 	/**
 	 *
@@ -30,7 +30,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 	/**
 	 *
 	 */
-	public HashBag2 () {
+	public HashBag () {
 		size = 0;
 		itemsCounter = 0;
 		internalMap = new HashMap<T, Integer>();
@@ -39,7 +39,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 	/**
 	 *
 	 */
-	public HashBag2 (IBag<T> b) {
+	public HashBag (IBag<T> b) {
 		this();
 		_addAll(b);
 	}
@@ -47,7 +47,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 	/**
 	 *
 	 */
-	public HashBag2 (Collection<T> c) {
+	public HashBag (Collection<T> c) {
 		this();
 		_addAll(c);
 	}
@@ -55,7 +55,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 	/**
 	 *
 	 */
-	public HashBag2 (T[] l) {
+	public HashBag (T[] l) {
 		this();
 		_addAll(l);
 	}
@@ -63,7 +63,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 	/**
 	 *
 	 */
-	public HashBag2 (HashBag2<T> b) {
+	public HashBag (HashBag<T> b) {
 		size = b.size;
 		itemsCounter = b.itemsCounter;
 		internalMap = new HashMap<T, Integer>(b.internalMap);
@@ -187,7 +187,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 	 *
 	 */
 	public IBag<T> union (final IBag<T> b) {
-		HashBag2<T> uBag = new HashBag2<T>();
+		HashBag<T> uBag = new HashBag<T>();
 		
 		T aux;
 		int times;
@@ -211,7 +211,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 	 *
 	 */
 	public IBag<T> intersection (final IBag<T> b) {
-		HashBag2<T> iBag = new HashBag2<T>();
+		HashBag<T> iBag = new HashBag<T>();
 
 		IBag<T> minBag, maxBag;
 
@@ -240,7 +240,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 	 *
 	 */
 	public IBag<T> difference (final IBag<T> b) {
-		HashBag2<T> dBag = new HashBag2<T>();
+		HashBag<T> dBag = new HashBag<T>();
 		int bTimes;
 
 		for (Map.Entry<T, Integer> e : internalMap.entrySet()) {
@@ -277,9 +277,9 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 			return true;
 		}
 
-		if (o instanceof HashBag2) {
+		if (o instanceof HashBag) {
 			try {
-				return equals((HashBag2<T>)o);
+				return equals((HashBag<T>)o);
 			} catch (Exception e) {
 				return false;
 			}
@@ -288,7 +288,7 @@ public final class HashBag2<T> extends ABag<T> implements IMutableBag<T>
 		}
 	}
 
-	public boolean equals(HashBag2<T> o) {
+	public boolean equals(HashBag<T> o) {
 		if (internalMap.hashCode() == o.internalMap.hashCode() && o.size==size && o.itemsCounter==itemsCounter) {
 			for (Map.Entry<T, Integer> e : o.internalMap.entrySet()) {
 				if (!e.getValue().equals(internalMap.get(e.getKey()))) {

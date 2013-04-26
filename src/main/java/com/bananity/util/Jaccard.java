@@ -37,7 +37,7 @@ public class Jaccard {
 	 *
 	 *  @return Jaccard distance between `a` and `b`
 	 */
-	public static double distance(HashBag2<String> a, HashBag2<String> b, boolean simmetric) {
+	public static double distance(HashBag<String> a, HashBag<String> b, boolean simmetric) {
 		IBag<String> i = a.intersection( b );
 		if ( i.size() == 0 ) {
 			return 1.0d;

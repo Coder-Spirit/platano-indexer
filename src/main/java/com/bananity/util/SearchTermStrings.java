@@ -36,7 +36,7 @@ public class SearchTermStrings
 	/**
 	 *
 	 */
-	private HashBag2<String> 					textBag 		= null;
+	private HashBag<String> 					textBag 		= null;
 
 	/**
 	 *
@@ -46,7 +46,7 @@ public class SearchTermStrings
 	/**
 	 *
 	 */
-	private HashMap<String, HashBag2<String>> 	wordsBags 		= null;
+	private HashMap<String, HashBag<String>> 	wordsBags 		= null;
 
 	/**
 	 *
@@ -91,7 +91,7 @@ public class SearchTermStrings
 	/**
 	 *
 	 */
-	public HashBag2<String> getTextBag () {
+	public HashBag<String> getTextBag () {
 		if (textBag == null) {
 			computeBags();
 		}
@@ -169,7 +169,7 @@ public class SearchTermStrings
 			computeTokens();
 		}
 
-		wordsBags = new HashMap<String, HashBag2<String>>();
+		wordsBags = new HashMap<String, HashBag<String>>();
 
 		ArrayList<String> allSubtokens = new ArrayList<String>();
 
@@ -183,10 +183,10 @@ public class SearchTermStrings
 			}
 
 			allSubtokens.addAll(wordSubtokens);
-			wordsBags.put(token, new HashBag2<String>(wordSubtokens));
+			wordsBags.put(token, new HashBag<String>(wordSubtokens));
 		}
 
-		textBag = new HashBag2<String>(allSubtokens);
+		textBag = new HashBag<String>(allSubtokens);
 	}
 
 	/**

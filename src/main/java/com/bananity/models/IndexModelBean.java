@@ -153,12 +153,14 @@ public class IndexModelBean {
 	 *  @param item 		Item to be inserted
 	 *  @param subTokens 	Tokens used to index the item
 	 */
-	public void insert (final String collName, final SearchTerm item, final Collection<String> subTokens) throws Exception {
+	public void insert (final String collName, final SearchTerm item) throws Exception {
 		Cache<String, ArrayList<SearchTerm>> cache = cB.getTokensCache(collName);
 
 		if (cache == null) {
 			throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
 		}
+
+		Collection<String> subTokens = item.getLcFlattenStrings().getUniqueByLength(2);
 
 		boolean addedItem, mustTrim, recoveredFromStorage;
 		SearchTerm sortingTmpValue;

@@ -4,9 +4,7 @@ package com.bananity.controllers;
 // Bananity Classes
 import com.bananity.models.IndexModelBean;
 import com.bananity.text.TextNormalizer;
-import com.bananity.util.SearchesTokenizer;
 import com.bananity.util.HashBag;
-import com.bananity.util.ResultItemComparator;
 import com.bananity.util.SearchTerm;
 import com.bananity.util.StorageItemComparator2;
 
@@ -86,7 +84,7 @@ public class IndexController extends BaseController {
 		private void insertLogic (String collName, String item) throws Exception {
 			SearchTerm stItem = new SearchTerm(item);
 
-			imB.insert(collName, stItem, SearchesTokenizer.getSubTokensList(item));
+			imB.insert(collName, stItem);
 			addToCache(collName, stItem);
 		}
 

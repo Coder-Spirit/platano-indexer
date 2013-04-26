@@ -6,7 +6,6 @@ import com.bananity.text.TextNormalizer;
 import com.bananity.util.CandidatesCache;
 import com.bananity.util.ResultItemComparator2;
 import com.bananity.util.SearchTerm;
-import com.bananity.util.SearchSubstrings;
 import com.bananity.util.Jaccard;
 
 // Cache
@@ -53,14 +52,14 @@ public class SearchController extends BaseController {
 		public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			try {
 				String 	collName 	= request.getParameter("c");
-				String 	searchTerm 	= TextNormalizer.normalizeText(request.getParameter("searchTerm"), true);
+				String 	searchText 	= TextNormalizer.normalizeText(request.getParameter("searchTerm"), true);
 				int 	limit 		= Integer.parseInt(request.getParameter("limit"));
 
-				if (collName == null || collName.length() == 0 || searchTerm == null || limit <= 0) {
+				if (collName == null || collName.length() == 0 || searchText == null || limit <= 0) {
 					throw new Exception( "Invalid parameters" );
 				}
 
-				ArrayList<SearchTerm> searchResult = searchLogic(collName, searchTerm, limit);
+				ArrayList<SearchTerm> searchResult = searchLogic(collName, searchText, limit);
 
 				sendResponse(request, response, HttpServletResponse.SC_OK, 0, searchResult);
 
@@ -76,7 +75,7 @@ public class SearchController extends BaseController {
 	 *  The magic happens here
 	 *
 	 *  @param collName 	Index collection name
-	 *  @param searchTerm 	Search text
+	 *  @param searchText 	Search text
 	 *  @param limit 		Maximum number of items that result can have
 	 *
 	 *  @return 			List of found elements in the specified collection searching by searchTerm

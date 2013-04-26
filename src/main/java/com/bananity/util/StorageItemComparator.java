@@ -2,19 +2,24 @@ package com.bananity.util;
 
 
 import com.bananity.text.TextNormalizer;
+import com.bananity.util.SearchTerm;
+
 import java.util.Comparator;
 
 
-public class StorageItemComparator implements Comparator<String>
+public class StorageItemComparator implements Comparator<SearchTerm>
 {
 	private final String token;
 
-	public StorageItemComparator (String token) {
+	public StorageItemComparator (final String token) {
 		this.token = token;
 	}
 
-	public int compare(String sr1, String sr2) {
+	public int compare(final SearchTerm st1, final SearchTerm st2) {
 		
+		final String sr1 = st1.toString();
+		final String sr2 = st2.toString();
+
 		// En primer lugar comparamos SOLO la logitud
 		int result = Integer.compare(sr1.length(), sr2.length());
 
@@ -28,8 +33,16 @@ public class StorageItemComparator implements Comparator<String>
 			result = Integer.compare(indexOfTokenInSr1, indexOfTokenInSr2);
 
 			if (result == 0) {
-				// Si no queda otra: orden lexicográfico
-				result = sr1.compareTo(sr2);
+				int freqSt1 = st1.getLcFlattenStrings().getTextBag().getTimes(token);
+				int freqSt2 = st2.getLcFlattenStrings().getTextBag().getTimes(token);
+
+				// The order change is needed (greater freq is equivalent to smaller distance)
+				result = Integer.compare(freqSt2, freqSt1);
+
+				if (result == 0) {
+					// Si no queda otra: orden lexicográfico
+					result = sr1.compareTo(sr2);
+				}
 			}
 		}
 

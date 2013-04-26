@@ -5,7 +5,7 @@ package com.bananity.controllers;
 import com.bananity.models.IndexModelBean;
 import com.bananity.text.TextNormalizer;
 import com.bananity.util.SearchTerm;
-import com.bananity.util.StorageItemComparator2;
+import com.bananity.util.StorageItemComparator;
 
 // Cache
 import com.google.common.cache.Cache;
@@ -131,7 +131,7 @@ public class IndexController extends BaseController {
 		private void addToCacheToken (Cache<String, ArrayList<SearchTerm>> cache, SearchTerm item, String cacheKeyBaseItem, Integer limit) throws Exception {
 			String cacheKey = new StringBuilder(cacheKeyBaseItem).append("@").append(limit.toString()).toString();
 			ArrayList<SearchTerm>  cachedResult = cache.getIfPresent(cacheKey);
-			StorageItemComparator2 tokenComparator = new StorageItemComparator2(cacheKeyBaseItem);
+			StorageItemComparator tokenComparator = new StorageItemComparator(cacheKeyBaseItem);
 
 			if (cachedResult == null) return;
 

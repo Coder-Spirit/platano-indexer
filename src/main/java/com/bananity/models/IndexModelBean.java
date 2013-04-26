@@ -8,7 +8,7 @@ import com.bananity.locks.LocksBean;
 import com.bananity.storages.IIndexStorage;
 import com.bananity.storages.StoragesFactoryBean;
 import com.bananity.util.SearchTerm;
-import com.bananity.util.StorageItemComparator2;
+import com.bananity.util.StorageItemComparator;
 
 // Google Caches
 import com.google.common.cache.Cache;
@@ -167,7 +167,7 @@ public class IndexModelBean {
 
 		for (String subToken : subTokens) {
 			ArrayList<SearchTerm>  subTokenRelatedItems = cache.getIfPresent(subToken);
-			StorageItemComparator2 tokenComparator = new StorageItemComparator2(subToken);
+			StorageItemComparator tokenComparator = new StorageItemComparator(subToken);
 			
 			if (subTokenRelatedItems == null) {
 				subTokenRelatedItems = storage.findSubToken (collName, subToken);

@@ -3,7 +3,7 @@ package com.bananity.util;
 
 // Main Class
 import com.bananity.util.ResultItemComparator;
-import com.bananity.util.SearchesTokenizer;
+import com.bananity.util.SearchTerm;
 
 // Java Utils
 import java.util.ArrayList;

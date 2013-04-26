@@ -1,15 +1,10 @@
 package com.bananity.util;
 
-
 // Main Class
 import com.bananity.util.HashBag;
 
 // Java Utils
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 
 // Junit
 import org.junit.Assert;
@@ -17,164 +12,207 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.JUnit4;
 
 
 /**
  * @author Andreu Correa Casablanca
  */
-@RunWith(Parameterized.class)
+@RunWith(JUnit4.class)
 public class HashBagTest
 {
-	private HashBag 	hb;
-	private ArrayList 	al;
-
-	/**
-	 * This value must not be used in the tests
-	 */
-	private final static Integer 	intNotIn = 0;
-
-	/**
-	 * This value must not be used in the tests
-	 */
-	private final static String 	strNotIn = "NOTIN";
-
-	public HashBagTest (HashBag hb, ArrayList al) {
-		this.hb = hb;
-		this.al = al;
-	}
-
-	@Parameters
-	public static Collection<Object[]> data () {
-		ArrayList<Integer> bAL = new ArrayList<Integer>(
-			Arrays.asList(new Integer[] {
-				1, 2, 1, 4, 3, 3
-			})
-		);
-
-		HashBag<Integer> aHB = new HashBag<Integer>();
-		HashBag<Integer> bHB = new HashBag<Integer>(bAL);
-
-		for (Integer i : bAL) {
-			aHB.put(i);
-		}
-
-		HashBag<Integer> cHB = new HashBag<Integer>();
-		HashBag<Integer> dHB = new HashBag<Integer>();
-
-		cHB.addAll(bAL);
-		dHB.addAll(aHB);
-
-		return Arrays.asList(new Object[][] {
-			{aHB, bAL}, {bHB, bAL}, {cHB, bAL}, {dHB, bAL}
-		});
-	}
-
 	@Test
-	public void test_size () {
-		Assert.assertEquals(al.size(), hb.size());
-	}
+	public void test_equals () {
+		// Empty HashBag
+		HashBag<String> aHB = new HashBag<String>();
+		Assert.assertEquals(0, aHB.size());
+		Assert.assertEquals(0, aHB.uniqueItemsCount());
 
-	@Test
-	public void test_getTimes () {
-		for (Object o : al) {
-			Assert.assertEquals(Collections.frequency(al, o), hb.getTimes(o));
-		}
+		// HashBag from an array
+		HashBag<String> bHB = new HashBag<String>(new String[] {"a", "b", "c"});
 
-		if (al.get(0) instanceof Integer) {
-			Assert.assertEquals(0, hb.getTimes(intNotIn));
-		} else if (al.get(0) instanceof String) {
-			Assert.assertEquals(0, hb.getTimes(strNotIn));
-		}
-	}
-
-	@Test
-	public void test_contains () {
-		for (Object o : al) {
-			Assert.assertTrue(hb.contains(o));
-		}
+		// HashBag from a Collection
+		HashBag<String> cHB = new HashBag<String>(Arrays.asList(new String[] {"a", "b", "c"}));
 		
-		if (al.get(0) instanceof Integer) {
-			Assert.assertFalse(hb.contains(intNotIn));
-		} else if (al.get(0) instanceof String) {
-			Assert.assertFalse(hb.contains(strNotIn));
-		}
+		// HashBag from a HashBag
+		HashBag<String> dHB = new HashBag<String>(bHB);
+
+		// HashBag from a Bag
+		HashBag<String> eHB = new HashBag<String>((IBag)bHB);
+
+		// 
+		HashBag<String> fHB = new HashBag<String>(new String[] {"a", "b", "c", "d"});
+		HashBag<String> gHB = new HashBag<String>(new String[] {"a", "b", "c", "c"});
+
+
+		// Checking equality (and it's symmetry)
+		Assert.assertEquals(bHB, cHB);
+		Assert.assertEquals(cHB, bHB);
+
+		Assert.assertEquals(cHB, dHB);
+		Assert.assertEquals(dHB, cHB);
+
+		Assert.assertEquals(dHB, eHB);
+		Assert.assertEquals(eHB, dHB);
+
+		Assert.assertEquals(eHB, bHB);
+		Assert.assertEquals(bHB, eHB);
+
+		// Checking equality (just it's reflexivity)
+		Assert.assertEquals(aHB, aHB);
+		Assert.assertEquals(bHB, bHB);
+		Assert.assertEquals(cHB, cHB);
+		Assert.assertEquals(dHB, dHB);
+		Assert.assertEquals(eHB, eHB);
+
+		// Checking inequality
+		Assert.assertNotEquals(aHB, bHB);
+		Assert.assertNotEquals(aHB, cHB);
+		Assert.assertNotEquals(aHB, dHB);
+		Assert.assertNotEquals(aHB, eHB);
+
+		Assert.assertNotEquals(bHB, fHB);
+		Assert.assertNotEquals(bHB, gHB);
+		Assert.assertNotEquals(fHB, gHB);
+
+		// Checking inequality between different classes
+		Assert.assertNotEquals(aHB, new Integer(1));
 	}
 
 	@Test
-	public void test_remove () {
-		HashBag hb = (HashBag)this.hb.clone();
+	public void test_add () {
+		HashBag<String> aHB = new HashBag<String>();
+		Assert.assertFalse(aHB.contains("Bananity"));
+		Assert.assertFalse(aHB.contains("Pinterest"));
 
-		int hbSize = hb.size();
+		aHB.add("Bananity", 3);
+		Assert.assertTrue(aHB.contains("Bananity"));
+		Assert.assertEquals(3, aHB.getTimes("Bananity"));
+		Assert.assertEquals(3, aHB.size());
+		Assert.assertEquals(1, aHB.uniqueItemsCount());
 
-		for (Object o : al) {
-			int oTimes = hb.getTimes(o);
+		aHB.add("Pinterest", 5);
+		Assert.assertTrue(aHB.contains("Pinterest"));
+		Assert.assertEquals(5, aHB.getTimes("Pinterest"));
+		Assert.assertEquals(8, aHB.size());
+		Assert.assertEquals(2, aHB.uniqueItemsCount());
 
-			hb.remove(o);
-			Assert.assertEquals(hbSize-1, hb.size());
-			Assert.assertEquals(oTimes-1, hb.getTimes(o));
-			if (oTimes-1 == 0) {
-				Assert.assertFalse(hb.contains(o));
-			}
+		aHB.add("Bananity", 1);
+		Assert.assertEquals(4, aHB.getTimes("Bananity"));
+		Assert.assertEquals(9, aHB.size());
+		Assert.assertEquals(2, aHB.uniqueItemsCount());
 
-			hbSize--;
-		}
+		aHB.add("Pinterest", 0);
+		Assert.assertEquals(5, aHB.getTimes("Pinterest"));
+		Assert.assertEquals(9, aHB.size());
+		Assert.assertEquals(2, aHB.uniqueItemsCount());
 	}
 
 	@Test
-	public void test_toArrayList () {
-		Assert.assertEquals(hb.size(), hb.toArrayList().size());
+	public void test_decreaseValue () {
+		HashBag<String> aHB = new HashBag<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
+
+		Assert.assertEquals(3, aHB.decreaseValue("Love"));
+		Assert.assertEquals(5, aHB.size());
+		Assert.assertEquals(2, aHB.getTimes("Bty"));
+		Assert.assertEquals(2, aHB.getTimes("Love"));
+		Assert.assertEquals(1, aHB.getTimes("Hate"));
+		Assert.assertEquals(3, aHB.uniqueItemsCount());
+
+		Assert.assertEquals(1, aHB.decreaseValue("Hate"));
+		Assert.assertEquals(4, aHB.size());
+		Assert.assertEquals(2, aHB.getTimes("Bty"));
+		Assert.assertEquals(2, aHB.getTimes("Love"));
+		Assert.assertEquals(0, aHB.getTimes("Hate"));
+		Assert.assertEquals(2, aHB.uniqueItemsCount());
 	}
 
 	@Test
-	public void test_toUniqueArrayList () {
-		ArrayList al = hb.toUniqueArrayList();
+	public void test_removeValue () {
+		HashBag<String> aHB = new HashBag<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
 
-		for (Object o : al) {
-			Assert.assertTrue(hb.contains(o));
-			Assert.assertEquals(1, Collections.frequency(al, o));
-		}
+		Assert.assertEquals(3, aHB.removeValue("Love"));
+		Assert.assertEquals(3, aHB.size());
+		Assert.assertEquals(2, aHB.getTimes("Bty"));
+		Assert.assertEquals(0, aHB.getTimes("Love"));
+		Assert.assertEquals(1, aHB.getTimes("Hate"));
+		Assert.assertEquals(2, aHB.uniqueItemsCount());
+
+		Assert.assertEquals(2, aHB.removeValue("Bty"));
+		Assert.assertEquals(1, aHB.size());
+		Assert.assertEquals(0, aHB.getTimes("Bty"));
+		Assert.assertEquals(0, aHB.getTimes("Love"));
+		Assert.assertEquals(1, aHB.getTimes("Hate"));
+		Assert.assertEquals(1, aHB.uniqueItemsCount());
+
+		Assert.assertEquals(1, aHB.removeValue("Hate"));
+		Assert.assertEquals(0, aHB.size());
+		Assert.assertEquals(0, aHB.getTimes("Bty"));
+		Assert.assertEquals(0, aHB.getTimes("Love"));
+		Assert.assertEquals(0, aHB.getTimes("Hate"));
+		Assert.assertEquals(0, aHB.uniqueItemsCount());
+
+		Assert.assertEquals(new HashBag<String>(), aHB);
 	}
 
 	@Test
-	public void test_doInteresection () {
-		HashBag<Integer> aHB = new HashBag(Arrays.asList(
-			new Integer[] {1, 2, 3, 4}
-		));
+	public void test_union () {
+		HashBag<String> aHB = new HashBag<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
 
-		HashBag<Integer> bHB = new HashBag(Arrays.asList(
-			new Integer[] {3, 4, 5, 6}
-		));
+		HashBag<String> bHB = new HashBag<String>(new String[] {
+			"Bty", "Love", "Love", "Hate", "Hate", "Hate"
+		});
 
-		Assert.assertEquals(2, aHB.doIntersection(bHB).size());
-		Assert.assertEquals(2, bHB.doIntersection(aHB).size());
+		HashBag<String> abHB = new HashBag<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate", "Hate", "Hate"
+		});
+
+		Assert.assertEquals(aHB, aHB.union(aHB));
+		Assert.assertEquals(abHB, aHB.union(bHB));
+		Assert.assertEquals(abHB, bHB.union(aHB));
 	}
 
 	@Test
-	public void test_doUnion () {
-		HashBag<Integer> aHB = new HashBag(Arrays.asList(
-			new Integer[] {1, 2, 3, 4}
-		));
+	public void test_intersection () {
+		HashBag aHB = new HashBag<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
 
-		HashBag<Integer> bHB = new HashBag(Arrays.asList(
-			new Integer[] {3, 4, 5, 6}
-		));
+		HashBag<String> bHB = new HashBag<String>(new String[] {
+			"Bty", "Love", "Love", "Hate", "Hate", "Hate"
+		});
 
-		HashBag<Integer> cHB = new HashBag(Arrays.asList(
-			new Integer[] {3, 4, 5, 6, 3, 4}
-		));
+		HashBag<String> abHB = new HashBag<String>(new String[] {
+			"Bty", "Love", "Love", "Hate"
+		});
 
-		// The union of a hashbag with itself is the initial hashbag
-		Assert.assertEquals(hb.size(), hb.doUnion(hb).size());
+		Assert.assertEquals(aHB, aHB.intersection(aHB));
+		Assert.assertEquals(abHB, aHB.intersection(bHB));
+		Assert.assertEquals(abHB, bHB.intersection(aHB));
+	}
 
-		// Union with 2 common elements (with same cardinality)
-		HashBag u1 = aHB.doUnion(bHB);
-		HashBag u2 = bHB.doUnion(aHB);
-		Assert.assertEquals(6, u1.size());
-		Assert.assertEquals(u1.size(), u2.size());
+	@Test
+	public void test_difference () {
+		HashBag aHB = new HashBag<String>(new String[] {
+			"Bty", "Bty", "Love", "Love", "Love", "Hate"
+		});
 
-		// Union with 2 common elements (with distinct cardinality)
-		Assert.assertEquals(8, aHB.doUnion(cHB).size());
+		HashBag bHB = new HashBag<String>(new String[] {
+			"Love", "Love", "Love"
+		});
+
+		HashBag<String> abHB = new HashBag<String>(new String[] {
+			"Bty", "Bty", "Hate"
+		});
+
+		Assert.assertEquals(new HashBag<String>(), aHB.difference(aHB));
+		Assert.assertEquals(abHB, aHB.difference(bHB));
+		Assert.assertEquals(new HashBag<String>(), bHB.difference(aHB));
 	}
 }

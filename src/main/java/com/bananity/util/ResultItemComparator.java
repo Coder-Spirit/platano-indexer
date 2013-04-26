@@ -37,7 +37,7 @@ public class ResultItemComparator implements Comparator<SearchTerm>
 			d1 = computeLcFlattenDistance(st1);
 		}
 		if (d2 == null) {
-			d1 = computeLcFlattenDistance(st2);
+			d2 = computeLcFlattenDistance(st2);
 		}
 
 		result = d1.compareTo(d2);

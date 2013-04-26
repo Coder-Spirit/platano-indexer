@@ -4,7 +4,6 @@ package com.bananity.controllers;
 // Bananity Classes
 import com.bananity.models.IndexModelBean;
 import com.bananity.text.TextNormalizer;
-import com.bananity.util.HashBag;
 import com.bananity.util.SearchTerm;
 import com.bananity.util.StorageItemComparator2;
 

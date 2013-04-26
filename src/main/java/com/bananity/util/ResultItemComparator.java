@@ -13,12 +13,12 @@ import java.util.HashMap;
  * @author 	Andreu Correa Casablanca
  * @see 	java.util.Comparator
  */
-public class ResultItemComparator2 implements Comparator<SearchTerm>
+public class ResultItemComparator implements Comparator<SearchTerm>
 {
 	private final SearchTerm base;
 	private final HashMap<SearchTerm, Double> distancesCache;
 
-	public ResultItemComparator2 (SearchTerm base) {
+	public ResultItemComparator (SearchTerm base) {
 		this.base = base;
 		distancesCache = new HashMap<SearchTerm, Double>();
 	}

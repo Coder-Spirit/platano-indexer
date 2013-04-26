@@ -49,6 +49,24 @@ public class SearchTerm implements IJsonSerializable, IBsonSerializable
 
 	// ---------------------------------------------------------------------------------------------
 
+	public int hashCode () {
+		return text.hashCode();
+	}
+
+	public boolean equals (Object o) {
+		if (o == this) {
+			return true;
+		}
+
+		if (o instanceof SearchTerm) {
+			return ((SearchTerm)o).text.equals(this.text);
+		} else {
+			return false;
+		}
+	}
+
+	// ---------------------------------------------------------------------------------------------
+
 	public String toString () {
 		return text;
 	}

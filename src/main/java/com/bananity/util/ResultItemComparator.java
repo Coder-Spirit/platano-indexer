@@ -18,16 +18,17 @@ public class ResultItemComparator implements Comparator<SearchTerm>
 	private final SearchTerm base;
 	private final HashMap<SearchTerm, Double> distancesCache;
 
-	public ResultItemComparator (String baseStr) {
-		this(new SearchTerm(baseStr));
-	}
-
 	public ResultItemComparator (SearchTerm base) {
 		this.base = base;
 		distancesCache = new HashMap<SearchTerm, Double>();
 	}
 
 	public int compare (SearchTerm st1, SearchTerm st2) {
+		
+		if (st1.equals(st2)) {
+			return 0;
+		}
+
 		int result;
 
 		Double d1 = distancesCache.get(st1);

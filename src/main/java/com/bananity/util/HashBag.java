@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Andreu Correa Casablanca
  */
-public final class HashBag<T> extends ABag<T> implements IMutableBag<T>
+public final class HashBag<T> extends ABag<T>
 {
 	/**
 	 *
@@ -77,16 +77,6 @@ public final class HashBag<T> extends ABag<T> implements IMutableBag<T>
 		return internalMap.entrySet().iterator();
 	}
 
-	/**
-	 *
-	 */
-	public void add (final T o) {
-		_add(o);
-	}
-
-	public void add (final T o, final int times) {
-		_add(o, times);
-	}
 
 	/**
 	 *
@@ -102,28 +92,6 @@ public final class HashBag<T> extends ABag<T> implements IMutableBag<T>
 				size += times;
 			}
 		}
-	}
-
-
-	/**
-	 *
-	 */
-	public void addAll (final IBag<T> b) {
-		_addAll(b);
-	}
-
-	/**
-	 *
-	 */
-	public void addAll (final Collection<T> c) {
-		_addAll(c);
-	}
-
-	/**
-	 *
-	 */
-	public void addAll (final T[] l) {
-		_addAll(l);
 	}
 
 

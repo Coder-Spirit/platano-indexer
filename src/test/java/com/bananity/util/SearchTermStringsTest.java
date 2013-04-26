@@ -43,9 +43,9 @@ public class SearchTermStringsTest
 	@Test
 	public void test_getTextBag () {
 		SearchTermStrings 	sts_A 	= new SearchTermStrings("The Banana Society");
-		HashBag2<String> 	hb_A 	= sts_A.getTextBag();
+		HashBag<String> 	hb_A 	= sts_A.getTextBag();
 
-		HashBag2<String> 	hb_Test = new HashBag2<String>(new String[] {
+		HashBag<String> 	hb_Test = new HashBag<String>(new String[] {
 			"The Banana",
 			"The Banan", "The Bana", "The Ban", "The Ba", "The B",
 			"he Banana", "he Banan", "he Bana", "he Ban", "he Ba", "he B",

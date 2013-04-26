@@ -80,35 +80,6 @@ public class HashBagTest
 	}
 
 	@Test
-	public void test_add () {
-		HashBag<String> aHB = new HashBag<String>();
-		Assert.assertFalse(aHB.contains("Bananity"));
-		Assert.assertFalse(aHB.contains("Pinterest"));
-
-		aHB.add("Bananity", 3);
-		Assert.assertTrue(aHB.contains("Bananity"));
-		Assert.assertEquals(3, aHB.getTimes("Bananity"));
-		Assert.assertEquals(3, aHB.size());
-		Assert.assertEquals(1, aHB.uniqueItemsCount());
-
-		aHB.add("Pinterest", 5);
-		Assert.assertTrue(aHB.contains("Pinterest"));
-		Assert.assertEquals(5, aHB.getTimes("Pinterest"));
-		Assert.assertEquals(8, aHB.size());
-		Assert.assertEquals(2, aHB.uniqueItemsCount());
-
-		aHB.add("Bananity", 1);
-		Assert.assertEquals(4, aHB.getTimes("Bananity"));
-		Assert.assertEquals(9, aHB.size());
-		Assert.assertEquals(2, aHB.uniqueItemsCount());
-
-		aHB.add("Pinterest", 0);
-		Assert.assertEquals(5, aHB.getTimes("Pinterest"));
-		Assert.assertEquals(9, aHB.size());
-		Assert.assertEquals(2, aHB.uniqueItemsCount());
-	}
-
-	@Test
 	public void test_decreaseValue () {
 		HashBag<String> aHB = new HashBag<String>(new String[] {
 			"Bty", "Bty", "Love", "Love", "Love", "Hate"

@@ -27,7 +27,7 @@ public class ResultItemComparator implements Comparator<SearchTerm>
 		distancesCache = new HashMap<SearchTerm, Double>();
 	}
 
-	public int compare(SearchTerm st1, SearchTerm st2) {
+	public int compare (SearchTerm st1, SearchTerm st2) {
 		int result;
 
 		Double d1 = distancesCache.get(st1);

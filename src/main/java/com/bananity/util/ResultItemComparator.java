@@ -53,6 +53,8 @@ public class ResultItemComparator implements Comparator<SearchTerm>
 				d1 = computeOriginalDistance(st1);
 				d2 = computeOriginalDistance(st2);
 
+				System.out.println("("+base+") Original Distance between "+st1+" ("+d1+") AND "+st2+" ("+d2+")");
+
 				result = d1.compareTo(d2);
 			}
 		}
@@ -61,17 +63,17 @@ public class ResultItemComparator implements Comparator<SearchTerm>
 	}
 
 	private double computeLcFlattenDistance (SearchTerm st) {
-		double d = Jaccard.distance(base.getLcFlattenStrings().getTextBag(), st.getLcFlattenStrings().getTextBag(), true);
+		double d = Jaccard.distance(base.getLcFlattenStrings().getTextBag(), st.getLcFlattenStrings().getTextBag());
 		distancesCache.put(st, d);
 
 		return d;
 	}
 
 	private double computeLowerCaseDistance (SearchTerm st) {
-		return Jaccard.distance(base.getLowerCaseStrings().getTextBag(), st.getLowerCaseStrings().getTextBag(), true);
+		return Jaccard.distance(base.getLowerCaseStrings().getTextBag(), st.getLowerCaseStrings().getTextBag());
 	}
 
 	private double computeOriginalDistance (SearchTerm st) {
-		return Jaccard.distance(base.getOriginalStrings().getTextBag(), st.getOriginalStrings().getTextBag(), true);
+		return Jaccard.distance(base.getOriginalStrings().getTextBag(), st.getOriginalStrings().getTextBag());
 	}
 }

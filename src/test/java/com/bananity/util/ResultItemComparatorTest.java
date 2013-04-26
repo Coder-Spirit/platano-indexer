@@ -59,4 +59,42 @@ public class ResultItemComparatorTest
 		ResultItemComparator c2 = new ResultItemComparator(_huevos_fritos_St);
 		Assert.assertEquals(-1, c2.compare(_huevos_fritos_St, _Fritos_St));
 	}
+
+	@Test
+	public void test_compare_regression_2 () {
+		SearchTerm _FC_Barcelona_St 	= new SearchTerm("Barça");
+		SearchTerm _fc_barcelona_St 	= new SearchTerm("barça");
+		SearchTerm _Barca_St 			= new SearchTerm("Barca");
+		SearchTerm _barca_St 			= new SearchTerm("barca");
+
+		ResultItemComparator _FC_Barcelona_Cmp 	= new ResultItemComparator(_FC_Barcelona_St);
+		ResultItemComparator _fc_barcelona_Cmp 	= new ResultItemComparator(_fc_barcelona_St);
+		ResultItemComparator _Barca_Cmp 		= new ResultItemComparator(_Barca_St);
+		ResultItemComparator _barca_Cmp 		= new ResultItemComparator(_barca_St);
+
+		// The next 4 blocks check 'special chars' comparisons
+		Assert.assertEquals(-1, _FC_Barcelona_Cmp.compare(_FC_Barcelona_St, _Barca_St));
+		Assert.assertEquals(-1, _FC_Barcelona_Cmp.compare(_FC_Barcelona_St, _barca_St));
+		Assert.assertEquals(-1, _FC_Barcelona_Cmp.compare(_fc_barcelona_St, _Barca_St));
+		Assert.assertEquals(-1, _FC_Barcelona_Cmp.compare(_fc_barcelona_St, _barca_St));
+
+		Assert.assertEquals(-1, _fc_barcelona_Cmp.compare(_FC_Barcelona_St, _Barca_St));
+		Assert.assertEquals(-1, _fc_barcelona_Cmp.compare(_FC_Barcelona_St, _barca_St));
+		Assert.assertEquals(-1, _fc_barcelona_Cmp.compare(_fc_barcelona_St, _Barca_St));
+		Assert.assertEquals(-1, _fc_barcelona_Cmp.compare(_fc_barcelona_St, _barca_St));
+
+		Assert.assertEquals(1, _FC_Barcelona_Cmp.compare(_Barca_St, _FC_Barcelona_St));
+		Assert.assertEquals(1, _FC_Barcelona_Cmp.compare(_barca_St, _FC_Barcelona_St));
+		Assert.assertEquals(1, _FC_Barcelona_Cmp.compare(_Barca_St, _fc_barcelona_St));
+		Assert.assertEquals(1, _FC_Barcelona_Cmp.compare(_barca_St, _fc_barcelona_St));
+
+		Assert.assertEquals(1, _fc_barcelona_Cmp.compare(_Barca_St, _FC_Barcelona_St));
+		Assert.assertEquals(1, _fc_barcelona_Cmp.compare(_barca_St, _FC_Barcelona_St));
+		Assert.assertEquals(1, _fc_barcelona_Cmp.compare(_Barca_St, _fc_barcelona_St));
+		Assert.assertEquals(1, _fc_barcelona_Cmp.compare(_barca_St, _fc_barcelona_St));
+
+		// The next 4 blocks check 'special chars + case' comparisons
+		//Assert.assertEquals(-1, _FC_Barcelona_Cmp.compare(_FC_Barcelona_St, _fc_barcelona_St));
+		//Assert.assertEquals(1, _FC_Barcelona_Cmp.compare(_fc_barcelona_St, _FC_Barcelona_St));
+	}
 }

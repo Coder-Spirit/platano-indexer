@@ -1,7 +1,5 @@
 package com.bananity.util;
 
-import java.util.ArrayList;
-
 /**
  *  This class encapsulates many methods to calculate the Jaccard Distance
  *

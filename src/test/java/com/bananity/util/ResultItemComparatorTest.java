@@ -94,7 +94,7 @@ public class ResultItemComparatorTest
 		Assert.assertEquals(1, _fc_barcelona_Cmp.compare(_barca_St, _fc_barcelona_St));
 
 		// The next 4 blocks check 'special chars + case' comparisons
-		//Assert.assertEquals(-1, _FC_Barcelona_Cmp.compare(_FC_Barcelona_St, _fc_barcelona_St));
-		//Assert.assertEquals(1, _FC_Barcelona_Cmp.compare(_fc_barcelona_St, _FC_Barcelona_St));
+		Assert.assertEquals(-1, _FC_Barcelona_Cmp.compare(_FC_Barcelona_St, _fc_barcelona_St));
+		Assert.assertEquals(1, _FC_Barcelona_Cmp.compare(_fc_barcelona_St, _FC_Barcelona_St));
 	}
 }

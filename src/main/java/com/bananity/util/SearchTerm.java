@@ -44,7 +44,7 @@ public class SearchTerm implements IJsonSerializable, IBsonSerializable
 			originalStrings = new SearchTermStrings(text);
 		}
 
-		return lowerCaseStrings;
+		return originalStrings;
 	}
 
 	// ---------------------------------------------------------------------------------------------

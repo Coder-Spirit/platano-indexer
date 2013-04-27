@@ -53,8 +53,6 @@ public class ResultItemComparator implements Comparator<SearchTerm>
 				d1 = computeOriginalDistance(st1);
 				d2 = computeOriginalDistance(st2);
 
-				System.out.println("("+base+") Original Distance between "+st1+" ("+d1+") AND "+st2+" ("+d2+")");
-
 				result = d1.compareTo(d2);
 			}
 		}

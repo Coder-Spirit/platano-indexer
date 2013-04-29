@@ -6,6 +6,7 @@ import com.bananity.text.TextNormalizer;
 import com.bananity.util.CandidatesCache;
 import com.bananity.util.ResultItemComparator;
 import com.bananity.util.SearchTerm;
+import com.bananity.util.SearchTermFactory;
 import com.bananity.util.Jaccard;
 
 // Cache
@@ -93,7 +94,7 @@ public class SearchController extends BaseController {
 			return finalResult;
 		}
 
-		SearchTerm searchTerm = new SearchTerm(searchText);
+		SearchTerm searchTerm = SearchTermFactory.get(searchText);
 		CandidatesCache<SearchTerm> candidates = new CandidatesCache<SearchTerm>(new ResultItemComparator(searchTerm), limit);
 
 		int lengthThreshold = searchTerm.getLcFlattenStrings().getMaxTokenLength();

@@ -3,6 +3,7 @@ package com.bananity.storages;
 
 import com.bananity.constants.StorageConstantsBean;
 import com.bananity.util.SearchTerm;
+import com.bananity.util.SearchTermFactory;
 import com.bananity.util.serialization.BsonSerializer;
 
 import com.mongodb.BasicDBList;
@@ -351,7 +352,7 @@ public class MongoIndexStorage implements IIndexStorage
 		BasicDBList aliasFromDB = (BasicDBList)mongoResult.get("tl");
 		if (aliasFromDB != null && aliasFromDB.size() > 0) {
 			for (Object aliasObject : aliasFromDB) {
-				result.add(new SearchTerm((String)aliasObject));
+				result.add(SearchTermFactory.get((String)aliasObject));
 			}
 		}
 		

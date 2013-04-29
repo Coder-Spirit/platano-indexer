@@ -76,4 +76,16 @@ public abstract class ABag<T> implements IBag<T>
 
 		return result;
 	}
+
+	/**
+	 *
+	 */
+	public double distance(IBag<T> b) {
+		IBag<T> i = this.intersection(b);
+		if ( i.size() == 0 ) {
+			return 1.0d;
+		}
+		
+		return 1.0d - ((double)i.size() / (double)this.union(b).size());
+	}
 }

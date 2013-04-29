@@ -7,7 +7,6 @@ import com.bananity.util.CandidatesCache;
 import com.bananity.util.ResultItemComparator;
 import com.bananity.util.SearchTerm;
 import com.bananity.util.SearchTermFactory;
-import com.bananity.util.Jaccard;
 
 // Cache
 import com.google.common.cache.Cache;

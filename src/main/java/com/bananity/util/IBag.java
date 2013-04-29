@@ -19,4 +19,6 @@ public interface IBag<T> extends Iterable<Map.Entry<T, Integer>>
 
 	public ArrayList<T> toArrayList ();
 	public ArrayList<T> toUniqueArrayList ();
+
+	public double distance(IBag<T> b);
 }

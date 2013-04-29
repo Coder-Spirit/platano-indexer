@@ -1,8 +1,6 @@
 package com.bananity.util;
 
 
-import com.bananity.util.Jaccard;
-
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -61,17 +59,17 @@ public class ResultItemComparator implements Comparator<SearchTerm>
 	}
 
 	private double computeLcFlattenDistance (SearchTerm st) {
-		double d = Jaccard.distance(base.getLcFlattenStrings().getTextBag(), st.getLcFlattenStrings().getTextBag());
+		double d = base.getLcFlattenStrings().getTextBag().distance(st.getLcFlattenStrings().getTextBag());
 		distancesCache.put(st, d);
 
 		return d;
 	}
 
 	private double computeLowerCaseDistance (SearchTerm st) {
-		return Jaccard.distance(base.getLowerCaseStrings().getTextBag(), st.getLowerCaseStrings().getTextBag());
+		return base.getLowerCaseStrings().getTextBag().distance(st.getLowerCaseStrings().getTextBag());
 	}
 
 	private double computeOriginalDistance (SearchTerm st) {
-		return Jaccard.distance(base.getOriginalStrings().getTextBag(), st.getOriginalStrings().getTextBag());
+		return base.getOriginalStrings().getTextBag().distance(st.getOriginalStrings().getTextBag());
 	}
 }

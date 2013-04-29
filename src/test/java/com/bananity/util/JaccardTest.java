@@ -3,7 +3,6 @@ package com.bananity.util;
 
 // Main Class
 import com.bananity.util.HashBag;
-import com.bananity.util.Jaccard;
 
 // Java Utils
 import java.util.ArrayList;
@@ -59,36 +58,36 @@ public class JaccardTest
 	@Test
 	public void test_distance_HashBag_checkEquality () {
 		// Checking Equality
-		Assert.assertEquals(0., Jaccard.distance(abcHB, abcHB), 0.);
-		Assert.assertEquals(0., Jaccard.distance(bcdHB, bcdHB), 0.);
-		Assert.assertEquals(0., Jaccard.distance(cdaHB, cdaHB), 0.);
-		Assert.assertEquals(0., Jaccard.distance(dabHB, dabHB), 0.);
+		Assert.assertEquals(0., abcHB.distance(abcHB), 0.);
+		Assert.assertEquals(0., bcdHB.distance(bcdHB), 0.);
+		Assert.assertEquals(0., cdaHB.distance(cdaHB), 0.);
+		Assert.assertEquals(0., dabHB.distance(dabHB), 0.);
 	}
 
 	@Test
 	public void test_distance_HashBag_checkDistanceRelations () {
 		// Checking distance relations
-		Assert.assertEquals(Jaccard.distance(abcHB, bcdHB), Jaccard.distance(abcHB, cdaHB), 0.);
-		Assert.assertEquals(Jaccard.distance(abcHB, cdaHB), Jaccard.distance(abcHB, dabHB), 0.);
-		Assert.assertEquals(Jaccard.distance(bcdHB, cdaHB), Jaccard.distance(bcdHB, dabHB), 0.);
-		Assert.assertEquals(Jaccard.distance(bcdHB, dabHB), Jaccard.distance(bcdHB, abcHB), 0.);
-		Assert.assertEquals(Jaccard.distance(cdaHB, dabHB), Jaccard.distance(cdaHB, abcHB), 0.);
-		Assert.assertEquals(Jaccard.distance(cdaHB, abcHB), Jaccard.distance(cdaHB, bcdHB), 0.);
-		Assert.assertEquals(Jaccard.distance(dabHB, abcHB), Jaccard.distance(dabHB, bcdHB), 0.);
-		Assert.assertEquals(Jaccard.distance(dabHB, bcdHB), Jaccard.distance(dabHB, cdaHB), 0.);
+		Assert.assertEquals(abcHB.distance(bcdHB), abcHB.distance(cdaHB), 0.);
+		Assert.assertEquals(abcHB.distance(cdaHB), abcHB.distance(dabHB), 0.);
+		Assert.assertEquals(bcdHB.distance(cdaHB), bcdHB.distance(dabHB), 0.);
+		Assert.assertEquals(bcdHB.distance(dabHB), bcdHB.distance(abcHB), 0.);
+		Assert.assertEquals(cdaHB.distance(dabHB), cdaHB.distance(abcHB), 0.);
+		Assert.assertEquals(cdaHB.distance(abcHB), cdaHB.distance(bcdHB), 0.);
+		Assert.assertEquals(dabHB.distance(abcHB), dabHB.distance(bcdHB), 0.);
+		Assert.assertEquals(dabHB.distance(bcdHB), dabHB.distance(cdaHB), 0.);
 	}
 
 	@Test
 	public void test_distance_HashBag_checkEmpty () {
 		// Checking distance for empty arrays
-		Assert.assertEquals(1.0, Jaccard.distance(new HashBag<String>(), abcHB), 0.);
+		Assert.assertEquals(1.0, new HashBag<String>().distance(abcHB), 0.);
 	}
 
 	@Test
 	public void test_distance_HashBag_checkDistanceValues () {
-		Assert.assertEquals(0.5, Jaccard.distance(abcHB, bcdHB), 0.00001);
-		Assert.assertEquals(0.5, Jaccard.distance(bcdHB, abcHB), 0.00001);
-		Assert.assertEquals(0.25, Jaccard.distance(abcdHB, abcHB), 0.00001);
-		Assert.assertEquals(0.25, Jaccard.distance(abcHB, abcdHB), 0.00001);
+		Assert.assertEquals(0.5, abcHB.distance(bcdHB), 0.00001);
+		Assert.assertEquals(0.5, bcdHB.distance(abcHB), 0.00001);
+		Assert.assertEquals(0.25, abcdHB.distance(abcHB), 0.00001);
+		Assert.assertEquals(0.25, abcHB.distance(abcdHB), 0.00001);
 	}
 }

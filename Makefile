@@ -133,7 +133,7 @@ compile_test: dist
 
 test: compile_test
 	@echo ">> Testing"
-	@for test_file in `cd $(TARGET_DIR)$(TEST_CLASS_DIR) ; find . -name "*.class" | awk '{path = substr($$0,3,length($$0)-8); gsub(/\//,".",path); print path;}'` ; do \
+	@for test_file in `cd $(TARGET_DIR)$(TEST_CLASS_DIR) ; find . -name "*Test.class" | awk '{path = substr($$0,3,length($$0)-8); gsub(/\//,".",path); print path;}'` ; do \
 		echo Testing: $$test_file ; \
 		if test "$$i" = "" ; then cd $(TARGET_DIR)$(TEST_CLASS_DIR); fi; \
 		output=`java -cp "../../$(LIB_DIR)*:../$(CLASS_DIR):." org.junit.runner.JUnitCore $$test_file` ; \

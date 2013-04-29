@@ -4,6 +4,7 @@ package com.bananity.util;
 // Java Utils
 import java.util.Set;
 import java.util.List;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,11 +26,7 @@ public class CandidatesCache<T> {
 	/**
 	 * Constructor
 	 */
-	public CandidatesCache (Comparator<T> comparator, int limit) throws Exception {
-		if (limit <= 0) {
-			throw new Exception( "BAD \"size\" value (" + limit + ")" );
-		}
-
+	public CandidatesCache (Comparator<T> comparator, int limit) {
 		this.limit = limit;
 		used = new HashSet<T>();
 		this.comparator = comparator;
@@ -56,10 +53,6 @@ public class CandidatesCache<T> {
 		}
 	}
 
-	public String toString () {
-		return queue.toString();
-	}
-
 	public int size () {
 		return queue.size();
 	}
@@ -68,11 +61,12 @@ public class CandidatesCache<T> {
 	 * Returns the internal queue as an ArrayList
 	 */
 	public ArrayList<T> getRecords () {
-		ArrayList<T> a = new ArrayList<T>();
+		ArrayList<T> result = new ArrayList<T>();
+		
 		while ( queue.size() > 0 ) {
-			a.add( queue.poll() );
+			result.add(0, queue.poll());
 		}
-		Collections.reverse( a );
-		return a;
+		
+		return result;
 	}
 }

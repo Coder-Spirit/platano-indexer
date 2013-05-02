@@ -9,9 +9,10 @@ import java.util.ArrayList;
  */
 public class SortedLists
 {
-	public static <T> boolean sortedInsert (Comparator<T> c, ArrayList<T> al, int limit, T item) {
+	public static <T> boolean sortedInsert (final Comparator<T> c, final ArrayList<T> al, final int limit, T item) {
 		
-		int insertPos = al.size();
+		int oldSize = al.size();
+		int insertPos = oldSize;
 
 		for (int i = al.size()-1; i >= 0; i--) {
 			if (c.compare(al.get(i), item) > 0) {
@@ -22,9 +23,20 @@ public class SortedLists
 		}
 
 		if (insertPos < limit) {
-			//for (int) {
-			//
-			//}
+			
+			if (oldSize == limit && insertPos == oldSize-1) {
+				al.set(oldSize-1, item);
+			} else if (oldSize < limit && insertPos == oldSize) {
+				al.add(item);
+			} else {
+				if (oldSize < limit) {
+					al.add(al.get(oldSize-1));
+				}
+
+				for (int i=insertPos; i<oldSize; i++) {
+					item = al.set(i, item);
+				}
+			}
 
 			return true;
 		} else {

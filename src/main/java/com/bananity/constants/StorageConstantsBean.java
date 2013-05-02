@@ -151,7 +151,7 @@ public class StorageConstantsBean {
 
 			try {
 				log.info("LOADING conf.properties");
-				prop.load( Thread.currentThread().getContextClassLoader().getResourceAsStream("conf.properties") );
+				prop.load( classLoader.getResourceAsStream("conf.properties") );
 
 				////////////////////////////////////////
 				//      General Storage Settings      //

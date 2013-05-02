@@ -95,6 +95,8 @@ public class IndexController extends BaseController {
 	 *  @param item 	Item to be inserted in the collection
 	 */
 		private void removeLogic (String collName, String item) throws Exception {
+			// WARNING : There aren't locks
+
 			SearchTerm stItem = SearchTermFactory.get(item);
 
 			imB.remove(collName, stItem);

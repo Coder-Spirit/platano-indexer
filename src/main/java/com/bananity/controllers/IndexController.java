@@ -6,6 +6,7 @@ import com.bananity.models.IndexModelBean;
 import com.bananity.text.TextNormalizer;
 import com.bananity.util.SearchTerm;
 import com.bananity.util.SearchTermFactory;
+import com.bananity.util.SortedLists;
 import com.bananity.util.StorageItemComparator;
 
 // Cache
@@ -13,7 +14,6 @@ import com.google.common.cache.Cache;
 
 // Java utils
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -131,31 +131,11 @@ public class IndexController extends BaseController {
 	 */
 		private void addToCacheToken (Cache<String, ArrayList<SearchTerm>> cache, SearchTerm item, String cacheKeyBaseItem, Integer limit) throws Exception {
 			String cacheKey = new StringBuilder(cacheKeyBaseItem).append("@").append(limit.toString()).toString();
+			
 			ArrayList<SearchTerm>  cachedResult = cache.getIfPresent(cacheKey);
-			StorageItemComparator tokenComparator = new StorageItemComparator(cacheKeyBaseItem);
-
 			if (cachedResult == null) return;
 
-			SearchTerm sortingTmpValue;
-			boolean addedItem;
-
-			if (cachedResult.size() < limit) {
-				cachedResult.add(item);
-				addedItem = true;
-			} else if (tokenComparator.compare(cachedResult.get(limit-1), item) > 0) {
-				cachedResult.set(limit-1, item);
-				addedItem = true;
-			} else {
-				addedItem = false;
-			}
-
-			if (addedItem) {
-				for (int i=cachedResult.size()-1; i>0 && tokenComparator.compare(cachedResult.get(i), cachedResult.get(i-1)) < 0; i--) {
-					sortingTmpValue = cachedResult.get(i);
-					cachedResult.set(i, cachedResult.get(i-1));
-					cachedResult.set(i-1, sortingTmpValue);
-				}
-			}
+			SortedLists.sortedInsert(new StorageItemComparator(cacheKeyBaseItem), cachedResult, limit, item);
 
 			cache.put(cacheKey, cachedResult);
 		}

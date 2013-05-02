@@ -125,7 +125,7 @@ public class SearchController extends BaseController {
 		}
 
 		finalResult = candidates.getRecords();
-		cache.put( cacheKey, finalResult );
+		cache.put(cacheKey, finalResult);
 
 		return finalResult;
 	}

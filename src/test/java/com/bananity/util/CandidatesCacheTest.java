@@ -28,13 +28,16 @@ public class CandidatesCacheTest
 		cc.put(3);
 
 		Assert.assertEquals(3, cc.size());
+		Assert.assertArrayEquals(
+			new Integer[] {3, 4, 5},
+			cc.getRecords().toArray(new Integer[] {})
+		);
 
 		cc.put(29);
 		cc.put(9);
 		cc.put(11);
 
 		Assert.assertEquals(5, cc.size());
-
 		Assert.assertArrayEquals(
 			new Integer[] {3, 4, 5, 9, 11},
 			cc.getRecords().toArray(new Integer[] {})

@@ -130,13 +130,10 @@ public class IndexController extends BaseController {
 	 *  @param limit 			limit imposed to search result size (as a part of cache key)
 	 */
 		private void addToCacheToken (Cache<String, ArrayList<SearchTerm>> cache, SearchTerm item, String cacheKeyBaseItem, Integer limit) throws Exception {
-			String cacheKey = new StringBuilder(cacheKeyBaseItem).append("@").append(limit.toString()).toString();
-			
+			String cacheKey 					= new StringBuilder(cacheKeyBaseItem).append("@").append(limit.toString()).toString();
 			ArrayList<SearchTerm>  cachedResult = cache.getIfPresent(cacheKey);
 			if (cachedResult == null) return;
 
 			SortedLists.sortedInsert(new StorageItemComparator(cacheKeyBaseItem), cachedResult, limit, item);
-
-			cache.put(cacheKey, cachedResult);
 		}
 }

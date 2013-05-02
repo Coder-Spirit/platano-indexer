@@ -101,14 +101,11 @@ public class SearchController extends BaseController {
 		ArrayList<SearchTerm> partialResults;
 
 		Set<String> usedTokens = new HashSet();
-		Set<String> tmpSearch;
-		ArrayList<String> currSearch;
 
 		while ( candidates.size() < limit && lengthThreshold > 0 ) {
-			tmpSearch = searchTerm.getLcFlattenStrings().getUniqueByLength( lengthThreshold );
-			currSearch = new ArrayList<String>();
+			ArrayList<String> currSearch = new ArrayList<String>();
 
-			for ( String s : tmpSearch ) {
+			for ( String s : searchTerm.getLcFlattenStrings().getUniqueByLength(lengthThreshold) ) {
 				if ( ! usedTokens.contains( s ) ) {
 					usedTokens.add( s );
 					currSearch.add( s );

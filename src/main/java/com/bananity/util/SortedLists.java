@@ -28,11 +28,9 @@ public class SortedLists
 				al.set(oldSize-1, item);
 			} else if (oldSize < limit && insertPos == oldSize) {
 				al.add(item);
+			} else if (oldSize < limit) {
+				al.add(insertPos, item);
 			} else {
-				if (oldSize < limit) {
-					al.add(al.get(oldSize-1));
-				}
-
 				for (int i=insertPos; i<oldSize; i++) {
 					item = al.set(i, item);
 				}

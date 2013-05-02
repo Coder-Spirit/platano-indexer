@@ -16,10 +16,12 @@ public class SortedLists
 	public static <T> boolean sortedInsert (final Comparator<T> c, final ArrayList<T> al, final int limit, T item) {
 		
 		int oldSize = al.size();
-		int insertPos = oldSize;
+		int insertPos;
 
 		// We use a threshold to select between binary search and naive search
 		if (al.size() < 10) {
+			insertPos = oldSize;
+
 			for (int i = al.size()-1; i >= 0; i--) {
 				if (c.compare(al.get(i), item) > 0) {
 					insertPos--;
@@ -28,7 +30,10 @@ public class SortedLists
 				}
 			}
 		} else {
-			insertPos = - Collections.binarySearch(al, item, c) - 1;
+			insertPos = Collections.binarySearch(al, item, c);
+			if (insertPos < 0) {
+				insertPos = -insertPos -1;
+			}
 		}
 
 		if (insertPos < limit) {

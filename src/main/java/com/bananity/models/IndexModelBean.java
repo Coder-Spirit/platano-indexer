@@ -8,6 +8,7 @@ import com.bananity.locks.LocksBean;
 import com.bananity.storages.IIndexStorage;
 import com.bananity.storages.StoragesFactoryBean;
 import com.bananity.util.SearchTerm;
+import com.bananity.util.SortedLists;
 import com.bananity.util.StorageItemComparator;
 
 // Google Caches
@@ -162,7 +163,7 @@ public class IndexModelBean {
 
 		Collection<String> subTokens = item.getLcFlattenStrings().getUniqueByLength(2);
 
-		boolean addedItem, mustTrim, recoveredFromStorage;
+		boolean addedItem, recoveredFromStorage;
 		SearchTerm sortingTmpValue;
 
 		for (String subToken : subTokens) {
@@ -172,47 +173,25 @@ public class IndexModelBean {
 			if (subTokenRelatedItems == null) {
 				subTokenRelatedItems = storage.findSubToken (collName, subToken);
 				recoveredFromStorage = true;
-				mustTrim = true;
 			} else {
 				recoveredFromStorage = false;
-				mustTrim = false;
 			}
 
 			// Este enfoque (más complejo que un simple Collections.sort)
 			// se aplica para evitar copias en memoria, inserciones en mongo,
 			// y ordenaciones inútiles
 			if (!subTokenRelatedItems.contains(item)) {
-				if (subTokenRelatedItems.size() < tokenEntrySize) {
-					subTokenRelatedItems.add(item);
-					addedItem = true;
-					mustTrim = true;
-				} else if (tokenComparator.compare(subTokenRelatedItems.get(tokenEntrySize-1), item) > 0) {
-					subTokenRelatedItems.set(tokenEntrySize-1, item);
-					addedItem = true;
-				} else {
-					addedItem = false;
-				}
+				addedItem = SortedLists.sortedInsert(tokenComparator, subTokenRelatedItems, tokenEntrySize, item);
 			} else {
 				addedItem = false;
 			}
 
 			if (addedItem) {
-				
-				for (int i=subTokenRelatedItems.size()-1; i>0 && tokenComparator.compare(subTokenRelatedItems.get(i), subTokenRelatedItems.get(i-1)) < 0; i--) {
-					sortingTmpValue = subTokenRelatedItems.get(i);
-					subTokenRelatedItems.set(i, subTokenRelatedItems.get(i-1));
-					subTokenRelatedItems.set(i-1, sortingTmpValue);
-				}
-
 				storage.insert(collName, subToken, subTokenRelatedItems);
 			}
 
 			if (addedItem || recoveredFromStorage) {
 				cache.put(subToken, subTokenRelatedItems);
-			}
-
-			if (mustTrim) {
-				subTokenRelatedItems.trimToSize();
 			}
 		}
 	}

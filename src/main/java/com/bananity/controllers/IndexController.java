@@ -95,7 +95,10 @@ public class IndexController extends BaseController {
 	 *  @param item 	Item to be inserted in the collection
 	 */
 		private void removeLogic (String collName, String item) throws Exception {
-			
+			SearchTerm stItem = SearchTermFactory.get(item);
+
+			imB.remove(collName, stItem);
+			removeFromCache(collName, stItem);
 		}
 
 	/**
@@ -122,6 +125,26 @@ public class IndexController extends BaseController {
 		}
 
 	/**
+	 *
+	 */
+		private void removeFromCache (String collName, SearchTerm item) throws Exception {
+			Cache<String, ArrayList<SearchTerm>> cache = cB.getResultCache(collName);
+			
+			if (cache == null) {
+				throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
+			}
+
+			HashSet<String> expandedCacheKeyBase = item.getLcFlattenStrings().getUniqueByLength(2);
+
+			for (String cacheKeyBaseItem : expandedCacheKeyBase) {
+				removeCacheToken (cache, cacheKeyBaseItem, 5);
+				removeCacheToken (cache, cacheKeyBaseItem, 10);
+				removeCacheToken (cache, cacheKeyBaseItem, 15);
+				removeCacheToken (cache, cacheKeyBaseItem, 20);
+			}
+		}
+
+	/**
 	 *  Adds an item to a results cache value (given with the key cacheKeyBaseItem@limit)
 	 *
 	 *  @param cache 			cache to be updated
@@ -129,11 +152,19 @@ public class IndexController extends BaseController {
 	 *  @param cacheKeyBaseItem complete or partial searchTerm (as a part of cache key)
 	 *  @param limit 			limit imposed to search result size (as a part of cache key)
 	 */
-		private void addToCacheToken (Cache<String, ArrayList<SearchTerm>> cache, SearchTerm item, String cacheKeyBaseItem, Integer limit) throws Exception {
-			String cacheKey 					= new StringBuilder(cacheKeyBaseItem).append("@").append(limit.toString()).toString();
+		private void addToCacheToken (Cache<String, ArrayList<SearchTerm>> cache, SearchTerm item, String cacheKeyBaseItem, int limit) throws Exception {
+			String cacheKey 					= new StringBuilder(cacheKeyBaseItem).append("@").append(limit).toString();
 			ArrayList<SearchTerm>  cachedResult = cache.getIfPresent(cacheKey);
 			if (cachedResult == null) return;
 
 			SortedLists.sortedInsert(new StorageItemComparator(cacheKeyBaseItem), cachedResult, limit, item);
+		}
+
+	/**
+	 *
+	 */
+		private void removeCacheToken (Cache<String, ArrayList<SearchTerm>> cache, String cacheKeyBaseItem, int limit) {
+			String cacheKey = new StringBuilder(cacheKeyBaseItem).append("@").append(limit).toString();
+			cache.invalidate(cacheKey);
 		}
 }

@@ -41,7 +41,7 @@ public class BsonSerializer {
 	/**
 	 * 
 	 */
-	public static Collection CollectionToBsonCompatible(final Collection baseCollection) {
+	public static ArrayList CollectionToBsonCompatible(final Collection baseCollection) {
 		ArrayList result = new ArrayList();
 
 		for (Object item : baseCollection) {
@@ -54,7 +54,7 @@ public class BsonSerializer {
 	/**
 	 * 
 	 */
-	public static Collection ArrayToBsonCompatible (final Object[] baseArray) {
+	public static ArrayList ArrayToBsonCompatible (final Object[] baseArray) {
 		ArrayList result = new ArrayList();
 
 		for (Object item : baseArray) {

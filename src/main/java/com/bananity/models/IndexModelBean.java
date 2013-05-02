@@ -163,12 +163,9 @@ public class IndexModelBean {
 
 		Collection<String> subTokens = item.getLcFlattenStrings().getUniqueByLength(2);
 
-		boolean addedItem, recoveredFromStorage;
-		SearchTerm sortingTmpValue;
-
 		for (String subToken : subTokens) {
-			ArrayList<SearchTerm>  subTokenRelatedItems = cache.getIfPresent(subToken);
-			StorageItemComparator tokenComparator = new StorageItemComparator(subToken);
+			boolean addedItem, recoveredFromStorage;
+			ArrayList<SearchTerm> subTokenRelatedItems = cache.getIfPresent(subToken);
 			
 			if (subTokenRelatedItems == null) {
 				subTokenRelatedItems = storage.findSubToken (collName, subToken);
@@ -177,11 +174,8 @@ public class IndexModelBean {
 				recoveredFromStorage = false;
 			}
 
-			// Este enfoque (más complejo que un simple Collections.sort)
-			// se aplica para evitar copias en memoria, inserciones en mongo,
-			// y ordenaciones inútiles
 			if (!subTokenRelatedItems.contains(item)) {
-				addedItem = SortedLists.sortedInsert(tokenComparator, subTokenRelatedItems, tokenEntrySize, item);
+				addedItem = SortedLists.sortedInsert(new StorageItemComparator(subToken), subTokenRelatedItems, tokenEntrySize, item);
 			} else {
 				addedItem = false;
 			}
@@ -201,9 +195,26 @@ public class IndexModelBean {
 	 *
 	 *  @param collName 	Collection Name (where the remove will be done)
 	 *  @param item 		Item to be removed
-	 *  @param subTokens 	Tokens used to index the item
 	 */
-	public void remove (String collName, String item, Collection<String> subTokens) throws Exception {
-		// TODO
+	public void remove (final String collName, final SearchTerm item) throws Exception {
+		Cache<String, ArrayList<SearchTerm>> cache = cB.getTokensCache(collName);
+
+		if (cache == null) {
+			throw new Exception("¡Cache not foud for collection \""+collName+"\"!");
+		}
+
+		Collection<String> subTokens = item.getLcFlattenStrings().getUniqueByLength(2);
+
+		for (String subToken : subTokens) {
+			ArrayList<SearchTerm> subTokenRelatedItems = cache.getIfPresent(subToken);
+
+			if (subTokenRelatedItems == null) {
+				subTokenRelatedItems = storage.findSubToken (collName, subToken);
+			}
+
+			subTokenRelatedItems.remove(item);
+
+			storage.insert(collName, subToken, subTokenRelatedItems);
+		}
 	}
 }

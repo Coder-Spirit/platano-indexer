@@ -191,8 +191,7 @@ public class StorageConstantsBean {
 				log.info("LOADED conf.properties");
 			} catch (Exception e) {
 				
-				log.error( "Unable to load settings file ( conf.properties ) : " + e.getMessage() );
-				e.printStackTrace();
+				log.error( "Unable to load settings file ( conf.properties )", e);
 
 				System.exit(ErrorConstants.UNABLE_TO_LOAD_INDEX_SETTINGS);
 			} finally {

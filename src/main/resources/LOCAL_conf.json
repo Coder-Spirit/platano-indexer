@@ -1,49 +1,45 @@
 {
-	"mongodb" : {
-		"hosts" : {
-			"HOST_01" :{
-				"address" : "127.0.0.1",
-				"port" : 27017
-			}
-		},
-		"replica_sets" : {
-			"REPLICA_01" : [
-				"HOST_01",
-				{
-					"address" : "127.0.0.2",
-					"port" : 71072
+	"storages" : {
+		"mongodb" : {
+			"hosts" : {
+				"HOST_01" : {
+					"address" : "127.0.0.1",
+					"port" : 27017
 				}
-			]
-		},
-		"databases" : {
-			"DB_01" : {
-				"name" : "newSearchBty",
-				"where" : "hosts:HOST_01",
-				"user" : "root",
-				"pass" : "root"
-			}
-		},
-		"collections" : {
-			"index_bties" : {
-				"db" : "DB_01",
-				"token_entry_size" : 256
 			},
-			"index_users" : {
-				"db" : "DB_01",
-				"token_entry_size" : 256
+			"shards" : {
+				"REPLICA_01" : [
+					"$/hosts/HOST_01",
+					{
+						"address" : "127.0.0.2",
+						"port" : 71072
+					}
+				]
+			},
+			"databases" : {
+				"DB_01" : {
+					"name" : "newSearchBty",
+					"where.from" : "$/hosts/HOST_01",
+					"user" : "root",
+					"pass" : "root"
+				}
 			}
 		}
 	},
 	"collections" : {
 		"bties" : {
-			"mapping" : "mongodb:index_bties",
+			"db_info.from" : "/storages/mongodb/databases/DB_01",
+			"mapping" : "index_bties",
 			"tokens_cache_size" : 1073741824,
-			"results_cache_size" : 268435456
+			"results_cache_size" : 268435456,
+			"token_entry_size" : 256
 		},
 		"users" : {
-			"mapping" : "mongodb:index_users",
+			"storage" : "mongodb",
+			"mapping" : "index_users",
 			"tokens_cache_size" : 1073741824,
-			"results_cache_size" : 268435456
+			"results_cache_size" : 268435456,
+			"token_entry_size" : 256
 		}
 	}
 }

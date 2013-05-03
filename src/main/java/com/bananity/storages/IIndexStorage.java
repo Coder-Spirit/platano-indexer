@@ -11,7 +11,7 @@ import java.util.Collection;
  *  Interface that all storages used in the search engine must implement
  *
  *  @author 	Andreu Correa Casablanca
- *  @version 	0.4
+ *  @version 	0.5
  */
 public interface IIndexStorage
 {

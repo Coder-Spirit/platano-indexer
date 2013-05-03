@@ -43,7 +43,7 @@ import org.json.simple.parser.JSONParser;
  *  The object follows the Singleton pattern.
  *
  *  @author  Andreu Correa Casablanca
- *  @version 0.4
+ *  @version 0.5
  */
 @Startup
 @Singleton

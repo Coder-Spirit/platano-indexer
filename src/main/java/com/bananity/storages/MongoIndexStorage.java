@@ -38,7 +38,7 @@ import org.bson.types.ObjectId;
  *  - A host have an internal name, and refers to an address and a port
  *
  *  @author 	Andreu Correa Casablanca
- *  @version 	0.4
+ *  @version 	0.5
  *
  *  @see 		com.bananity.constants.StorageConstantsBean
  *  @see 		com.bananity.storages.IIndexStorage

@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  *  This webservlet allows to insert items into the index collections (and remove it)
  *
  *  @author 	Andreu Correa Casablanca
- *  @version 	0.4
+ *  @version 	0.5
  */
 @WebServlet("/index")
 public class IndexController extends BaseController {

@@ -29,7 +29,7 @@ import org.apache.log4j.PropertyConfigurator;
  *  Storages Factory
  *
  *  @author 	Andreu Correa Casablanca
- *  @version 	0.4
+ *  @version 	0.5
  *
  *  @see 		com.bananity.storages.IIndexStorage
  *  @see 		com.bananity.storages.MongoIndexStorage

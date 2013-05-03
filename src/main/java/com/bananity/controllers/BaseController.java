@@ -23,7 +23,7 @@ import org.apache.log4j.PropertyConfigurator;
  *  This abstract class encapsules general methods used by all controllers
  *
  *  @author 	Andreu Correa Casablanca
- *  @version 	0.4
+ *  @version 	0.5
  */
 public abstract class BaseController extends HttpServlet {
 

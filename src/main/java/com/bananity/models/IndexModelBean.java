@@ -49,7 +49,7 @@ import org.apache.log4j.PropertyConfigurator;
  *  This bean is the generic model (in the MVC pattern) to access the indexed collections
  *
  *  @author 	Andreu Correa Casablanca
- *  @version 	0.4
+ *  @version 	0.5
  */
 @Startup
 @Singleton

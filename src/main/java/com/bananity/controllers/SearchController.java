@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  *  This webservlet allows to search items into the index collections
  *
  *  @author 	Andreu Correa Casablanca
- *  @version 	0.4
+ *  @version 	0.5
  */
 @WebServlet("/search")
 public class SearchController extends BaseController {

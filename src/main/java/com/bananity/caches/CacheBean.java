@@ -38,7 +38,7 @@ import org.apache.log4j.PropertyConfigurator;
  *  The object follows the Singleton pattern.
  *
  *  @author  Andreu Correa Casablanca
- *  @version 0.4
+ *  @version 0.5
  *
  *  @see com.bananity.constants.StorageConstantsBean
  */

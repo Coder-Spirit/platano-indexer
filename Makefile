@@ -2,7 +2,7 @@
 
 # Public config
 PROJECT_NAME := rufo
-VERSION := 0.4
+VERSION := 0.5
 MAIN_PACKAGE := com.bananity
 SRC_DIR := src/
 TARGET_DIR := target/

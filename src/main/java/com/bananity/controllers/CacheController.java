@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *  This webservlet allows admins to view the caches status
  *
  *  @author 	Andreu Correa Casablanca
- *  @version 	0.4
+ *  @version 	0.5
  */
 @WebServlet("/cache")
 public class CacheController extends BaseController {

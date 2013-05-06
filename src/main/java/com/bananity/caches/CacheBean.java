@@ -118,7 +118,7 @@ public class CacheBean {
 					.weigher(new Weigher<String, ArrayList<SearchTerm>>() {
 						public int weigh (String k, ArrayList<SearchTerm> v) {
 							// Tenemos en cuenta el tamaño de clave y de los punteros (4 por puntero, 1 por fin de línea)
-							int size += k.length() + 5 + v.size()*20;
+							int size = k.length() + 5 + v.size()*20;
 
 							for (SearchTerm vi : v) {
 								size += aproximateSubstringsWeigh(vi.toString().length());

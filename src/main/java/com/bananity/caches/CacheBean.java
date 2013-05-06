@@ -101,11 +101,11 @@ public class CacheBean {
 					.maximumWeight(tokensCacheSize)
 					.weigher(new Weigher<String, ArrayList<SearchTerm>>() {
 						public int weigh (String k, ArrayList<SearchTerm> v) {
-							int size = 0;
-							
-							size += k.length() + 5 + v.size()*5; // Tenemos en cuenta el tamaño de clave y de los punteros (4 por puntero, 1 por fin de línea)
+							// Tenemos en cuenta el tamaño de clave y de los punteros (4 por puntero, 1 por fin de línea)
+							int size = k.length() + 5 + v.size()*20;
+
 							for (SearchTerm vi : v) {
-								size += vi.toString().length();
+								size += aproximateSubstringsWeigh(vi.toString().length());
 							}
 
 							return size;
@@ -117,11 +117,11 @@ public class CacheBean {
 					.maximumWeight(resultCacheSize)
 					.weigher(new Weigher<String, ArrayList<SearchTerm>>() {
 						public int weigh (String k, ArrayList<SearchTerm> v) {
-							int size = 0;
-							
-							size += k.length() + 5 + v.size()*5; // Tenemos en cuenta el tamaño de clave y de los punteros (4 por puntero, 1 por fin de línea)
+							// Tenemos en cuenta el tamaño de clave y de los punteros (4 por puntero, 1 por fin de línea)
+							int size += k.length() + 5 + v.size()*20;
+
 							for (SearchTerm vi : v) {
-								size += vi.toString().length();
+								size += aproximateSubstringsWeigh(vi.toString().length());
 							}
 
 							return size;
@@ -170,5 +170,10 @@ public class CacheBean {
 	@Lock(LockType.READ)
 		public HashMap<String, Cache<String, ArrayList<SearchTerm>>> getResultCaches () {
 			return resultCaches;
+		}
+
+	@Lock(LockType.READ)
+		private int aproximateSubstringsWeigh (final int length) {
+			return (length*(length - 1))*2;
 		}
 }

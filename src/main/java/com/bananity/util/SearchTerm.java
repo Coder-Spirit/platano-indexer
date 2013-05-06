@@ -9,7 +9,7 @@ import com.bananity.util.serialization.JsonSerializer;
 
 public class SearchTerm implements IJsonSerializable, IBsonSerializable
 {
-	final String text;
+	String text;
 
 	SearchTermStrings lcFlattenStrings 	= null;
 	SearchTermStrings lowerCaseStrings 	= null;
@@ -77,5 +77,19 @@ public class SearchTerm implements IJsonSerializable, IBsonSerializable
 
 	public Object toBsonCompatible () {
 		return text;
+	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * In theory, this method isn't needed, only coded for security
+	 */
+	protected void finalize () throws Throwable {
+		text 				= null;
+		lcFlattenStrings 	= null;
+		lowerCaseStrings 	= null;
+		originalStrings 	= null;
+
+		super.finalize();
 	}
 }

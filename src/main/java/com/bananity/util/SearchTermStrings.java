@@ -26,7 +26,7 @@ public class SearchTermStrings
 	/**
 	 *
 	 */
-	private final String text;
+	private String text;
 
 	/**
 	 *
@@ -212,5 +212,20 @@ public class SearchTermStrings
 	 */
 	private void computeTokens () {
 		tokens = SubstringCalculator.tokenize(text, true);
+	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * In theory, this method isn't needed, only coded for security
+	 */
+	protected void finalize () throws Throwable {
+		text 			= null;
+		tokens 			= null;
+		textBag 		= null;
+		wordsLengths 	= null;
+		wordsBags 		= null;
+
+		super.finalize();
 	}
 }

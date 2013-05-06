@@ -174,6 +174,6 @@ public class CacheBean {
 
 	@Lock(LockType.READ)
 		private int aproximateSubstringsWeigh (final int length) {
-			return (length*(length - 1))*2;
+			return 2*length*length;
 		}
 }

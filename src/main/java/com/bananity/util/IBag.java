@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
+/**
+ * Bag Interface, to allow sets with item's counters
+ *
+ * @author Andreu Correa Casablanca
+ */
 public interface IBag<T> extends Iterable<Map.Entry<T, Integer>>
 {
 	public boolean 	contains (final T o);

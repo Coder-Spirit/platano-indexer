@@ -7,9 +7,15 @@ import com.bananity.util.serialization.IJsonSerializable;
 import com.bananity.util.serialization.JsonSerializer;
 
 
+/**
+ * This class encapsulates a lot of expanded info related with search terms (strings)
+ * The expanded info is lazyly calculated
+ *
+ * @author Andreu Correa Casablanca
+ */
 public class SearchTerm implements IJsonSerializable, IBsonSerializable
 {
-	final String text;
+	String text;
 
 	SearchTermStrings lcFlattenStrings 	= null;
 	SearchTermStrings lowerCaseStrings 	= null;
@@ -23,6 +29,9 @@ public class SearchTerm implements IJsonSerializable, IBsonSerializable
 
 	// ---------------------------------------------------------------------------------------------
 
+	/**
+	 * Returns expanded info
+	 */
 	public SearchTermStrings getLcFlattenStrings () {
 		if (lcFlattenStrings == null) {
 			lcFlattenStrings = new SearchTermStrings(TextNormalizer.flattenText(text).toLowerCase());
@@ -31,6 +40,9 @@ public class SearchTerm implements IJsonSerializable, IBsonSerializable
 		return lcFlattenStrings;
 	}
 
+	/**
+	 * Returns expanded info
+	 */
 	public SearchTermStrings getLowerCaseStrings () {
 		if (lowerCaseStrings == null) {
 			lowerCaseStrings = new SearchTermStrings(text.toLowerCase());
@@ -39,6 +51,9 @@ public class SearchTerm implements IJsonSerializable, IBsonSerializable
 		return lowerCaseStrings;
 	}
 
+	/**
+	 * Returns expanded info
+	 */
 	public SearchTermStrings getOriginalStrings () {
 		if (originalStrings == null) {
 			originalStrings = new SearchTermStrings(text);
@@ -77,5 +92,19 @@ public class SearchTerm implements IJsonSerializable, IBsonSerializable
 
 	public Object toBsonCompatible () {
 		return text;
+	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * In theory, this method isn't needed, only coded for security
+	 */
+	protected void finalize () throws Throwable {
+		text 				= null;
+		lcFlattenStrings 	= null;
+		lowerCaseStrings 	= null;
+		originalStrings 	= null;
+
+		super.finalize();
 	}
 }

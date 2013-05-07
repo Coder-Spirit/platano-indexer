@@ -127,7 +127,10 @@ public class IndexController extends BaseController {
 		}
 
 	/**
+	 *  Removes an item from the results cache tied to the specified collection
 	 *
+	 * @param collName 	Index collection name
+	 * @param item 		Item to be removed from the collection
 	 */
 		private void removeFromCache (String collName, SearchTerm item) throws Exception {
 			Cache<String, ArrayList<SearchTerm>> cache = cB.getResultCache(collName);
@@ -163,7 +166,11 @@ public class IndexController extends BaseController {
 		}
 
 	/**
+	 *  Removes an item from the results cache tied to the specified collection (given a result length)
 	 *
+	 *  @param cache 			cache to be updated
+	 *  @param cacheKeyBaseItem complete or partial searchTem (as a part of cache key)
+	 *  @param limit 			limit imposed to search result size (as a part of cache key)
 	 */
 		private void removeCacheToken (Cache<String, ArrayList<SearchTerm>> cache, String cacheKeyBaseItem, int limit) {
 			String cacheKey = new StringBuilder(cacheKeyBaseItem).append("@").append(limit).toString();

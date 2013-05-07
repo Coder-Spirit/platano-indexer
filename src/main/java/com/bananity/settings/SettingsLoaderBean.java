@@ -39,6 +39,8 @@ import org.json.simple.parser.JSONParser;
 
 
 /**
+ *  Not currently used. May be in the future...
+ *
  *  This class loads the server settings from a .properties file
  *  The object follows the Singleton pattern.
  *

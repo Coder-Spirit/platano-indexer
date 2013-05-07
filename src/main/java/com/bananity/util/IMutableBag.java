@@ -4,6 +4,12 @@ package com.bananity.util;
 import java.util.Collection;
 
 
+/**
+ * This interface is defined to uncouple mutable and immutable bags
+ *
+ * @author Andreu Correa Casablanca
+ * @see com.bananity.util.IBag
+ */
 public interface IMutableBag<T> extends IBag<T>
 {
 	public void add (final T o);

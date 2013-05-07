@@ -10,27 +10,29 @@ import java.util.Map;
 /**
  * Class similar to Set, but associates a counter to each item
  *
- * @author Andreu Correa Casablanca
+ * @author 	Andreu Correa Casablanca
+ * @see 	com.bananity.util.Bag
+ * @see 	com.bananity.util.ABag
  */
 public final class HashBag<T> extends ABag<T>
 {
 	/**
-	 *
+	 * Bag size (the sum of all items counters)
 	 */
 	private int size;
 
 	/**
-	 *
+	 * Number of different items inside the bag
 	 */
 	private int itemsCounter;
 
 	/**
-	 *
+	 * The 'storage'
 	 */
 	private HashMap<T, Integer> internalMap;
 
 	/**
-	 *
+	 * Basic constructor, gives as an empty HashBag
 	 */
 	public HashBag () {
 		size = 0;
@@ -39,7 +41,7 @@ public final class HashBag<T> extends ABag<T>
 	}
 
 	/**
-	 *
+	 * 'Copy' constructor
 	 */
 	public HashBag (IBag<T> b) {
 		this();
@@ -47,23 +49,7 @@ public final class HashBag<T> extends ABag<T>
 	}
 
 	/**
-	 *
-	 */
-	public HashBag (Collection<T> c) {
-		this();
-		_addAll(c);
-	}
-
-	/**
-	 *
-	 */
-	public HashBag (T[] l) {
-		this();
-		_addAll(l);
-	}
-
-	/**
-	 *
+	 * 'Copy' constructor (more efficient than `HashBag(IBag<T> b)`)
 	 */
 	public HashBag (HashBag<T> b) {
 		size = b.size;
@@ -71,9 +57,26 @@ public final class HashBag<T> extends ABag<T>
 		internalMap = new HashMap<T, Integer>(b.internalMap);
 	}
 
+	/**
+	 * 'Copy' constructor
+	 */
+	public HashBag (Collection<T> c) {
+		this();
+		_addAll(c);
+	}
 
 	/**
-	 *
+	 * 'Copy' constructor
+	 */
+	public HashBag (T[] l) {
+		this();
+		_addAll(l);
+	}
+
+
+	/**
+	 * This method is declared in the Iterable interface
+	 * @see java.lang.Iterable
 	 */
 	public Iterator<Map.Entry<T, Integer>> iterator () {
 		return internalMap.entrySet().iterator();
@@ -81,7 +84,8 @@ public final class HashBag<T> extends ABag<T>
 
 
 	/**
-	 *
+	 * This method is declared in ABag
+	 * @see com.bananity.util.ABag
 	 */
 	protected void _add (final T o, final int times) {
 		if (times > 0) {
@@ -98,7 +102,7 @@ public final class HashBag<T> extends ABag<T>
 
 
 	/**
-	 *
+	 * Returns 'true' if 'o' ∈ this
 	 */
 	public boolean contains (final T o) {
 		return (internalMap.get(o) != null);
@@ -106,7 +110,7 @@ public final class HashBag<T> extends ABag<T>
 
 
 	/**
-	 *
+	 * Returns the number of repetitions of 'o' inside the bag
 	 */
 	public int getTimes (final T o) {
 		Integer times = internalMap.get(o);
@@ -116,7 +120,7 @@ public final class HashBag<T> extends ABag<T>
 
 
 	/**
-	 *
+	 * Returns a union bag: this ∪ b
 	 */
 	public IBag<T> union (final IBag<T> b) {
 		HashBag<T> uBag = new HashBag<T>();
@@ -140,7 +144,7 @@ public final class HashBag<T> extends ABag<T>
 	}
 
 	/**
-	 *
+	 * Returns an intersection bag: this ∩ b
 	 */
 	public IBag<T> intersection (final IBag<T> b) {
 		HashBag<T> iBag = new HashBag<T>();
@@ -169,7 +173,7 @@ public final class HashBag<T> extends ABag<T>
 	}
 
 	/**
-	 *
+	 * Returns the bags difference: this \ b
 	 */
 	public IBag<T> difference (final IBag<T> b) {
 		HashBag<T> dBag = new HashBag<T>();

@@ -78,7 +78,7 @@ public class SearchTermStrings
 	// ---------------------------------------------------------------------------------------------
 
 	/**
-	 *
+	 * Returns the length of the longest token
 	 */
 	public int getMaxTokenLength () {
 		if (maxTokenLength == -1) {
@@ -89,7 +89,7 @@ public class SearchTermStrings
 	}
 
 	/**
-	 *
+	 * Returns the associated Bag
 	 */
 	public HashBag<String> getTextBag () {
 		if (textBag == null) {
@@ -100,7 +100,7 @@ public class SearchTermStrings
 	}
 
 	/**
-	 *
+	 * Returns one item per token if token has length greater or equal than threshold
 	 */
 	public HashSet<String> getUniqueByLength(final int threshold) {
 		if (wordsLengths == null) {

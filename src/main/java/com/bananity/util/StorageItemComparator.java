@@ -7,6 +7,13 @@ import com.bananity.util.SearchTerm;
 import java.util.Comparator;
 
 
+/**
+ * This class is used to compare items to be stored in a key-value store
+ * The comparator is optimized to decrease the inconsistency risk and
+ * improve the performance, in storing process and in retrieval process.
+ *
+ * @author Andreu Correa Casablanca
+ */
 public class StorageItemComparator implements Comparator<SearchTerm>
 {
 	private final String token;

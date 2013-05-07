@@ -4,6 +4,11 @@ import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
 
+/**
+ * Factory, used to avoid the creation of multiple instances of equal SearchTerm objects
+ *
+ * @author Andreu Correa Casablanca
+ */
 public class SearchTermFactory
 {
 	private static WeakHashMap<String, WeakReference<SearchTerm>> references = new WeakHashMap<String, WeakReference<SearchTerm>>();

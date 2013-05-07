@@ -11,7 +11,12 @@ import java.util.ArrayList;
 public class SortedLists
 {
 	/**
+	 * This method is similar to PriorityQueue's offer method
 	 *
+	 * @param c 		the comparator used to sort elements
+	 * @param al 		the list where we want to insert an item
+	 * @param limit 	specifies the max array size
+	 * @param item 		The item to be inserted in the list (al)
 	 */
 	public static <T> boolean sortedInsert (final Comparator<T> c, final ArrayList<T> al, final int limit, T item) {
 		

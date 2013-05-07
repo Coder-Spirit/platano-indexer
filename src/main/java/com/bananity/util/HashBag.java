@@ -8,6 +8,8 @@ import java.util.Map;
 
 
 /**
+ * Class similar to Set, but associates a counter to each item
+ *
  * @author Andreu Correa Casablanca
  */
 public final class HashBag<T> extends ABag<T>
@@ -110,44 +112,6 @@ public final class HashBag<T> extends ABag<T>
 		Integer times = internalMap.get(o);
 
 		return (times == null)?0:times;
-	}
-
-
-	/**
-	 *
-	 */
-	public int decreaseValue (final T o) {
-		int times = getTimes(o);
-
-		if (times != 0) {
-			if (times > 1) {
-				internalMap.put(o, times-1);
-				--size;
-			} else if (times == 1) {
-				internalMap.remove(o);
-				--size; --itemsCounter;
-			} else {
-				// Strange case... should not happen
-				internalMap.remove(o);
-			}
-		}
-		
-		return times;
-	}
-
-	/**
-	 *
-	 */
-	public int removeValue (final T o) {
-		int times = getTimes(o);
-
-		if (times != 0) {
-			internalMap.remove(o);
-			size -= times;
-			--itemsCounter;
-		}
-
-		return times;
 	}
 
 

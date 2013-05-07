@@ -67,14 +67,14 @@ public class TextNormalizer
 	}
 
 	/**
-	 *
+	 * This function returns escaped text
 	 */
 	public static String escapeUnicode (final String text) {
 		return escaper.translate(text);
 	}
 
 	/**
-	 *
+	 * This function returns unescaped text
 	 */
 	public static String unescapeUnicode (final String text) {
 		return unescaper.translate(text);

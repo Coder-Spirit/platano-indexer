@@ -32,7 +32,12 @@ REMOTE_SERVER := root@46.105.110.101
 REMOTE_DEPLOYMENT_DIR := /opt/jboss/standalone/deployments/
 CONF_PROPERTIES := conf.properties
 LOCAL_CONF_PROPERTIES := LOCAL_conf.properties
-REMOTE_CONF_PROPERTIES := REMOTE_conf.properties
+REMOTE_CONF_PROPERTIES := LOCAL_conf.properties
+
+# Deploy config
+PUBLISH_SERVER_ADDR := 54.246.173.194
+PUBLISH_SERVER_PORT := 2225
+PUBLISH_SERVER_KEY := ~/.ec2/certs/bananity-developer.pem
 
 # Private config
 RM := rm -rf
@@ -176,12 +181,8 @@ local_deploy: dist
 	@if test `ps aux | grep "org.jboss.as" | grep -v "grep" | wc -l` -gt 0 ; then echo "(and running)"; else echo "(but NOT running)"; fi
 
 remote_deploy: dist
-	@echo " -- Try a RSA Key to avoid using password --"
-	@ssh $(REMOTE_SERVER) rm -f $(REMOTE_DEPLOYMENT_DIR)$(FINAL_NAME)*
-	@scp $(TARGET_DIR)$(PACKAGE_NAME) $(REMOTE_SERVER):$(REMOTE_DEPLOYMENT_DIR)
-	@ssh $(REMOTE_SERVER) touch $(REMOTE_DEPLOYMENT_DIR)$(FINAL_NAME).dodeploy
-	@echo -n ">> Deployed at $(REMOTE_SERVER) "
-	@if test `ssh $(REMOTE_SERVER) ps aux | grep "org.jboss.as" | grep -v "grep" | wc -l` -gt 0 ; then echo "(and running)"; else echo "(but NOT running)"; fi
+	@scp -C -P $(PUBLISH_SERVER_PORT) -i $(PUBLISH_SERVER_KEY) $(DIST_DIR)$(PACKAGE_NAME) developer@$(PUBLISH_SERVER_ADDR):publish/$(PACKAGE_NAME)
+	@ssh -C -p $(PUBLISH_SERVER_PORT) -i $(PUBLISH_SERVER_KEY) developer@$(PUBLISH_SERVER_ADDR) 'sudo ./btydeploy'
 
 edit:
 	@if test "$$n" = "" ; then vim -p `find -name "*.java"`; else vim -p `find . -name *.java -type f -exec ls -lt --full-time \{\} + | awk '{print $$6$$7" "$$9; }' - | sort -r | head -$$n | awk '{print $$2;}' -`; fi

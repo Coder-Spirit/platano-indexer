@@ -17,7 +17,8 @@ import java.text.Normalizer;
  */
 public class TextNormalizer
 {
-	private final static Pattern isMPattern = Pattern.compile("\\p{IsM}");
+	private final static Pattern spacePattern 	= Pattern.compile("\\s+");
+	private final static Pattern isMPattern 	= Pattern.compile("\\p{IsM}");
 
 	private final static UnicodeEscaper 	escaper 	= UnicodeEscaper.above(127);
 	private final static UnicodeUnescaper 	unescaper 	= new UnicodeUnescaper();
@@ -30,7 +31,7 @@ public class TextNormalizer
 	 */
 	public static String normalizeText (final String text) {
 		if (!Normalizer.isNormalized(text, Normalizer.Form.NFC)) {
-			return Normalizer.normalize(text, Normalizer.Form.NFC);
+			return Normalizer.normalize(spacePattern.matcher(text.trim()).replaceAll(" "), Normalizer.Form.NFC);
 		} else {
 			return text;
 		}

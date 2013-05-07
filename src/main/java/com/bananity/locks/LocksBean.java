@@ -26,7 +26,9 @@ import org.apache.log4j.PropertyConfigurator;
 
 
 /**
- * @author Andreu Correa Casablanca
+ *  Not currently used (may be in future...)
+ *
+ *  @author Andreu Correa Casablanca
  */
 @Startup
 @Singleton

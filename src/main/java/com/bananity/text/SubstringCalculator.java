@@ -8,17 +8,19 @@ import java.util.regex.Pattern;
 
 
 /**
- * @author Andreu Correa Casablanca
+ *  This class encapsulates methods related with decomposing strings
+ *
+ *  @author Andreu Correa Casablanca
  */
 public class SubstringCalculator
 {
 	/**
-	 *
+	 * Precompiled pattern used to speed up the string splitting task
 	 */
 	private final static Pattern spacePattern = Pattern.compile("\\s+");
 
 	/**
-	 *
+	 * Simple method to get all substrings with length greater than minLength
 	 */
 	public static ArrayList<String> getAllSubstrings (String token, int minLength) {
 		int l = token.length();
@@ -40,7 +42,7 @@ public class SubstringCalculator
 	}
 
 	/**
-	 *
+	 * Similar to getAllSubstrings, but specialized in word pairs
 	 */
 	public static ArrayList<String> getWordsPairSubstrings (String token, int minLength) {
 		final String[] pair = spacePattern.split(token);
@@ -61,7 +63,10 @@ public class SubstringCalculator
 	}
 
 	/**
+	 *  This method tokenizes a string
 	 *
+	 *  @param text The 	text to be tokenized
+	 *  @param addWordPairs if 'true', then the result has also word pairs as tokens
 	 */
 	public static ArrayList<String> tokenize (String text, boolean addWordPairs) {
 		final String[] tokensArray = spacePattern.split(text);
@@ -70,6 +75,7 @@ public class SubstringCalculator
 
 	 	if (addWordPairs) {
 	 		for (int i=0, n=tokensArray.length-1; i<n; i++) {
+				// Aquí se puede evitar el uso de StringBuilder, usando substring sobre text para ahorrar memoria
 				tokens.add(
 					new StringBuilder(tokensArray[i]).append(" ").append(tokensArray[i+1]).toString()
 				);

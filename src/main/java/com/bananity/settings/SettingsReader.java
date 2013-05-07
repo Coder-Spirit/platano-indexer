@@ -10,7 +10,9 @@ import java.util.regex.Pattern;
 
 
 /**
- * @author Andreu Correa Casablanca
+ *  Not currently used. May be in the future...
+ *
+ *  @author Andreu Correa Casablanca
  */
 public class SettingsReader
 {

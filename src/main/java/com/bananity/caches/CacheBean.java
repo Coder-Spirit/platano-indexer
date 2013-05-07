@@ -172,6 +172,9 @@ public class CacheBean {
 			return resultCaches;
 		}
 
+	/**
+	 * @return Aproximate space (very conservartive) that needs a SearchTerm with a string with specified length
+	 */
 	@Lock(LockType.READ)
 		private int aproximateSubstringsWeigh (final int length) {
 			return 2*length*length;

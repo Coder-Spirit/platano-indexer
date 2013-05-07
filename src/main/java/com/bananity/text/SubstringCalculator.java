@@ -74,11 +74,12 @@ public class SubstringCalculator
 		ArrayList<String> tokens = new ArrayList<String>(Arrays.asList(tokensArray));
 
 	 	if (addWordPairs) {
-	 		for (int i=0, n=tokensArray.length-1; i<n; i++) {
-				// Aquí se puede evitar el uso de StringBuilder, usando substring sobre text para ahorrar memoria
+	 		for (int i=0, baseIndex=0, n=tokensArray.length-1; i<n; i++) {
 				tokens.add(
-					new StringBuilder(tokensArray[i]).append(" ").append(tokensArray[i+1]).toString()
+					text.substring(baseIndex, baseIndex+tokensArray[i].length()+1+tokensArray[i+1].length())
 				);
+
+				baseIndex += tokensArray[i].length() + 1;
 			}
 	 	}
 

@@ -28,3 +28,7 @@ Platano Indexer server.
 an application in your JBoss Application Server.
 5. Type the command `make jboss_start`. This command starts Jboss and Platano
 Indexer.
+6. Index something! This can be done through the next command
+> `curl -XPOST http://host:port/platano-indexer-0.5/index/?m=insert&c=YourCollectionName&item=TextYouWantToIndex`
+7. Search something! This can be done through the next command
+> `curl -XPOST http://host:port/platano-indexer-0.5/search/?c=YourCollectionName&searchTerm=PutHereYourSearchString&limit=NumberOfDesiredResults`

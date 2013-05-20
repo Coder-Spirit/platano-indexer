@@ -1,7 +1,7 @@
 # run "make help" to display options
 
 # Public config
-PROJECT_NAME := rufo
+PROJECT_NAME := platano-indexer
 VERSION := 0.5
 MAIN_PACKAGE := com.bananity
 SRC_DIR := src/

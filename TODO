@@ -1,0 +1,13 @@
+
+================================================================================
+=                                  TODO LIST                                   =
+================================================================================
+
+There is a lot of work to do in Platano Indexer.
+
+ * Improve the settings system to allow more flexibility and get cleaner code.
+ * Add more storage backends.
+ * Improve the installation and deployment process.
+ * Allow more indexing and searching options.
+ * Remove JBoss dependencies.
+ * Mathematical modelization to improve the cache usage.

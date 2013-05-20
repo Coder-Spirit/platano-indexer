@@ -17,4 +17,14 @@ is working as a freelance.
 
 ## Basic Guide
 
-WORK IN PROGRESS
+1. Install JBoss Application Server on your machine. It's recommended to use the
+community version (7.1.1 Final).
+2. Install MongoDB on your machine. Platano Indexer was tested on Mongo 2.2 and
+Mongo 2.4. It's a good idea to use the 10gen repositories if you use Debian or
+Ubuntu.
+3. Go to src/main/resources/ and edit LOCAL_conf.properties to configure your
+Platano Indexer server.
+4. Type the command `make local_deploy`. This command installs Platano Indexer as
+an application in your JBoss Application Server.
+5. Type the command `make jboss_start`. This command starts Jboss and Platano
+Indexer.

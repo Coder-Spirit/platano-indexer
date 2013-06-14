@@ -27,7 +27,7 @@ public class CandidatesCache<T> {
 		this.comparator = comparator;
 		
 		this.used 		= new HashSet<T>();
-		this.queue 		= new ArrayList<T>();
+		this.queue 		= new ArrayList<T>(limit);
 	}
 
 	/**
@@ -48,6 +48,7 @@ public class CandidatesCache<T> {
 	 * Returns the internal queue as an ArrayList
 	 */
 	public ArrayList<T> getRecords () {
+		queue.trimToSize();
 		return queue;
 	}
 }

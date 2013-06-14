@@ -86,7 +86,7 @@ public class CacheBean {
 			log = Logger.getLogger(CacheBean.class);
 
 			// We allocate a "guard array" to use it in hardFreeSpace
-			outOfMemoryGuardArray = new ArrayList<Integer>(65536);
+			allocateGuardArray();
 
 			tokensCaches = new HashMap<String, Cache<String, ArrayList<SearchTerm>>>();
 			resultCaches = new HashMap<String, Cache<String, ArrayList<SearchTerm>>>();
@@ -178,7 +178,7 @@ public class CacheBean {
 			System.gc();
 
 			// We reallocate the guard array to allow more recovers in the future
-			outOfMemoryGuardArray = new ArrayList<Integer>(65536);
+			allocateGuardArray();
 		}
 
 	/**
@@ -244,5 +244,13 @@ public class CacheBean {
 			}
 
 			c.cleanUp();
+		}
+
+	@Lock(LockType.READ)
+		private void allocateGuardArray () {
+			outOfMemoryGuardArray = new ArrayList<Integer>(65536);
+			for (int i=0; i<65536; i++) {
+				outOfMemoryGuardArray.add(new Integer(i));
+			}
 		}
 }

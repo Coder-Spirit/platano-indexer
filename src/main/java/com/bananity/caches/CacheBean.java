@@ -144,6 +144,20 @@ public class CacheBean {
 				purgeCache(ec.getValue());
 			}
 
+			for (Map.Entry<String, Cache<String, ArrayList<SearchTerm>>> ec: resultCaches.entrySet()) {
+				purgeCache(ec.getValue());
+			}
+		}
+
+	/**
+	 * Deallocates resources to avoid Out of Memory Errors
+	 */
+	@Lock(LockType.READ)
+		public void hardFreeSpace () {
+			for (Map.Entry<String, Cache<String, ArrayList<SearchTerm>>> ec: tokensCaches.entrySet()) {
+				purgeCache(ec.getValue());
+			}
+
 			System.gc();
 
 			for (Map.Entry<String, Cache<String, ArrayList<SearchTerm>>> ec: resultCaches.entrySet()) {

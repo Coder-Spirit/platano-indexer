@@ -48,6 +48,14 @@ public class IndexController extends BaseController {
 	 */
 	@Override
 		public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			// Here we take care of possible excessive memory usage
+			long freeMem = Runtime.getRuntime().freeMemory();
+			long usedMem = Runtime.getRuntime().totalMemory();
+			long maxMem  = Runtime.getRuntime().maxMemory();
+			if ( ((double)(maxMem-usedMem+freeMem))/((double)maxMem) < 0.10 ) {
+				cB.freeSpace();
+			}
+
 			try {
 				String 	method 		= request.getParameter("m");
 				String 	collName 	= request.getParameter("c");

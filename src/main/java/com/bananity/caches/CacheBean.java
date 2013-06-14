@@ -71,6 +71,11 @@ public class CacheBean {
 	private HashMap<String, Cache<String, ArrayList<SearchTerm>>> tokensCaches;
 
 	/**
+	 * This array is only for "Out of Memory Error" recovering purposes
+	 */
+	private ArrayList<Integer> outOfMemoryGuardArray;
+
+	/**
 	 *  This method initializes the logger reference and the caches associative lists
 	 */
 	@Lock(LockType.WRITE)
@@ -79,6 +84,9 @@ public class CacheBean {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			PropertyConfigurator.configure(classLoader.getResource("log4j.properties"));
 			log = Logger.getLogger(CacheBean.class);
+
+			// We allocate a "guard array" to use it in hardFreeSpace
+			outOfMemoryGuardArray = new ArrayList<Integer>(65536);
 
 			tokensCaches = new HashMap<String, Cache<String, ArrayList<SearchTerm>>>();
 			resultCaches = new HashMap<String, Cache<String, ArrayList<SearchTerm>>>();
@@ -154,6 +162,9 @@ public class CacheBean {
 	 */
 	@Lock(LockType.READ)
 		public void hardFreeSpace () {
+			// We deallocate the guard array to allow run the next lines of code
+			outOfMemoryGuardArray = null;
+
 			for (Map.Entry<String, Cache<String, ArrayList<SearchTerm>>> ec: tokensCaches.entrySet()) {
 				purgeCache(ec.getValue());
 			}
@@ -165,6 +176,9 @@ public class CacheBean {
 			}
 
 			System.gc();
+
+			// We reallocate the guard array to allow more recovers in the future
+			outOfMemoryGuardArray = new ArrayList<Integer>(65536);
 		}
 
 	/**

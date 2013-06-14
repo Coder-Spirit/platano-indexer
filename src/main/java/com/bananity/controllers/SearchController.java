@@ -63,6 +63,8 @@ public class SearchController extends BaseController {
 
 				sendResponse(request, response, HttpServletResponse.SC_OK, 0, searchResult);
 
+			} catch (OutOfMemoryError oome) {
+				cB.freeSpace();
 			} catch (Exception e) {
 				log.warn("BAD_REQUEST from "+request.getRemoteAddr()+" with exception "+e.getMessage()+", cause: "+e.getCause()+", params: "+request.getQueryString()+", body: "+request.getReader().readLine());
 				e.printStackTrace();

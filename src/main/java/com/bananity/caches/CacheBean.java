@@ -13,6 +13,7 @@ import com.google.common.cache.Weigher;
 // Java utils
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 // Bean Setup
 import javax.ejb.EJB;
@@ -135,6 +136,24 @@ public class CacheBean {
 		}
 
 	/**
+	 * Deallocates resources to avoid Out of Memory Errors
+	 */
+	@Lock(LockType.READ)
+		public void freeSpace () {
+			for (Map.Entry<String, Cache<String, ArrayList<SearchTerm>>> ec: tokensCaches.entrySet()) {
+				purgeCache(ec.getValue());
+			}
+
+			System.gc();
+
+			for (Map.Entry<String, Cache<String, ArrayList<SearchTerm>>> ec: resultCaches.entrySet()) {
+				purgeCache(ec.getValue());
+			}
+
+			System.gc();
+		}
+
+	/**
 	 *  Returns a tokens cache associated to a collection
 	 *
 	 *  @param 	collName 	The collection name
@@ -178,5 +197,24 @@ public class CacheBean {
 	@Lock(LockType.READ)
 		private int aproximateSubstringsWeigh (final int length) {
 			return 2*length*length;
+		}
+
+	@Lock(LockType.READ)
+		private void purgeCache (Cache<String, ArrayList<SearchTerm>> c) {
+			c.cleanUp();
+
+			long csize = c.size();
+			long ndels = 0;
+
+			for (String cek : c.asMap().keySet()) {
+				if (ndels > csize/2) {
+					break;
+				}
+
+				c.invalidate(cek);
+				ndels++;
+			}
+
+			c.cleanUp();
 		}
 }

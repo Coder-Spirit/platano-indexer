@@ -1,6 +1,8 @@
 Platano Indexer
 ===============
 
+**EDIT:** This project is outdated, not maintained, and deprecated. Use ElasticSearch instead.
+
 Platano Indexer is a Free Software text indexer/searcher (MIT License) written
 in Java using as a base the JBoss Application Server 7.
 
